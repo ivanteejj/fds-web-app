@@ -19,6 +19,10 @@ const filterOptions = [
     {
         text: 'Category',
         value: 'category',
+    },
+    {
+        text: 'Region',
+        value: 'area'
     }
 ]
 
