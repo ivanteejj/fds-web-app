@@ -1,41 +1,83 @@
-import PropTypes from 'prop-types'
-import React, { Component } from 'react'
-import {
-  Dropdown,
-  Search
-} from 'semantic-ui-react'
-import SearchBar from './SearchBar'
-import Filter from './Filter'
+import React, { useMemo, useEffect, useState } from 'react'
+import Results from './Results'
 
-class Catalog extends Component {
-    constructor(props) {
-        super(props)
-        this.handler = this.updateFilter.bind(this)
-        this.state = {
-            value: 'Restaurant',
-            search: null,
-            results:[]
-        }
-    }
-
-    updateFilter = (e, {value}) => {
-        this.setState({value})
-    }
-
-    handleSearch = (e) => {
-        this.setState({search: e});
-    }
-
-    render() {
-        return (
-            <div>
-                <Search onSearchChange={this.handleSearch}/>
-                <Filter updateFilter = {this.handler} />
-                <label>{this.state.value}</label>
-            </div>
-        )
-    }
+const fakeData = {
+    data: [
+        {fid: 100, fname: "Regular Milk Tea", rid: 1000, rname: "LiWOW", price: 3.5, category: "Beverages", qty_left: "100"},
+        {fid: 101, fname: "Avocado Melon Tea", rid: 1001, rname: "GongWah", price: 2.9, category: "Beverages", qty_left: "20"},
+        {fid: 102, fname: "Brown Sugar Fries", rid: 1000, rname: "TigerMeow", price: 9.70, category: "Western", qty_left: "10"},
+        {fid: 103, fname: "Eww Eel Bento", rid: 1020, rname: "SumoBentos", price: 25.90, category: "Japanese", qty_left: "15"},
+        {fid: 104, fname: "Yaya Papaya Macaron", rid: 1999, rname: "AuthenticSG", price: 10.9, category: "Dessert", qty_left: "5"}
+    ]
 }
 
-export default Catalog
+function Catalog() {
+    const columns = useMemo(
+        () => [
+            {
+                Header: "Restaurant",
+                columns: [
+                    {
+                        Header: "Name",
+                        accessor: "rname"
+                    },
+                    {
+                        Header: "id",
+                        accessor: "rid"
+                    }
+                ]
+            },
+            {
+                Header: "Food",
+                columns: [
+                    {
+                        Header: "Name",
+                        accessor: "fname"
+                    },
+                    {
+                        Header: "id",
+                        accessor: "fid"
+                    },
+                    {
+                        Header: "Price",
+                        accessor: "price",
+                        Cell: ({cell: {value}}) => {
+                            return (
+                                <>
+                                    {`$${value}`}
+                                </>
+                            )
+                        }
+                    },
+                    {
+                        Header: "Category",
+                        accessor: "category"
+                    },
+                    {
+                        Header: "Quantity Left",
+                        accessor: "qty_left"
+                    }
+                ]
+            }
+        ], []
+    )
+    
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        (async() => {
+            // backend code here!
+            //const result = await axios("sth sth");
+            setData(fakeData.data); //replace the param with const variable above
+        })();
+    }, []);
+
+    return (
+        <>
+            <Results columns = {columns} data={data} />
+        </>
+    );
+}
+
+export default Catalog;
  
