@@ -1,5 +1,6 @@
 import React, { useMemo, useEffect, useState } from 'react'
 import Results from './Results'
+import axios from 'axios';
 
 const fakeData = {
     data: [
@@ -66,9 +67,8 @@ function Catalog() {
 
     useEffect(() => {
         (async() => {
-            // backend code here!
-            //const result = await axios("sth sth");
-            setData(fakeData.data); //replace the param with const variable above
+            const result = await axios.get("/customer");
+            setData(result.data); //replace the param with const variable above
         })();
     }, []);
 

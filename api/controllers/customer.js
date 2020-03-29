@@ -12,8 +12,10 @@ const getAllCustomerDetails = (req, res) => {
 
 const getCustomerDetails = (req, res) => {
     const custUsername = req.params.userName
+    
     const outputCustDetails = 
         cust.filter((c) => c.id === parseInt(custUsername))
+
     res.json(outputCustDetails)
 }
 

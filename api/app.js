@@ -9,6 +9,8 @@ var app = express();
 
 var indexRouter = require('./controllers/index');
 var customerController = require('./controllers/customer');
+var foodController = require('./controllers/food');
+
 
 // view engine setup
 app.use(logger('dev'));
@@ -27,6 +29,7 @@ app.use(
 )
 
 // Routing for customers
+app.get('/customer/', (req, res) => foodController.getAllFood(req, res))
 app.get('/customer/account/', (req, res) => customerController.getAllCustomerDetails(req, res))
 app.get('/customer/account/:userName', (req, res) => customerController.getCustomerDetails(req, res))
 

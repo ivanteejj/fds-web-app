@@ -7,7 +7,7 @@ export default class CustomerDetails extends React.Component {
     };
 
     componentDidMount() {
-        axios.get('/customer/account/1')
+        axios.get('/login/1')
         .then(res => {
             console.log(res);
             this.setState({customer : res.data});

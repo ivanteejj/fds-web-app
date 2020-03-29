@@ -6,7 +6,7 @@ import { BrowserRouter as Router,
     Redirect 
 } from "react-router-dom"
 
-import CustomerNavBar from "../../components/customers/cust_nav"
+import CustomerNavBar from "../../components/customers/ivantest/cust_nav"
 import CustomerShoppingPage from "./cust_shop"
 import CustomerOrdersPage from "./cust_orders"
 import CustomerAccountPage from "./cust_acc"
