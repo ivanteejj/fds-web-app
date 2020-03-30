@@ -1,4 +1,4 @@
-import React, {useState, useEffect, createRef} from "react";
+import React, {useState, createRef} from "react";
 import {
     Input,
     Dropdown,
@@ -74,6 +74,7 @@ export default function Results({columns, data}) {
             d => setSelectedRid(d.original.rid)
         )
         // redirect here
+
     }
 
     return (
