@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {
     Grid,
-    Divider
+    Divider, Header, Card
 } from 'semantic-ui-react'
 import Menu from "./Menu"
 import ShoppingCart from "./ShoppingCart"
@@ -151,17 +151,19 @@ export default function Restaurant() {
 
     return (
         <>
-            <div>
-                <header className={"App-header"}>
-                    <h1>{rdetails.rname}</h1>
-                    <h4>{`Address: ${rdetails.address}`}</h4>
-                </header>
-            </div>
-            <Divider />
-
             <Grid relaxed>
                 <Grid.Row>
-                    <Grid.Column width={4}/>
+                    <Grid.Column width={1}/>
+                    <Grid.Column width={3}>
+                        <Header as={'h2'}>{`${rdetails.rname}`}</Header>
+                        <Card>
+                            <Card.Content>
+                                <Card.Header>Address</Card.Header>
+                                <Card.Description>{rdetails.address}</Card.Description>
+                            </Card.Content>
+                        </Card>
+                    </Grid.Column>
+
                     <Grid.Column width={8}>
                         <Menu addCart={addToCart} menu={menu}/>
                     </Grid.Column>
