@@ -8,6 +8,7 @@ import { BrowserRouter as Router,
 import logo from './logo.svg'
 import './App.css'
 
+
 //Pages
 import RegisterPage from "./pages/register"
 import LoginPage from "./pages/login"
@@ -26,7 +27,8 @@ class App extends Component {
     render() {
         return <Router>
             <Switch>
-            <Route exact path="/" component = { RestaurantPage }></Route>
+            <Route exact path= "/shop" component = { Home }></Route>
+            <Route exact path = "/shop/:rid" component = { RestaurantPage }></Route>
             <Route exact path = "/404" component = { NotFoundPage }></Route>
             <Route exact path = "/login" component = { LoginPage }></Route>
             <Route exact path = "/register" component = { RegisterPage }></Route>

@@ -6,6 +6,7 @@ import {
 import Menu from "./Menu"
 import ShoppingCart from "./ShoppingCart"
 import Popup from "./PopupCheckOut"
+import axios from 'axios'
 
 const fakeMenu = {
     data: [
@@ -66,7 +67,7 @@ function sumCartCost(cart) {
     , 0)
 }
 
-export default function Restaurant() {
+export default function Restaurant({ match }) {
     const [menu, setMenu] = useState([]);
     const [rdetails, setRDetails] = useState({});
     const [cart, setCart] = useState([]);
@@ -90,7 +91,7 @@ export default function Restaurant() {
 
     const addToCart = (fid, fname, price, qty_left) => {
         var existItem = cart.filter(x => x.id === fid)[0];
-        const otherItems = cart.filter(x => x.id != fid);
+        const otherItems = cart.filter(x => x.id !== fid);
 
         if (!existItem && qty_left > 0) {
             setCart(cart.concat({id: fid, name: fname, quantity: 1, price: price, qty_left: qty_left}));
@@ -102,7 +103,7 @@ export default function Restaurant() {
 
     const incrementQty = (fid, qty_left) => {
         var existItem = cart.filter(x => x.id === fid)[0];
-        const otherItems = cart.filter(x => x.id != fid);
+        const otherItems = cart.filter(x => x.id !== fid);
 
         if (qty_left > existItem.quantity) {
             existItem.quantity++;
@@ -112,7 +113,7 @@ export default function Restaurant() {
 
     const decrementQty = (fid) => {
         var existItem = cart.filter(x => x.id === fid)[0];
-        const otherItems = cart.filter(x => x.id != fid);
+        const otherItems = cart.filter(x => x.id !== fid);
 
         if (existItem.quantity > 1) {
             existItem.quantity--;
@@ -123,7 +124,7 @@ export default function Restaurant() {
     }
 
     const removeItemInCart = (fid) => {
-        const otherItems = cart.filter(x => x.id != fid);
+        const otherItems = cart.filter(x => x.id !== fid);
 
         setCart(otherItems); // remove item from cart
     }
@@ -132,11 +133,27 @@ export default function Restaurant() {
         setCheckout(boo)
     }
 
+    
     useEffect(() => {
         (async() => {
-            // const result = await axios.get("sth sth");
-            setMenu(groupBy(fakeMenu.data, 'category')) //group food by category
-            setRDetails(fakeRDetails.data[0])
+            //get menu for the specified rid
+            const menu = await axios
+                .get('/customer/shop/menu', {
+                    params: {
+                      rid: 2
+                    }
+                  })
+                .then((response) => setMenu(groupBy(response.data, 'category')))
+                .then((error) => console.log(error))
+            
+            const restDetails = await axios
+                  .get('/customer/shop/restaurant', {
+                    params: {
+                        rid: 2
+                      }
+                  })
+                  .then((response) => setRDetails(response.data[0]))
+                
             setPromos(fakePromos.data)
             setRecentDeliveryLoc(fakeRecentDeliverLoc.data)
             setPaymentMtds(fakePaymentOptions.data);

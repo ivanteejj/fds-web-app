@@ -4,12 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
+var db = require('./queries')
 
 var app = express();
 
 var indexRouter = require('./controllers/index');
 var customerController = require('./controllers/customer');
 var foodController = require('./controllers/food');
+var restController = require('./controllers/restaurant');
+
 
 
 // view engine setup
@@ -29,8 +32,9 @@ app.use(
 )
 
 // Routing for customers
-app.get('/customer/', (req, res) => foodController.getAllFood(req, res))
-app.get('/customer/account/', (req, res) => customerController.getAllCustomerDetails(req, res))
+app.get('/', (req, res) => foodController.getAllFood(req, res, db))
+app.get('/customer/shop/menu', (req, res) => foodController.getFoodFromOneRes(req, res, db))
+app.get('/customer/shop/restaurant/', (req, res) => restController.getOneRestDetails(req, res, db))
 app.get('/customer/account/:userName', (req, res) => customerController.getCustomerDetails(req, res))
 
 module.exports = app;

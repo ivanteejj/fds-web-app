@@ -1,18 +1,42 @@
 var express = require('express');
 
-const allFood = [
-    { rname: "North Restaurant", rid: 1, fname: "chicken wing", fid: 1, price: 6, category: "Fast Food", qty_left: 10, area: "North" },
-    { rname: "North Restaurant", rid: 1, fname: "french fry", fid: 2, price: 7, category: "Fast Food", qty_left: 11, area: "North" },
-    { rname: "North Restaurant", rid: 1, fname: "chicken burger", fid: 3, price: 5, category: "Fast Food", qty_left: 20, area: "North" },
-    { rname: "South Restaurant", rid: 2, fname: "kimchi", fid: 11, price: 8, category: "Korean", qty_left: 20, area: "South" },
-    { rname: "South Restaurant", rid: 2, fname: "patbingsoo", fid: 12, price: 9, category: "Korean", qty_left: 20, area: "South" },
-    { rname: "South Restaurant", rid: 2, fname: "tofu stew", fid: 13, price: 10, category: "Korean", qty_left: 20, area: "South" },
-];
+const queryForGetAllFood = 
+"SELECT r1.rname, r1.rest_id as rid, f1.fname, f1.fid, f1.price, f1.category, f1.daily_limit as qty_left ,r1.area from Restaurants r1 JOIN Food f1 on r1.rest_id = f1.rest_id"
 
-const getAllFood = (req, res) => {
-    res.json(allFood)
+const getAllFood = (req, res, db) => {
+    const output = db.query(queryForGetAllFood, 
+        (error, results) => {
+            if (error) {
+                console.log(error)
+            }
+
+            res.status(200).json(results.rows)
+        })
+    }
+
+// "FROM avg(fr1.rating) food_reviews fr1 WHERE fr1.fid = f1.fid"
+
+
+const queryForGetFoodFromOneRes = 
+"SELECT f1.fid, f1.fname, f1.rest_id as rid, f1.price, f1.category, f1.daily_limit as qty_left, f1.daily_limit as rating FROM Food f1 WHERE f1.rest_id = $1"
+const getFoodFromOneRes = (req, res, db) => {
+    const rid = req.query.rid;
+    console.log(rid);
+
+    const output = db.query(queryForGetFoodFromOneRes, [rid],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+
+            res.status(200).json(result.rows);
+        })
+
 }
+
+
 
 module.exports = {
     getAllFood: getAllFood,
+    getFoodFromOneRes: getFoodFromOneRes
 };
