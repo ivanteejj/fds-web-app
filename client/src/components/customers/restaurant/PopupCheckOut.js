@@ -35,7 +35,7 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
     const [paymentMode, setPaymentMode] = useState("")
 
     const placeOrder = () => {
-        const address = selectedLoc != "" ? selectedLoc : deliveryLocInput;
+        const address = selectedLoc !== "" ? selectedLoc : deliveryLocInput;
         submitOrder(cart, appliedPromo, deliveryFee, total, address, paymentMode);
         remainPopup(false) // close popup
     }
@@ -80,7 +80,7 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
         } else {
             setTotal(totalCost)
         }
-    })
+    }, [appliedPromo, totalCost, costOffset])
 
     return (
         <div className="popup-box">

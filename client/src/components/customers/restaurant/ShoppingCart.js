@@ -48,7 +48,7 @@ export default function ShoppingCart({addQty, reduceQty, removeItem, toCheckout,
             })}
             <Divider/>
 
-            {cart.length > 0 && cart != undefined && (
+            {cart.length > 0 && cart !== undefined && (
                 <>
                     <Grid columns={2}>
                         <Grid.Row>

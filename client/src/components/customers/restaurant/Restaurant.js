@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import {
     Grid,
-    Divider, Header, Card
+    Header,
+    Card
 } from 'semantic-ui-react'
 import Menu from "./Menu"
 import ShoppingCart from "./ShoppingCart"
@@ -90,7 +91,7 @@ export default function Restaurant() {
 
     const addToCart = (fid, fname, price, qty_left) => {
         var existItem = cart.filter(x => x.id === fid)[0];
-        const otherItems = cart.filter(x => x.id != fid);
+        const otherItems = cart.filter(x => x.id !== fid);
 
         if (!existItem && qty_left > 0) {
             setCart(cart.concat({id: fid, name: fname, quantity: 1, price: price, qty_left: qty_left}));
@@ -102,7 +103,7 @@ export default function Restaurant() {
 
     const incrementQty = (fid, qty_left) => {
         var existItem = cart.filter(x => x.id === fid)[0];
-        const otherItems = cart.filter(x => x.id != fid);
+        const otherItems = cart.filter(x => x.id !== fid);
 
         if (qty_left > existItem.quantity) {
             existItem.quantity++;
@@ -112,7 +113,7 @@ export default function Restaurant() {
 
     const decrementQty = (fid) => {
         var existItem = cart.filter(x => x.id === fid)[0];
-        const otherItems = cart.filter(x => x.id != fid);
+        const otherItems = cart.filter(x => x.id !== fid);
 
         if (existItem.quantity > 1) {
             existItem.quantity--;
@@ -123,7 +124,7 @@ export default function Restaurant() {
     }
 
     const removeItemInCart = (fid) => {
-        const otherItems = cart.filter(x => x.id != fid);
+        const otherItems = cart.filter(x => x.id !== fid);
 
         setCart(otherItems); // remove item from cart
     }
@@ -147,7 +148,7 @@ export default function Restaurant() {
         setCartCost(sumCartCost(cart))
         setDeliveryFee((cartCost * delivery_percent) + delivery_base)
         setTotalCost(deliveryFee + cartCost)
-    })
+    }, [cart, cartCost, deliveryFee])
 
     return (
         <>
