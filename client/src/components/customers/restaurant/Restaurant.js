@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import {
     Grid,
-    Divider, Header, Card
+    Header,
+    Card
 } from 'semantic-ui-react'
+import {useParams, useLocation} from 'react-router-dom'
 import Menu from "./Menu"
 import ShoppingCart from "./ShoppingCart"
 import Popup from "./PopupCheckOut"
@@ -68,6 +70,9 @@ function sumCartCost(cart) {
 }
 
 export default function Restaurant({ match }) {
+    let params = useParams()
+    let location = useLocation()
+
     const [menu, setMenu] = useState([]);
     const [rdetails, setRDetails] = useState({});
     const [cart, setCart] = useState([]);
@@ -136,24 +141,26 @@ export default function Restaurant({ match }) {
     
     useEffect(() => {
         (async() => {
-            //get menu for the specified rid
-            const menu = await axios
-                .get('/customer/shop/menu', {
-                    params: {
-                      rid: 2
-                    }
-                  })
-                .then((response) => setMenu(groupBy(response.data, 'category')))
-                .then((error) => console.log(error))
-            
-            const restDetails = await axios
-                  .get('/customer/shop/restaurant', {
-                    params: {
-                        rid: 2
-                      }
-                  })
-                  .then((response) => setRDetails(response.data[0]))
-                
+            // const userid = location.state.userid
+            // const menu = await axios
+            //     .get('/customer/shop/menu', {
+            //         params: {
+            //           rid: params.rid
+            //         }
+            //       })
+            //     .then((response) => setMenu(groupBy(response.data, 'category')))
+            //     .then((error) => console.log(error))
+            //
+            // const restDetails = await axios
+            //       .get('/customer/shop/restaurant', {
+            //         params: {
+            //             rid: 2
+            //           }
+            //       })
+            //       .then((response) => setRDetails(response.data[0]))
+            //
+            setMenu(groupBy(fakeMenu.data, 'category'))
+            setRDetails(fakeRDetails.data[0])
             setPromos(fakePromos.data)
             setRecentDeliveryLoc(fakeRecentDeliverLoc.data)
             setPaymentMtds(fakePaymentOptions.data);
@@ -164,7 +171,7 @@ export default function Restaurant({ match }) {
         setCartCost(sumCartCost(cart))
         setDeliveryFee((cartCost * delivery_percent) + delivery_base)
         setTotalCost(deliveryFee + cartCost)
-    })
+    }, [cart, cartCost, deliveryFee])
 
     return (
         <>

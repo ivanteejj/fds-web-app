@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import Restaurant from './Restaurant'
 import MenuBar from "../home/MenuBar";
+import Order from "./Order";
 
-class RestaurantPage extends Component {
 
+class OrderPage extends Component {
     render() {
         return (
             <>
@@ -12,11 +12,12 @@ class RestaurantPage extends Component {
                         <h1>FDS</h1>
                     </header>
                     <MenuBar/>
+                    <Order/>
                 </div>
-                <Restaurant />
             </>
         )
     }
 }
 
-export default RestaurantPage
+export default OrderPage
+

@@ -1,10 +1,11 @@
-import React, {useState, createRef} from "react";
+import React, {useState, createRef, useEffect} from "react";
 import {
     Input,
     Dropdown,
     GridRow
 } from 'semantic-ui-react'
 import {useTable, useFilters, useSortBy, useRowSelect} from "react-table";
+import {useHistory} from "react-router-dom"
 import "./Results.css"
 
 const filterOptions = [
@@ -31,12 +32,12 @@ const handleClick = () => searchFocus.current.focus()
 
 
 export default function Results({columns, data}) {
-
+    let history = useHistory()
     const [filterInput, setFilterInput] = useState("")
 
     const [searchType, setSearchType] = useState(filterOptions[0].value) 
 
-    const [selectedRid, setSelectedRid] = useState("")
+    const [selectedRid, setSelectedRid] = useState(null)
 
     const {
         getTableProps,
@@ -73,9 +74,14 @@ export default function Results({columns, data}) {
         flatRows.map(
             d => setSelectedRid(d.original.rid)
         )
-        // redirect here
-
     }
+
+    useEffect(() => {
+        // redirect here
+        if (selectedRid !== null) {
+            history.push(`/shop/${selectedRid}`, {userid: "tester123"})
+        }
+    }, [selectedRid])
 
     return (
         <>

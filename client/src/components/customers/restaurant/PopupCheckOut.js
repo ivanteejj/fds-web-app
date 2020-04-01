@@ -80,7 +80,7 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
         } else {
             setTotal(totalCost)
         }
-    })
+    }, [appliedPromo, totalCost, costOffset])
 
     return (
         <div className="popup-box">

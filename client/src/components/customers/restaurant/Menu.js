@@ -47,7 +47,7 @@ export default function Menu({addCart, menu}) {
                                                 </Grid.Column>
 
                                                 <Grid.Column textAlign={'right'}>
-                                                    <h3>{`$${item.price}`}</h3>
+                                                    <h3>{`$${item.price.toFixed(1)}`}</h3>
                                                 </Grid.Column>
                                             </Grid.Row>
                                         </Grid>
