@@ -7,6 +7,7 @@ import {
 import Menu from "./Menu"
 import ShoppingCart from "./ShoppingCart"
 import Popup from "./PopupCheckOut"
+import axios from 'axios'
 
 const fakeMenu = {
     data: [
@@ -67,7 +68,7 @@ function sumCartCost(cart) {
     , 0)
 }
 
-export default function Restaurant() {
+export default function Restaurant({ match }) {
     const [menu, setMenu] = useState([]);
     const [rdetails, setRDetails] = useState({});
     const [cart, setCart] = useState([]);
@@ -133,11 +134,27 @@ export default function Restaurant() {
         setCheckout(boo)
     }
 
+    
     useEffect(() => {
         (async() => {
-            // const result = await axios.get("sth sth");
-            setMenu(groupBy(fakeMenu.data, 'category')) //group food by category
-            setRDetails(fakeRDetails.data[0])
+            //get menu for the specified rid
+            const menu = await axios
+                .get('/customer/shop/menu', {
+                    params: {
+                      rid: 2
+                    }
+                  })
+                .then((response) => setMenu(groupBy(response.data, 'category')))
+                .then((error) => console.log(error))
+            
+            const restDetails = await axios
+                  .get('/customer/shop/restaurant', {
+                    params: {
+                        rid: 2
+                      }
+                  })
+                  .then((response) => setRDetails(response.data[0]))
+                
             setPromos(fakePromos.data)
             setRecentDeliveryLoc(fakeRecentDeliverLoc.data)
             setPaymentMtds(fakePaymentOptions.data);
