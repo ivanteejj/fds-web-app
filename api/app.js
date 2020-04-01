@@ -32,7 +32,7 @@ app.use(
 )
 
 // Routing for customers
-app.get('/', (req, res) => foodController.getAllFood(req, res, db))
+app.get('/customer/shop/', (req, res) => restController.getAllRestDataForHomePage(req, res, db))
 app.get('/customer/shop/menu', (req, res) => foodController.getFoodFromOneRes(req, res, db))
 app.get('/customer/shop/restaurant/', (req, res) => restController.getOneRestDetails(req, res, db))
 app.get('/customer/account/:userName', (req, res) => customerController.getCustomerDetails(req, res))
