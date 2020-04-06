@@ -15,6 +15,8 @@ import LoginPage from "./pages/login"
 import NotFoundPage from "./pages/404"
 import Home from './components/customers/home/homepage'
 import RestaurantPage from './components/customers/restaurant/RestaurantPage'
+import MenuPage from "./components/staff/Menu/MenuPage";
+import OrderPage from "./components/customers/orders/OrderPage";
 //import Login from './components/customers/account/login'
 import Signup from './components/customers/account/signup'
 
@@ -27,6 +29,8 @@ class App extends Component {
     render() {
         return <Router>
             <Switch>
+            <Route exact path= "/test" component = { MenuPage }></Route>
+            <Route exact path= "/order" component = { OrderPage }></Route>
             <Route exact path= "/shop" component = { Home }></Route>
             <Route exact path = "/shop/:rid" component = { RestaurantPage }></Route>
             <Route exact path = "/404" component = { NotFoundPage }></Route>
