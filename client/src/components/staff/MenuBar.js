@@ -23,12 +23,6 @@ const MenuBar = () => (
                 content={'Menu'}
             />
 
-            <Button basic
-                size={'tiny'}
-                icon={'eye'}
-                content={'All Orders'}
-            />
-
             <Menu.Item>
                 <DropDown/>
             </Menu.Item>

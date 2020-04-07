@@ -19,7 +19,7 @@ const MenuBar = () => (
         <Menu.Menu position='right'>
             <Button
                 size={'tiny'}
-                icon={'food'}
+                icon={'eye'}
                 content={'My Orders'}
             />
 
