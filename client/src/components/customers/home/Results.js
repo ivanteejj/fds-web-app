@@ -84,7 +84,7 @@ export default function Results({columns, data}) {
     }, [selectedRid])
 
     return (
-        <>
+        <div className={'Results'}>
             <GridRow>
                 <div>
                 <Input
@@ -148,6 +148,6 @@ export default function Results({columns, data}) {
             {selectedFlatRows.map(d => {
                 return <>{`${d.original.rid}`}</>;
             })}
-        </>
+        </div>
     )
 }

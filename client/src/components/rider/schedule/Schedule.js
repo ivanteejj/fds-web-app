@@ -16,6 +16,9 @@ const fakeSchedulePT = {
     // data should already be sorted in desc order by date
     data: [
         {
+            sch_id: 1221, day: 1, date: "15/03/2020", time_start: "12:00", time_end: "15:00", time_interval: 3
+        },
+        {
             sch_id: 1222, day: 1, date: "15/04/2020", time_start: "12:00", time_end: "15:00", time_interval: 3
         },
         {
@@ -48,8 +51,8 @@ const pretty_time_format = "ha";
 
 function transform(data) {
     return data.map(item => {
-        return {title: `${moment(item.time_start, time_format).format(pretty_time_format)} - 
-                        ${moment(item.time_end, time_format).format(pretty_time_format)}`,
+        return {title: `${moment(item.time_start, time_format).format(pretty_time_format)} - ${moment(item.time_end, time_format).format(pretty_time_format)}
+                        (${item.time_interval} hours)`,
                 start: moment(item.date + " " + item.time_start, datetime_format).toDate(),
                 end: moment(item.date + " " + item.time_end, datetime_format).toDate()}
     })
