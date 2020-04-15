@@ -1,5 +1,6 @@
 import React, {useState, useReducer, useEffect} from "react"
 import {
+    Button,
     Divider,
     Dropdown,
     Grid
@@ -176,6 +177,9 @@ export default function Summary() {
                         <Divider/>
                         <Grid.Row>
                             <h1>Promotions</h1>
+                            <Button floated={'right'} size={'mini'} color={'pink'}
+                                    content={'Add Promo'}
+                            />
                             <Promotions promotions={promotions}/>
                         </Grid.Row>
                     </Grid.Column>
