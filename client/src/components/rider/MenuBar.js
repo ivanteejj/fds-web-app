@@ -20,7 +20,7 @@ const MenuBar = () => (
             <Button
                 size={'tiny'}
                 icon={'eye'}
-                content={'My Orders'}
+                content={'Schedule'}
             />
 
             <Menu.Item>
