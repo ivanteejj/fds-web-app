@@ -227,10 +227,6 @@ export default function PartTimeAddSchedule({startDate, endDate, submitSchedule}
                                                             onClick={() => updateShift(index, idx, "remove", null)}
                                                             color={'red'}
                                                     />
-
-                                                    <text>
-                                                        {`${totalHours} ${x.time_start} ${x.time_end}`}
-                                                    </text>
                                                 </Table.Row>
                                             ))}
                                         </Table.Cell>

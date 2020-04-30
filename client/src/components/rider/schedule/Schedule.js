@@ -155,12 +155,6 @@ export default function Schedule() {
                                   occupiedDates={occupiedDates} submitSchedule={submitSchedule}
                 />
             )}
-
-            {test && test.map((item) => item.shifts.map(x => (
-                <text>
-                    {`Day ${item.day} Start: ${x.time_start} End: ${x.time_end} Interval: ${x.time_interval}`}
-                </text>
-            )))}
         </>
     )
 }
