@@ -1,5 +1,6 @@
-import React from "react"
+import React, {Component} from "react"
 import MenuBar from "../MenuBar";
+import Earnings from "./Earnings";
 
 class EarningsPage extends Component {
     render() {
@@ -9,6 +10,7 @@ class EarningsPage extends Component {
                     <h1>FDS (Rider)</h1>
                 </header>
                 <MenuBar/>
+                <Earnings/>
             </div>
         )
     }
