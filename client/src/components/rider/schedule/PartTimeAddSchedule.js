@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import {Button, Card, Divider, Header, Table} from "semantic-ui-react";
+import {Button, Divider, Header, Table} from "semantic-ui-react";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 

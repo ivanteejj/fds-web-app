@@ -1,7 +1,6 @@
 import React from "react"
 import {
     Card,
-    Divider,
     Grid,
     Icon,
     Table
