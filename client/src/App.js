@@ -22,7 +22,7 @@ import SummaryPage from "./components/staff/Home/SummaryPage";
 import SchedulePage from "./components/rider/schedule/SchedulePage";
 import EarningsPage from "./components/rider/earnings/EarningsPage";
 import ReviewsPage from "./components/rider/reviews/ReviewsPage";
-import HomePage from "./components/rider/home/HomePage";
+import RiderSummaryPage from "./components/rider/home/RiderSummaryPage";
 //import Login from './components/customers/account/login'
 import Signup from './components/customers/account/signup'
 
@@ -35,7 +35,7 @@ class App extends Component {
     render() {
         return <Router>
             <Switch>
-            <Route exact path= "/test" component = { HomePage }></Route>
+            <Route exact path= "/test" component = { RiderSummaryPage }></Route>
             <Route exact path= "/order" component = { OrderPage }></Route>
             <Route exact path= "/shop" component = { Home }></Route>
             <Route exact path = "/shop/:rid" component = { RestaurantPage }></Route>
