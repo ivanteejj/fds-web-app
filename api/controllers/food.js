@@ -16,9 +16,10 @@ const getAllFood = (req, res, db) => {
 
 // "FROM avg(fr1.rating) food_reviews fr1 WHERE fr1.fid = f1.fid"
 
-
 const queryForGetFoodFromOneRes = 
-"SELECT f1.fid, f1.fname, f1.rest_id as rid, f1.price, f1.category, f1.daily_limit as qty_left, f1.daily_limit as rating FROM Food f1 WHERE f1.rest_id = $1"
+"SELECT f1.fid, f1.fname, f1.rest_id as rid, f1.price, f1.category, f1.daily_limit as qty_left, f1.daily_limit as rating " +
+    "FROM Food f1 " +
+    "WHERE f1.rest_id = $1"
 const getFoodFromOneRes = (req, res, db) => {
     const rid = req.query.rid;
     console.log(rid);
