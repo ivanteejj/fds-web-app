@@ -14,7 +14,6 @@ var foodController = require('./controllers/food');
 var restController = require('./controllers/restaurant');
 
 
-
 // view engine setup
 app.use(logger('dev'));
 app.use(express.json());
@@ -33,8 +32,10 @@ app.use(
 
 // Routing for customers
 app.get('/customer/shop/', (req, res) => restController.getAllRestDataForHomePage(req, res, db))
-app.get('/customer/shop/menu', (req, res) => foodController.getFoodFromOneRes(req, res, db))
-app.get('/customer/shop/restaurant/', (req, res) => restController.getOneRestDetails(req, res, db))
-app.get('/customer/account/:userName', (req, res) => customerController.getCustomerDetails(req, res))
+app.get('/customer/shop/getMenu', (req, res) => foodController.getFoodFromOneRes(req, res, db))
+app.get('/customer/shop/getRestaurantDetails/', (req, res) => restController.getOneRestDetails(req, res, db))
+app.get('/customer/shop/getRecentDeliveryAddress/', (req, res) => customerController.getRecentDeliveryAddress(req, res, db))
+
+// app.get('/customer/account/:userName', (req, res) => customerController.getCustomerDetails(req, res))
 
 module.exports = app;
