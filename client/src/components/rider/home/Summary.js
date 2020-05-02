@@ -104,6 +104,7 @@ const reducer = (state, action) => {
     }
 }
 
+
 const date_format = "DD/MM/YYYY";
 
 export default function Summary() {

@@ -70,8 +70,8 @@ export default function ActiveOrders({orders, updateRiderStatus}) {
                         </Card>
 
                         <Button size="tiny"
-                                color={hideStatus[idx] ? "orange" : "grey"}
-                                content={hideStatus[idx] ? "Show Order Items" : "Hide Order Items"}
+                                color={!hideStatus[idx] ? "orange" : "grey"}
+                                content={!hideStatus[idx] ? "Show Order Items" : "Hide Order Items"}
                                 onClick={() => showStatus(idx)}
                         />
 
