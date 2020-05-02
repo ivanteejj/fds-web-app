@@ -1,5 +1,3 @@
-import React from "react"
-
 const generateReviewSkeleton = (order) => {
     return {rider: generateRiderReviewSkeleton(order), foodRating: generateFoodReviewSkeleton(order)}
 }

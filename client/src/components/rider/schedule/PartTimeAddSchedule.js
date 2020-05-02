@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import {Button, Card, Divider, Header, Table} from "semantic-ui-react";
+import {Button, Divider, Header, Table} from "semantic-ui-react";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 
@@ -21,7 +21,7 @@ export default function PartTimeAddSchedule({startDate, endDate, submitSchedule}
             setWorkingDays(arr)
         }
 
-    }, [])
+    }, [startDate, endDate])
 
     useEffect(() => {
         if (workingDays) {
@@ -94,7 +94,7 @@ export default function PartTimeAddSchedule({startDate, endDate, submitSchedule}
                         case "remove":
                             return {...item, shifts: item.shifts.filter((x, idx) => idx !== cidx)};
                         default:
-                            return;
+                            return item;
                     }
                 } else {
                     return item

@@ -1,19 +1,20 @@
 import React, {Component} from "react"
 import MenuBar from "../MenuBar";
-import Earnings from "./Earnings";
+import FdsAreaStats from "./FdsAreaStats";
 
-class EarningsPage extends Component {
+class FdsAreaStatsPage extends Component {
     render() {
-        return(
+        return (
             <div className="Home">
                 <header className={"App-header"}>
-                    <h1>FDS (Rider)</h1>
+                    <h1>FDS (Admin)</h1>
                 </header>
                 <MenuBar/>
-                <Earnings/>
+                <FdsAreaStats/>
+                <div className="Footer"/>
             </div>
         )
     }
 }
 
-export default EarningsPage
+export default FdsAreaStatsPage

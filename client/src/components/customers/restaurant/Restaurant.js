@@ -16,7 +16,8 @@ const fakePromos = {
     data: [
         {type: 'CART', disc: 0.25, disc_type: 'percent', details: '25% off on all food'},
         {type: 'DELIVERY', disc: 3, disc_type: 'dollar', details: '$3 off on delivery fee'},
-        {type: 'DELIVERY', disc: 1, disc_type: 'percent', details: 'Free Delivery Fee'}
+        {type: 'DELIVERY', disc: 1, disc_type: 'percent', details: 'Free Delivery Fee'},
+        {type: 'CART', disc: 0.2, disc_type: "percent", details: "20% off on order more than $100"}
     ]
 }
 
@@ -57,6 +58,7 @@ export default function Restaurant({ match }) {
     const [promos, setPromos] = useState([]);
     const [recentDeliveryLoc, setRecentDeliveryLoc] = useState([]);
     const [paymentMtds, setPaymentMtds] = useState([]);
+    const [userid, setUserid] = useState(null)
 
     // HARD CODED % DELIVERY FEE
     const delivery_base = 3
@@ -117,6 +119,7 @@ export default function Restaurant({ match }) {
     
     useEffect(() => {
         (async() => {
+
             const menu = await axios
                  .get('/customer/shop/getMenu', {
                      params: {
@@ -142,8 +145,6 @@ export default function Restaurant({ match }) {
                     }
                 })
                 .then((response) => setRecentDeliveryLoc(response.data))
-            // .then((response) => setRecentDeliveryLoc(response.data))
-
             setPromos(fakePromos.data)
             setPaymentMtds(fakePaymentOptions.data);
         })();
@@ -193,6 +194,8 @@ export default function Restaurant({ match }) {
             {cart.map(d => {
                 return <>{`item:${d.id} quantity: ${d.quantity}`}</>;
             })}
+
+            {userid && (<text>{userid}</text>)}
         </>
     )
 

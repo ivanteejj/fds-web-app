@@ -83,7 +83,7 @@ export default function PopupAddSchedule({openPopup, occupiedDates, riderType, s
             let boo = validRange(startDate, endDate, occupiedDates);
             setErrors({type: "range", payload: boo})
         }
-    }, [startDate, endDate])
+    }, [startDate, endDate, occupiedDates])
 
     function submitFTSchedule(workingDays) {
 

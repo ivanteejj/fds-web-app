@@ -1,4 +1,4 @@
-import React, {createRef, useEffect, useReducer, useState} from "react"
+import React, {createRef, useEffect, useState} from "react"
 import {
     Grid,
     Button
@@ -73,7 +73,6 @@ export default function Schedule() {
     const [occupiedDates, setOccupiedDates] = useState([])
     const [riderType, setRiderType] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
-    const [test, setTest] = useState(null);
 
     const openPopup = (boo) => {
         setShowPopup(boo);
@@ -97,7 +96,6 @@ export default function Schedule() {
     function submitSchedule(schedule) {
         // TODO: (backend) code here to submit schedule
         (async() => {
-            setTest(schedule)
             // check rider type before processing
 
             /* schedule parsed in will look sth lke this:

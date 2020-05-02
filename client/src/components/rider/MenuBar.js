@@ -9,6 +9,7 @@ const DropDown = () => (
     <Dropdown text = 'Alice'>
         <Dropdown.Menu>
             <Dropdown.Item text = 'Account Details'/>
+            <Dropdown.Item text = 'My Ratings'/>
             <Dropdown.Item text = 'Logout'/>
         </Dropdown.Menu>
     </Dropdown>
@@ -21,6 +22,12 @@ const MenuBar = () => (
                 size={'tiny'}
                 icon={'eye'}
                 content={'Schedule'}
+            />
+
+            <Button basic
+                size={'tiny'}
+                icon={'dollar'}
+                content={'My Earnings'}
             />
 
             <Menu.Item>
