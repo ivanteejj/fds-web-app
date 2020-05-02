@@ -21,7 +21,7 @@ export default function PartTimeAddSchedule({startDate, endDate, submitSchedule}
             setWorkingDays(arr)
         }
 
-    }, [])
+    }, [startDate, endDate])
 
     useEffect(() => {
         if (workingDays) {
@@ -94,7 +94,7 @@ export default function PartTimeAddSchedule({startDate, endDate, submitSchedule}
                         case "remove":
                             return {...item, shifts: item.shifts.filter((x, idx) => idx !== cidx)};
                         default:
-                            return;
+                            return item;
                     }
                 } else {
                     return item
