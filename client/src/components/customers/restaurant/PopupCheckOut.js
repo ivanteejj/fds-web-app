@@ -8,9 +8,16 @@ import {
     TextArea,
     Form,
     Label,
-    Radio
+    Radio, Dropdown
 } from 'semantic-ui-react'
 import "./PopupCheckOut.css"
+
+const areaOptions = [
+    {key: 1, text: "North", value: "North"},
+    {key: 2, text: "South", value: "South"},
+    {key: 3, text: "East", value: "East"},
+    {key: 4, text: "West", value: "West"},
+]
 
 const showPromo = (promo) => {
     switch(promo.disc_type){
@@ -30,19 +37,21 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
     const [appliedPromo, setAppliedPromo] = useState()
     const [costOffset, setCostOffset] = useState(0)
     const [total, setTotal] = useState(totalCost)
-    const [selectedLoc, setDeliveryLoc] = useState("")
+    const [selectedLoc, setDeliveryLoc] = useState(null)
+    const [deliveryAreaInput, setDeliveryAreaInput] = useState(areaOptions[0].value)
     const [deliveryLocInput, setDeliveryLocInput] = useState("")
     const [paymentMode, setPaymentMode] = useState("")
 
     const placeOrder = () => {
-        const address = selectedLoc !== "" ? selectedLoc : deliveryLocInput;
-        submitOrder(cart, appliedPromo, deliveryFee, total, address, paymentMode);
+        const address = selectedLoc !== "" ? selectedLoc.address : deliveryLocInput;
+        const area = selectedLoc !== "" ? selectedLoc.area : deliveryAreaInput;
+        submitOrder(cart, appliedPromo, deliveryFee, total, address, area, paymentMode);
         remainPopup(false) // close popup
     }
 
     const applyDeliveryOptions = (address) => {
         if (address === selectedLoc) {
-            setDeliveryLoc("")
+            setDeliveryLoc(null)
         } else {
             setDeliveryLoc(address)
         }
@@ -72,6 +81,10 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
         }
 
         setTotal(totalCost - costOffset)
+    }
+
+    const disableSubmit = () => {
+        return selectedLoc === null || (deliveryLocInput === "" && selectedLoc === "") || (paymentMode === "")
     }
 
     useEffect(() => {
@@ -201,9 +214,9 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
                                         </Grid.Column>
 
                                         <Grid.Column>
-                                            <Button content={selectedLoc === loc.address ? "Selected" : "Select"}
-                                                    color={selectedLoc === loc.address ? "grey" : "yellow"}
-                                                    onClick={() => applyDeliveryOptions(loc.address)}
+                                            <Button content={selectedLoc && selectedLoc.address === loc.address ? "Selected" : "Select"}
+                                                    color={selectedLoc && selectedLoc.address === loc.address ? "grey" : "yellow"}
+                                                    onClick={() => applyDeliveryOptions(loc)}
                                                     floated={"right"}
                                             />
                                         </Grid.Column>
@@ -212,13 +225,43 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
                             </Item>
                         )
                     })}
-                    <Form>
-                        <Label>Other Delivery Location</Label>
-                        <TextArea
-                            placeholder={'Enter full address for delivery'}
-                            onChange={(value) => setDeliveryLocInput(value)}
-                        />
-                    </Form>
+                    <Item>
+                        <Grid columns={2}>
+                            <Grid.Row>
+                                <Grid.Column>
+                                    <Header as={'a'}>Add New Address</Header>
+                                </Grid.Column>
+
+                                <Grid.Column>
+                                    <Button content={selectedLoc === "" ? "Selected" : "Select"}
+                                            color={selectedLoc === "" ? "grey" : "orange"}
+                                            onClick={() => applyDeliveryOptions("")}
+                                            floated={"right"}
+                                    />
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
+                    </Item>
+
+                    {selectedLoc === "" && (
+                        <Form>
+                            <Label>Other Delivery Location</Label>
+                            <TextArea
+                                placeholder={'Enter full address for delivery'}
+                                onChange={(e, {value}) => setDeliveryLocInput(value)}
+                            />
+                            <h4>
+                                Delivery Area:  {' '}
+                                <Dropdown
+                                    simple item
+                                    options={areaOptions}
+                                    defaultValue={areaOptions[0].value}
+                                    onChange={(e, {value}) => setDeliveryAreaInput(value)}
+                                />
+                            </h4>
+                        </Form>
+
+                    )}
 
                     <Divider/>
 
@@ -242,7 +285,7 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
                     <Button
                         floated='right'
                         content={'Place Order'}
-                        disabled={(deliveryLocInput === "" && selectedLoc === "") || (paymentMode === "")}
+                        disabled={disableSubmit()}
                         color={(deliveryLocInput === "" && selectedLoc === "") || (paymentMode === "") ? "grey" : "blue"}
                         onClick={() => placeOrder()}
                     />

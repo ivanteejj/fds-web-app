@@ -25,6 +25,17 @@ const fakeOrders = {
                 {fid: 101, rid: 1000, rname: "LiWoW", fname: "Avocado Melon Tea", quantity: 2, price: 2.9},
                 {fid: 102, rid: 1000, rname: "LiWoW", fname: "Brown Sugar Fries", quantity: 3, price: 9.7}
             ]
+        },
+        {oid: 100121, totalCost: 49.5, deliveryFee: 4.1, cartCost: 45.4,
+            promoApplied: null, paymentMode: "Cash On Delivery",
+            deliveryLocation: "NUS Central Library", riderid: "benwang",
+            dt_order_placed: "2020-02-22 19:10:25", dt_rider_departs: "2020-02-22 19:20:00",
+            dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
+            cart: [
+                {fid: 100, rid: 1000, rname: "LiWoW", fname: "Regular Milk Tea", quantity: 3, price: 3.5},
+                {fid: 101, rid: 1000, rname: "LiWoW", fname: "Avocado Melon Tea", quantity: 2, price: 2.9},
+                {fid: 102, rid: 1000, rname: "LiWoW", fname: "Brown Sugar Fries", quantity: 3, price: 9.7}
+            ]
         }
     ],
     completed_orders: [
@@ -62,14 +73,89 @@ const fakeOrders = {
     ]
 }
 
+const fakeOrderCartDetails = {
+    data: [
+        {oid: 100123, fid: 100, rid: 1000, rname: "LiWoW", fname: "Regular Milk Tea", quantity: 3, price: 3.5},
+        {oid: 100123, fid: 101, rid: 1000, rname: "LiWoW", fname: "Avocado Melon Tea", quantity: 2, price: 2.9},
+        {oid: 100123, fid: 102, rid: 1000, rname: "LiWoW", fname: "Brown Sugar Fries", quantity: 3, price: 9.7},
+        {oid: 100100, fid: 100, rid: 1000, rname: "LiWoW", fname: "Regular Milk Tea", quantity: 2, price: 3.5},
+        {oid: 100100, fid: 101, rid: 1000, rname: "LiWoW", fname: "Avocado Melon Tea", quantity: 1, price: 2.9},
+        {oid: 100100, fid: 100, rid: 1000, rname: "LiWoW", fname: "Regular Milk Tea", quantity: 2, price: 3.5},
+        {oid: 100100, fid: 101, rid: 1000, rname: "LiWoW", fname: "Avocado Melon Tea", quantity: 1, price: 2.9}
+    ]
+}
+
+const fakeRiderReview = {
+    data: [
+        {oid: 100000, riderid: "phukai", rating: 5, review: "Friendly and polite"}
+    ]
+}
+
+const fakeFoodRatings = {
+    data: [
+        {oid: 100000, fid: 101, fname: "Avocado Melon Tea", rating: 5, review: "Best melon tea in singapore!"},
+        {oid: 100000, fid: 100, fname: "Regular Milk Tea", rating: 2, review: "Too bland and the pearls are hard to chew..."}
+    ]
+}
+
+// merge all tables into one nested array
+function nestArrays(order, cart, riderReview, foodRating) {
+    return order.map(x => {
+        return {...x,
+            cart: cart.filter(a => a.oid === x.oid),
+            // if no rider review, there is no food rating
+            review: riderReview.some(b => b.oid === x.oid) ?
+                {
+                    rider: riderReview.filter(c => c.oid === x.oid),
+                    foodRating: foodRating.filter(d => d.oid === x.oid)
+                } : null
+        }
+    })
+}
+
+const filterOrders = (orders, filter) => {
+    switch (filter) {
+        case "":
+            return orders
+        case "ongoing":
+            return {...orders, completed_orders: []}
+        case "completed":
+            return {...orders, uncompleted_orders: []}
+    }
+}
+
 export default function Order() {
-    const [orders, setOrders] = useState({})
-    const [filterOption, setFilterOption] = useState("")
-    const [filteredOrders, setFilteredOrders] = useState({})
 
     const reducer = (state, action) => {
         return {...state, [action.type]: action.payload}
     }
+
+    const orderReducer = (state, action) => {
+        switch (action.type) {
+            case "initialize":
+                return {
+                    ...state,
+                    originalOrders: action.payload,
+                    filteredOrders: action.payload
+                };
+            case "filter":
+                return {
+                    ...state,
+                    filterOption: action.payload,
+                    filteredOrders: filterOrders(state.originalOrders, action.payload)
+                };
+            default:
+                return state;
+        }
+    }
+
+    const [orders, setOrders] = useReducer(orderReducer, {
+        originalOrders: {},
+        filterOption : "",
+        filteredOrders: {}
+    })
+
+    const {filterOption, filteredOrders} = orders
 
     const [showReview, setShowReview] = useReducer(reducer, {
         viewReview: false,
@@ -108,28 +194,9 @@ export default function Order() {
     useEffect(() => {
         (async() => {
             // const result = await axios.get("sth sth");
-            setOrders(fakeOrders)
+            setOrders({type: "initialize", payload: fakeOrders})
         })();
     }, []);
-
-    useEffect(() => {
-        filterOrders(filterOption)
-    }, [orders])
-
-    const filterOrders = (filter) => {
-        setFilterOption(filter)
-        switch (filter) {
-            case "":
-                setFilteredOrders(orders)
-                break;
-            case "ongoing":
-                setFilteredOrders({...orders, completed_orders: []})
-                break;
-            case "completed":
-                setFilteredOrders({...orders, uncompleted_orders: []})
-                break;
-        }
-    }
 
     return (
         <>
@@ -146,7 +213,7 @@ export default function Order() {
                                         <Radio label={"All Orders"}
                                                value={""}
                                                checked={filterOption === ""}
-                                               onChange={() => filterOrders("")}
+                                               onChange={() => setOrders({type: "filter", payload: ""})}
                                         />
                                     </Form.Field>
 
@@ -154,7 +221,7 @@ export default function Order() {
                                         <Radio label={"Ongoing Orders"}
                                                value={"ongoing"}
                                                checked={filterOption === "ongoing"}
-                                               onChange={() => filterOrders("ongoing")}
+                                               onChange={() => setOrders({type: "filter", payload: "ongoing"})}
                                         />
                                     </Form.Field>
 
@@ -162,7 +229,7 @@ export default function Order() {
                                         <Radio label={"Completed Orders"}
                                                value={"completed"}
                                                checked={filterOption === "completed"}
-                                               onChange={() => filterOrders("completed")}
+                                               onChange={() => setOrders({type: "filter", payload: "completed"})}
                                         />
                                     </Form.Field>
                                 </Form>
@@ -173,10 +240,12 @@ export default function Order() {
 
                 <Grid.Column width={8}>
                     {(filterOption === "" || filterOption === "ongoing") &&
+                    filteredOrders.uncompleted_orders && filteredOrders.uncompleted_orders.length > 0 &&
                         <OngoingOrders orders={filteredOrders.uncompleted_orders}/>
                     }
 
                     {(filterOption === "" || filterOption === "completed") &&
+                    filteredOrders.completed_orders && filteredOrders.completed_orders.length > 0 &&
                         <CompletedOrders orders={filteredOrders.completed_orders}
                                          openReview={openReview}
                         />
@@ -198,6 +267,7 @@ export default function Order() {
 
             {showReview.review &&
                 <>
+                    <text>{showReview.review.oid}</text>
                     <text>
                         {`rider: ${showReview.review.rider.riderid} rating: ${showReview.review.rider.rating} 
                         review: ${showReview.review.rider.review}`}

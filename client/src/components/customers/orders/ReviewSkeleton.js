@@ -1,5 +1,5 @@
 const generateReviewSkeleton = (order) => {
-    return {rider: generateRiderReviewSkeleton(order), foodRating: generateFoodReviewSkeleton(order)}
+    return {oid: order.oid, rider: generateRiderReviewSkeleton(order), foodRating: generateFoodReviewSkeleton(order)}
 }
 
 const generateRiderReviewSkeleton = (order) => {

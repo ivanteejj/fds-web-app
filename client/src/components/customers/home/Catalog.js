@@ -71,9 +71,9 @@ function Catalog() {
 
     useEffect(() => {
         (async() => {
-            const result = await axios.get("/customer/shop");
-            setData(result.data); //replace the param with const variable above
-            //setData(fakeData.data)
+            // const result = await axios.get("/customer/shop");
+            // setData(result.data); //replace the param with const variable above
+            setData(fakeData.data)
         })();
     }, []);
 

@@ -24,17 +24,19 @@ const showLatestStatus = (o) => {
 }
 
 export default function OngoingOrders({orders}) {
-    const [hideStatus, setHideStatus] =  useState(true)
+    const [hideStatus, setHideStatus] =  useState(Array.apply(true, new Array(orders.length)))
 
-    const showStatus = () => {
-        setHideStatus(!hideStatus)
+    const showStatus = (idx) => {
+        let arr = hideStatus.slice()
+        arr[idx] = !hideStatus[idx]
+        setHideStatus(arr)
     }
 
     return (
         <>
             <Header as={'h1'}>{`Active Orders`}</Header>
             <Divider/>
-            {orders && orders.map(order => {
+            {orders && orders.map((order, idx) => {
                 return (
                     <Card fluid>
                         <Card.Content>
@@ -56,14 +58,14 @@ export default function OngoingOrders({orders}) {
 
                                     <Grid.Column width={4}>
                                         <Button floated={'right'} size="tiny"
-                                                color={hideStatus ? "orange" : "grey"}
-                                                content={hideStatus ? "Show Details" : "Hide Details"}
-                                                onClick={() => showStatus()}
+                                                color={!hideStatus[idx] ? "orange" : "grey"}
+                                                content={!hideStatus[idx] ? "Show Details" : "Hide Details"}
+                                                onClick={() => showStatus(idx)}
                                         />
                                     </Grid.Column>
                                 </Grid.Row>
 
-                                {!hideStatus && <OrderStatus o={order}/>}
+                                {hideStatus[idx] && <OrderStatus o={order}/>}
                             </Grid>
 
                             <Divider/>

@@ -40,11 +40,11 @@ const fakePromos = {
 
 const fakeRecentDeliverLoc = {
     data: [
-        {address: "Blk 233 #01-123 Bishan Avenue ABC Singapore 123455"},
-        {address: "Tampines Mall Dropoff Point near Taxi-Stand"},
-        {address: "NUS University Town Starbucks"},
-        {address: "NUS Science Library"},
-        {address: "Blk 999 #09-999 Yishun Avenue ABC Singapore 999111"}
+        {address: "Blk 233 #01-123 Bishan Avenue ABC Singapore 123455", area: "North"},
+        {address: "Tampines Mall Dropoff Point near Taxi-Stand", area: "South"},
+        {address: "NUS University Town Starbucks", area: "West"},
+        {address: "NUS Science Library", area: "West" },
+        {address: "Blk 999 #09-999 Yishun Avenue ABC Singapore 999111", area: "East"}
     ]
 }
 
@@ -86,13 +86,16 @@ export default function Restaurant({ match }) {
     const [paymentMtds, setPaymentMtds] = useState([]);
     const [userid, setUserid] = useState(null)
 
+    const [test, setTest] = useState(null)
+
     // HARD CODED % DELIVERY FEE
     const delivery_base = 3
     const delivery_percent = 0.025
 
-    const submitOrder = (cart, appliedPromo, deliveryFee, totalCharge, deliveryLoc, paymentMode) => {
+    const submitOrder = (cart, appliedPromo, deliveryFee, totalCharge, deliveryLoc, deliveryArea, paymentMode) => {
+        // TODO: backend code for submit order
         // generate order in backend
-
+        setTest({area: deliveryArea, address: deliveryLoc})
         // once order successful, direct to home page
     }
 
@@ -109,13 +112,19 @@ export default function Restaurant({ match }) {
     }
 
     const incrementQty = (fid, qty_left) => {
-        var existItem = cart.filter(x => x.id === fid)[0];
-        const otherItems = cart.filter(x => x.id !== fid);
-
-        if (qty_left > existItem.quantity) {
-            existItem.quantity++;
-            setCart(otherItems.concat(existItem));
-        }
+        setCart(
+            cart.map(item => {
+                if (item.id === fid) {
+                    if (qty_left > item.quantity){
+                        return {...item, quantity: ++item.quantity}
+                    } else {
+                        return item;
+                    }
+                } else {
+                    return item;
+                }
+            })
+        )
     }
 
     const decrementQty = (fid) => {
@@ -139,7 +148,6 @@ export default function Restaurant({ match }) {
     const openPopupCheckOut = (boo) => {
         setCheckout(boo)
     }
-
     
     useEffect(() => {
         (async() => {
@@ -164,7 +172,6 @@ export default function Restaurant({ match }) {
             //
             setMenu(groupBy(fakeMenu.data, 'category'))
             setRDetails(fakeRDetails.data[0])
-            setPromos(fakePromos.data)
             setRecentDeliveryLoc(fakeRecentDeliverLoc.data)
             setPaymentMtds(fakePaymentOptions.data);
         })();
@@ -175,6 +182,17 @@ export default function Restaurant({ match }) {
         setDeliveryFee((cartCost * delivery_percent) + delivery_base)
         setTotalCost(deliveryFee + cartCost)
     }, [cart, cartCost, deliveryFee])
+
+    useEffect(() => {
+        // triggered when detect change in checkout variable
+        //TODO: backend code to retrieve applicable promos
+        if (checkout) {
+            var cart = cartCost
+            //axios code here
+            let data = fakePromos.data
+            setPromos(data)
+        }
+    }, [checkout])
 
     return (
         <>
@@ -214,6 +232,10 @@ export default function Restaurant({ match }) {
             {cart.map(d => {
                 return <>{`item:${d.id} quantity: ${d.quantity}`}</>;
             })}
+
+            {test && (
+                <text>{`area: ${test.area}, address: ${test.address}`}</text>
+            )}
 
             {userid && (<text>{userid}</text>)}
         </>
