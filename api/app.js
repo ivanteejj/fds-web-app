@@ -12,6 +12,8 @@ var indexRouter = require('./controllers/index');
 var customerController = require('./controllers/customer');
 var foodController = require('./controllers/food');
 var restController = require('./controllers/restaurant');
+var orderController = require('./controllers/order');
+var promoController = require('./controllers/promotion');
 
 
 // view engine setup
@@ -35,6 +37,9 @@ app.get('/customer/shop/', (req, res) => restController.getAllRestDataForHomePag
 app.get('/customer/shop/getMenu', (req, res) => foodController.getFoodFromOneRes(req, res, db))
 app.get('/customer/shop/getRestaurantDetails/', (req, res) => restController.getOneRestDetails(req, res, db))
 app.get('/customer/shop/getRecentDeliveryAddress/', (req, res) => customerController.getRecentDeliveryAddress(req, res, db))
+app.get('/customer/shop/getAllOrderDetailsForOneCust/', (req, res) => orderController.getAllOrderDetailsForOrderPage(req, res, db))
+app.get('/customer/shop/getAllRelevantPromosForOneCust/', (req, res) => promoController.getAllRelevantPromos(req, res, db))
+
 
 // app.get('/customer/account/:userName', (req, res) => customerController.getCustomerDetails(req, res))
 

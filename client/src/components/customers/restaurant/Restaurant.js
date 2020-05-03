@@ -10,7 +10,7 @@ import ShoppingCart from "./ShoppingCart"
 import Popup from "./PopupCheckOut"
 import axios from 'axios'
 
-const fakeCid = 1
+const fakeCid = 20
 
 const fakePromos = {
     data: [
@@ -141,11 +141,19 @@ export default function Restaurant({ match }) {
             const deliveryLOC = await axios
                 .get("/customer/shop/getRecentDeliveryAddress/", {
                     params: {
-                        cid: 2
+                        cid: fakeCid
                     }
                 })
                 .then((response) => setRecentDeliveryLoc(response.data))
-            setPromos(fakePromos.data)
+
+            const promos = await axios
+                .get('/customer/shop/getAllRelevantPromosForOneCust', {
+                params: {
+                    rid: params.rid
+                }
+            })
+            .then((response) => setPromos(response.data))
+
             setPaymentMtds(fakePaymentOptions.data);
         })();
     }, []);
