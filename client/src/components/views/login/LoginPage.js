@@ -11,12 +11,13 @@ import RegisterForm from "./RegisterForm";
 class LoginPage extends Component {
     render() {
         return (
-            <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+            <div style={{backgroundColor: "#252839"}}>
+            <Grid textAlign='center' style={{ height: '110vh' }} verticalAlign='middle'>
                 <Grid.Column width={2}/>
                 <Grid.Column width={12} textAlign={'center'}>
                     <Header as={'h1'} style={{color: "white", fontSize: "50px"}}>FDS</Header>
-                    <Segment basic textAlign='center'>
-                        <Grid columns={2} relaxed='very' stackable centered padded>
+                    <Segment textAlign='center' basic>
+                        <Grid columns={2} relaxed='very' centered padded>
                             <Grid.Column>
                                 <LoginForm />
                             </Grid.Column>
@@ -29,6 +30,7 @@ class LoginPage extends Component {
                 </Grid.Column>
                 <Grid.Column width={2}/>
             </Grid>
+            </div>
         )
     }
 }
