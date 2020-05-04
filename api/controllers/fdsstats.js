@@ -1,7 +1,7 @@
 var express = require('express');
 
 
-const queryToGetMainSummaryDetails = 
+const queryToGetMainSummaryDetails =
     "WITH totalOrdersPerMonthYear as (\n" +
     "\tselect EXTRACT(MONTH FROM order_placed) as month, EXTRACT(YEAR FROM order_placed) as year, count(*) as numOfOrders, sum(cart_fee + delivery_fee - discount_amount) as totalCost\n" +
     "\tfrom Orders\n" +
@@ -73,7 +73,41 @@ const getMainSummaryData = (req, res, db) => {
             if (error) {
                 console.log(error)
             }
-            console.log("test")
+            console.log(result.rows)
+            res.status(200).json(result.rows);
+        })
+}
+
+const queryToGetSummaryDetailsByCustomer =
+    "WITH totalOrdersPerCustomerPerMonthYear as (\n" +
+    "\tselect EXTRACT(MONTH FROM order_placed) as month, EXTRACT(YEAR FROM order_placed) as year, cid, count(*) as numOfOrders, sum(cart_fee + delivery_fee - discount_amount) as totalCost\n" +
+    "\tfrom Orders\n" +
+    "\tgroup by (month, year, cid)\n" +
+    "), currentMonthYear as (\n" +
+    "\tSELECT DISTINCT EXTRACT(MONTH FROM now()::timestamp) as month, EXTRACT(YEAR FROM now()::timestamp) as year \n" +
+    "\tFROM month\n" +
+    "), relevantMonthYear as (\n" +
+    "\tSELECT month, year\n" +
+    "\tFROM Month m1, Year y1\n" +
+    "\tWHERE (y1.year, m1.month) <= (\n" +
+    "\t\tSELECT year, month\n" +
+    "\t\tFROM currentMonthYear\n" +
+    "\t)\n" +
+    "\tORDER BY year desc, month desc\n" +
+    "\t-- can be adjusted to show more months\n" +
+    "\tLIMIT 12\n" +
+    ")\n" +
+    "\n" +
+    "SELECT month, year, cname as custid, numoforders as totalorders, totalcost\n" +
+    "FROM totalOrdersPerCustomerPerMonthYear JOIN Customers USING (cid)\n" +
+    "ORDER BY year desc, month desc\n"
+
+const getSummaryDetailsByCustomer = (req, res, db) => {
+    const output = db.query(queryToGetSummaryDetailsByCustomer,
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
             console.log(result.rows)
             res.status(200).json(result.rows);
         })
@@ -82,6 +116,7 @@ const getMainSummaryData = (req, res, db) => {
 
 module.exports = {
     getMainSummaryData: getMainSummaryData,
+    getSummaryDetailsByCustomer: getSummaryDetailsByCustomer
 };
 
 

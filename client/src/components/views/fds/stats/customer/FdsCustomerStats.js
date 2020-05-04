@@ -3,6 +3,7 @@ import {Grid, Header} from "semantic-ui-react";
 import FdsStatsTable from "../../../../elements/fds/stats/FdsStatsTable";
 import ReactTableFilters from "../../../../commons/ReactTableFilters"
 import DateTimeUtils from "../../../../commons/DateTimeUtils";
+import axios from "axios";
 
 const fakeCustStats = {
     //TODO: aggregated data
@@ -67,9 +68,11 @@ export default function FdsCustomerStats() {
 
     useEffect(() => {
         (async() => {
-            // TODO: (backend) code here for first rendering of page
-            let stats = fakeCustStats.data
-            setData(DateTimeUtils.formatDataPeriod(stats))
+            const summaryDetailsByCustomer = await axios
+                .get('/FDSManager/getSummaryDataByCustomer/', {
+
+                })
+                .then((response) => setData(DateTimeUtils.formatDataPeriod(response.data)))
         })()
     }, [])
 
