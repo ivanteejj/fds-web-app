@@ -175,12 +175,9 @@ export default function Restaurant({ match }) {
 
     useEffect(() => {
         // triggered when detect change in checkout variable
-        //TODO: backend code to retrieve applicable promos
         if (checkout) {
             var cart = cartCost
-            //axios code here
-            let data = fakePromos.data
-            setPromos(data)
+            setPromos(promos)
         }
     }, [checkout])
 
