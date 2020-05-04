@@ -10,6 +10,7 @@ import {
 import OrderDetails from "./details/OrderDetails";
 import CartDetails from "./details/CartDetails";
 import OrderStatus from "./details/OrderStatus";
+import DateTimeUtils from "../../../commons/DateTimeUtils";
 
 const showLatestStatus = (o) => {
     if (o.dt_rider_departs === null) {
@@ -43,7 +44,7 @@ export default function OngoingOrders({orders}) {
                             <h2>{`Order ID: #${order.oid}`}</h2>
 
                             <Item>
-                                <Item.Description>{`Order placed: ${order.dt_order_placed}`}</Item.Description>
+                                <Item.Description>{`Order placed: ${DateTimeUtils.stringtifyPrettyDT(order.dt_order_placed)}`}</Item.Description>
                                 <Item.Description>{`Restaurant: ${order.cart[0].rname}`}</Item.Description>
                                 <Item.Description>{`Rider: ${order.riderid}`}</Item.Description>
                                 <Item.Description>{`Delivery Address: ${order.deliverylocation}`}</Item.Description>
