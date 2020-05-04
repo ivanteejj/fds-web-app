@@ -1,26 +1,27 @@
 import React, {useState, useEffect, useMemo} from "react"
 import {Grid, Header} from "semantic-ui-react";
 import FdsStatsTable from "../../../../elements/fds/stats/FdsStatsTable";
-import ReactTableFilters from "../../../../commons/ReactTableFilters";
+import ReactTableFilters from "../../../../commons/ReactTableFilters"
+import DateTimeUtils from "../../../../commons/DateTimeUtils";
 
 const fakeCustStats = {
     //TODO: aggregated data
     //     period is concat of Month and Year
     //data should already be sorted in descending order by period
     data: [
-        {period: "March 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
-        {period: "March 2020", custid: "ryan", totalorders: 50, totalcost: 1251.2},
-        {period: "March 2020", custid: "bryan", totalorders: 1, totalcost: 11.2},
-        {period: "March 2020", custid: "cody", totalorders: 5, totalcost: 51.2},
-        {period: "March 2020", custid: "emily", totalorders: 23, totalcost: 451.2},
-        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {month: 3, year: 2020, custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {month: 3, year: 2020, custid: "ryan", totalorders: 50, totalcost: 1251.2},
+        {month: 3, year: 2020, custid: "bryan", totalorders: 1, totalcost: 11.2},
+        {month: 3, year: 2020, custid: "cody", totalorders: 5, totalcost: 51.2},
+        {month: 3, year: 2020, custid: "emily", totalorders: 23, totalcost: 451.2},
+        {month: 2, year: 2020, custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {month: 2, year: 2020, custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {month: 2, year: 2020, custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {month: 2, year: 2020, custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {month: 2, year: 2020, custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {month: 2, year: 2020, custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {month: 2, year: 2020, custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {month: 2, year: 2020, custid: "ivantee", totalorders: 15, totalcost: 251.2},
     ]
 }
 
@@ -68,7 +69,7 @@ export default function FdsCustomerStats() {
         (async() => {
             // TODO: (backend) code here for first rendering of page
             let stats = fakeCustStats.data
-            setData(stats)
+            setData(DateTimeUtils.formatDataPeriod(stats))
         })()
     }, [])
 

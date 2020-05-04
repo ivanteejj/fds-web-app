@@ -1,14 +1,15 @@
 import React, {useEffect, useReducer} from "react"
 import {Button, Dropdown, Grid, Header} from "semantic-ui-react";
 import FdsSummaryDetails from "../../../elements/fds/summary/FdsSummaryDetails";
+import DateTimeUtils from "../../../commons/DateTimeUtils";
 
 const fakeSummary = {
     data: [
         /* TODO: period is concat of Month and Year of dt_order_placed
         *  sorted in descending order by month and year
         */
-        {period: "March 2020", totalnewcustomers: 20, totalorders: 2000, totalcost: 22049.2},
-        {period: "February 2020", totalnewcustomers: 15, totalorders: 1500, totalcost: 20000.10},
+        {month: 3, year: 2020, totalnewcustomers: 20, totalorders: 2000, totalcost: 22049.2},
+        {month: 2, year: 2020, totalnewcustomers: 15, totalorders: 1500, totalcost: 20000.10},
     ]
 }
 
@@ -54,7 +55,7 @@ export default function FdsSummary() {
     useEffect(() => {
         (async() => {
             // TODO: (backend) code here for first rendering of page
-            setFilterSummary({type: "initialize", payload: fakeSummary.data})
+            setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(fakeSummary.data)})
         })()
     }, [])
 

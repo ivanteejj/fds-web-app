@@ -35,6 +35,7 @@ import FdsAreaStatsPage from "./components/views/fds/stats/area/FdsAreaStatsPage
 
 /* -------------------------- LoginPage/Register ------------------------------------------*/
 import LoginPage from './components/views/login/LoginPage'
+import SummaryDetails from "./components/elements/rider/summary/SummaryDetails";
 
 class App extends Component {
     constructor(props) {
@@ -45,7 +46,7 @@ class App extends Component {
     render() {
         return <Router>
             <Switch>
-            <Route exact path= "/test" component = { FdsSummaryPage }></Route>
+            <Route exact path= "/test" component = { StaffSummaryPage }></Route>
             <Route exact path= "/customer/order" component = { OrderPage }></Route>
             <Route exact path= "/customer/shop" component = { Home }></Route>
             <Route exact path = "/customer/shop/:rid" component = { RestaurantPage }></Route>
