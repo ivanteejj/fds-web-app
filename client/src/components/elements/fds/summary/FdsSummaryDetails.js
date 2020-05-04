@@ -7,15 +7,15 @@ export default function FdsSummaryDetails({stats}) {
             <Header as={'h2'} textAlign={'center'} color={'grey'}>Statistics</Header>
             <Statistic.Group widths={'three'}>
                 <Statistic>
-                    <Statistic.Value>{stats.totalNewCustomers}</Statistic.Value>
+                    <Statistic.Value>{stats.totalnewcustomers}</Statistic.Value>
                     <Statistic.Label>New Customers</Statistic.Label>
                 </Statistic>
                 <Statistic>
-                    <Statistic.Value>{stats.totalNumberOfOrders}</Statistic.Value>
+                    <Statistic.Value>{stats.totalorders}</Statistic.Value>
                     <Statistic.Label>Orders</Statistic.Label>
                 </Statistic>
                 <Statistic>
-                    <Statistic.Value>${stats.totalCost}</Statistic.Value>
+                    <Statistic.Value>${stats.totalcost}</Statistic.Value>
                     <Statistic.Label>Revenue</Statistic.Label>
                 </Statistic>
             </Statistic.Group>

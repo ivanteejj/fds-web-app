@@ -55,12 +55,12 @@ export default function ActiveOrders({orders, updateRiderStatus}) {
                         <Item.Header>{`Order #${order.oid}`}</Item.Header>
                         <Item.Description>{``}</Item.Description>
                         <Item.Meta>{`Order placed: ${order.dt_order_placed}`}</Item.Meta>
-                        <Item.Description>{`Payment: ${order.paymentMode}`}</Item.Description>
-                        <Item.Description>{`Total Cost: $${order.totalCost}`}</Item.Description>
+                        <Item.Description>{`Payment: ${order.paymentmode}`}</Item.Description>
+                        <Item.Description>{`Total Cost: $${order.totalcost}`}</Item.Description>
                         <Card>
                             <Card.Content>
                                 <Label>Delivery Location</Label>
-                                <Item.Description>{order.deliveryLocation}</Item.Description>
+                                <Item.Description>{order.deliverylocation}</Item.Description>
                                 <Item.Meta>{`Customer: ${order.custid}`}</Item.Meta>
                                 <Divider/>
                                 <Label>Restaurant</Label>

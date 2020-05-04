@@ -8,19 +8,19 @@ const fakeCustStats = {
     //     period is concat of Month and Year
     //data should already be sorted in descending order by period
     data: [
-        {period: "March 2020", custid: "ivantee", totalNumberOfOrders: 15, totalCost: 251.2},
-        {period: "March 2020", custid: "ryan", totalNumberOfOrders: 50, totalCost: 1251.2},
-        {period: "March 2020", custid: "bryan", totalNumberOfOrders: 1, totalCost: 11.2},
-        {period: "March 2020", custid: "cody", totalNumberOfOrders: 5, totalCost: 51.2},
-        {period: "March 2020", custid: "emily", totalNumberOfOrders: 23, totalCost: 451.2},
-        {period: "February 2020", custid: "ivantee", totalNumberOfOrders: 15, totalCost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalNumberOfOrders: 15, totalCost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalNumberOfOrders: 15, totalCost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalNumberOfOrders: 15, totalCost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalNumberOfOrders: 15, totalCost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalNumberOfOrders: 15, totalCost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalNumberOfOrders: 15, totalCost: 251.2},
-        {period: "February 2020", custid: "ivantee", totalNumberOfOrders: 15, totalCost: 251.2},
+        {period: "March 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {period: "March 2020", custid: "ryan", totalorders: 50, totalcost: 1251.2},
+        {period: "March 2020", custid: "bryan", totalorders: 1, totalcost: 11.2},
+        {period: "March 2020", custid: "cody", totalorders: 5, totalcost: 51.2},
+        {period: "March 2020", custid: "emily", totalorders: 23, totalcost: 451.2},
+        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
+        {period: "February 2020", custid: "ivantee", totalorders: 15, totalcost: 251.2},
     ]
 }
 
@@ -42,13 +42,13 @@ export default function FdsCustomerStats() {
                     },
                     {
                         Header: "Total Orders",
-                        accessor: "totalNumberOfOrders",
+                        accessor: "totalorders",
                         Filter: ReactTableFilters.NumberRangeColumnFilter,
                         filter: "between"
                     },
                     {
                         Header: "Total Spending",
-                        accessor: "totalCost",
+                        accessor: "totalcost",
                         Filter: ReactTableFilters.NumberRangeColumnFilter,
                         filter: "between",
                         Cell: ({cell: {value}}) => {

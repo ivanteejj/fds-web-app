@@ -45,7 +45,7 @@ class App extends Component {
     render() {
         return <Router>
             <Switch>
-            <Route exact path= "/test" component = { SchedulePage }></Route>
+            <Route exact path= "/test" component = { FdsSummaryPage }></Route>
             <Route exact path= "/customer/order" component = { OrderPage }></Route>
             <Route exact path= "/customer/shop" component = { Home }></Route>
             <Route exact path = "/customer/shop/:rid" component = { RestaurantPage }></Route>

@@ -28,7 +28,7 @@ const queryToGetAllOrderDetailsForOrderPage = "WITH totalPromotions as (\n" +
     ")\n" +
     "\n" +
     "\n" +
-    "SELECT oid, delivery_fee as deliveryFee, cart_fee as cartCost, promo_details_text, discount_amount, payment_method as paymentMode, delivery_location as deliveryLocation, rider_id as riderid, order_placed as dt_order_placed, rider_depart_for_rest as dt_rider_departs, rider_arrive_rest as dt_rider_arrives_rest, rider_depart_for_delivery_location as dt_rider_departs_rest, order_delivered as dt_order_delivered , cart    \n" +
+    "SELECT oid, delivery_fee as deliveryfee, cart_fee as cartcost, promo_details_text, discount_amount, payment_method as paymentMode, delivery_location as deliverylocation, rider_id as riderid, order_placed as dt_order_placed, rider_depart_for_rest as dt_rider_departs, rider_arrive_rest as dt_rider_arrives_rest, rider_depart_for_delivery_location as dt_rider_departs_rest, order_delivered as dt_order_delivered , cart    \n" +
     "FROM (Orders NATURAL JOIN aggregatedCart) LEFT JOIN totalPromotions USING (pid)\n" +
     "WHERE cid = $1"
 

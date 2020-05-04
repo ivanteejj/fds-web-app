@@ -16,21 +16,21 @@ export default function PopupLeaveReview({hidePopup, review, submitReview}) {
     const updateFoodReview = (type, value, fid) => {
         if (type === "rating") {
             setReviews({...reviews,
-                foodRating: reviews.foodRating.map(item => item.fid === fid ? {...item, rating: value}: item)
+                foodrating: reviews.foodrating.map(item => item.fid === fid ? {...item, rating: value}: item)
             })
         } else if (type === "review") {
             setReviews({...reviews,
-                foodRating: reviews.foodRating.map(item => item.fid === fid ? {...item, review: value} : item)
+                foodrating: reviews.foodrating.map(item => item.fid === fid ? {...item, review: value} : item)
             })
         }
     }
 
     useEffect(() => {
         setCount(
-            reviews.foodRating.filter(item => item.rating < 1 || item.review === "").length +
+            reviews.foodrating.filter(item => item.rating < 1 || item.review === "").length +
             (reviews.rider.rating < 1 || reviews.rider.review === "" ? 1 : 0)
         )
-    }, [reviews.foodRating, reviews.rider.rating, reviews.rider.review])
+    }, [reviews.foodrating, reviews.rider.rating, reviews.rider.review])
 
     const updateRiderReview = (type, value) => {
         if (type === "rating") {
@@ -72,7 +72,7 @@ export default function PopupLeaveReview({hidePopup, review, submitReview}) {
 
                         <Divider/>
                         <h2>Food Review</h2>
-                        {reviews.foodRating.map((item, index) => (
+                        {reviews.foodrating.map((item, index) => (
                             <>
                                 <h3>{item.fname}</h3>
                                 <Form.Field>

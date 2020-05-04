@@ -8,14 +8,14 @@ const fakeAreaStats = {
     //TODO: aggregated data
     //data should already be sorted in descending order by date
     data: [
-        {date: "02/05/2020", hour: 11, area: "North", totalOrders: 200},
-        {date: "02/05/2020", hour: 11, area: "South", totalOrders: 220},
-        {date: "02/05/2020", hour: 11, area: "East", totalOrders: 210},
-        {date: "02/05/2020", hour: 11, area: "West", totalOrders: 100},
-        {date: "01/05/2020", hour: 20, area: "North", totalOrders: 300},
-        {date: "01/05/2020", hour: 20, area: "South", totalOrders: 210},
-        {date: "01/05/2020", hour: 20, area: "East", totalOrders: 50},
-        {date: "01/05/2020", hour: 20, area: "West", totalOrders: 70},
+        {date: "02/05/2020", hour: 11, area: "North", totalorders: 200},
+        {date: "02/05/2020", hour: 11, area: "South", totalorders: 220},
+        {date: "02/05/2020", hour: 11, area: "East", totalorders: 210},
+        {date: "02/05/2020", hour: 11, area: "West", totalorders: 100},
+        {date: "01/05/2020", hour: 20, area: "North", totalorders: 300},
+        {date: "01/05/2020", hour: 20, area: "South", totalorders: 210},
+        {date: "01/05/2020", hour: 20, area: "East", totalorders: 50},
+        {date: "01/05/2020", hour: 20, area: "West", totalorders: 70},
     ]
 }
 
@@ -49,7 +49,7 @@ export default function FdsAreaStats() {
                     },
                     {
                         Header: "Total Orders",
-                        accessor: "totalOrders",
+                        accessor: "totalorders",
                         Filter: ReactTableFilters.NumberRangeColumnFilter,
                         filter: "between"
                     }

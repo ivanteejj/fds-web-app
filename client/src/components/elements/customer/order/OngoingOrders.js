@@ -46,8 +46,8 @@ export default function OngoingOrders({orders}) {
                                 <Item.Description>{`Order placed: ${order.dt_order_placed}`}</Item.Description>
                                 <Item.Description>{`Restaurant: ${order.cart[0].rname}`}</Item.Description>
                                 <Item.Description>{`Rider: ${order.riderid}`}</Item.Description>
-                                <Item.Description>{`Delivery Address: ${order.deliveryLocation}`}</Item.Description>
-                                <Item.Description>{`Payment Mode: ${order.paymentMode}`}</Item.Description>
+                                <Item.Description>{`Delivery Address: ${order.deliverylocation}`}</Item.Description>
+                                <Item.Description>{`Payment Mode: ${order.paymentmode}`}</Item.Description>
                             </Item>
 
                             <Grid>
