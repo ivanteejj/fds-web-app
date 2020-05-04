@@ -22,8 +22,8 @@ const fakeOngoingOrders = {
     //  NOTE additional fields: address (restaurant address), custid (customer's userid)
     // data should already be sorted in desc order by dt_order_placed
     data: [
-        {oid: 100123, totalCost: 49.5, paymentMode: "Cash On Delivery", custid: "ivantee",
-            deliveryLocation: "NUS Central Library", riderid: "chukai",
+        {oid: 100123, totalcost: 49.5, paymentmode: "Cash On Delivery", custid: "ivantee",
+            deliverylocation: "NUS Central Library", riderid: "chukai",
             dt_order_placed: "2020-02-22 19:10:25", dt_rider_departs: "2020-02-22 19:20:00",
             dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
             cart: [
@@ -32,8 +32,8 @@ const fakeOngoingOrders = {
                 {fid: 102, rid: 1000, rname: "LiWoW", address: "20 Tampines Central 1, #01-24, Singapore 529538", fname: "Brown Sugar Fries", quantity: 3}
             ]
         },
-        {oid: 100100, totalCost: 10.1, paymentMode: "Cash On Delivery", custid: "ivantee",
-            deliveryLocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
+        {oid: 100100, totalcost: 10.1, paymentmode: "Cash On Delivery", custid: "ivantee",
+            deliverylocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
             dt_order_placed: "2020-02-22 09:10:25", dt_rider_departs: "2020-02-22 09:20:25",
             dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
             cart: [
@@ -41,8 +41,8 @@ const fakeOngoingOrders = {
                 {fid: 101, rid: 1000, rname: "LiWoW", address: "20 Tampines Central 1, #01-24, Singapore 529538", fname: "Avocado Melon Tea", quantity: 1}
             ]
         },
-        {oid: 100000, totalCost: 10.1, paymentMode: "Cash On Delivery", custid: "ivantee",
-            deliveryLocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
+        {oid: 100000, totalcost: 10.1, paymentmode: "Cash On Delivery", custid: "ivantee",
+            deliverylocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
             dt_order_placed: "2020-02-22 09:10:25", dt_rider_departs: "2020-02-22 09:20:25",
             dt_rider_arrives_rest: "2020-02-22 09:20:25", dt_rider_departs_rest: null, dt_order_delivered: null,
             cart: [
@@ -50,8 +50,8 @@ const fakeOngoingOrders = {
                 {fid: 101, rid: 1000, rname: "LiWoW", address: "20 Tampines Central 1, #01-24, Singapore 529538", fname: "Avocado Melon Tea", quantity: 1}
             ]
         },
-        {oid: 100000, totalCost: 10.1, paymentMode: "Cash On Delivery", custid: "ivantee",
-            deliveryLocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
+        {oid: 100000, totalcost: 10.1, paymentmode: "Cash On Delivery", custid: "ivantee",
+            deliverylocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
             dt_order_placed: "2020-02-22 09:10:25", dt_rider_departs: "2020-02-22 09:20:25",
             dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
             cart: [
@@ -59,8 +59,8 @@ const fakeOngoingOrders = {
                 {fid: 101, rid: 1000, rname: "LiWoW", address: "20 Tampines Central 1, #01-24, Singapore 529538", fname: "Avocado Melon Tea", quantity: 1}
             ]
         },
-        {oid: 100000, totalCost: 10.1, paymentMode: "Cash On Delivery", custid: "ivantee",
-            deliveryLocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
+        {oid: 100000, totalcost: 10.1, paymentmode: "Cash On Delivery", custid: "ivantee",
+            deliverylocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
             dt_order_placed: "2020-02-22 09:10:25", dt_rider_departs: "2020-02-22 09:20:25",
             dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
             cart: [
@@ -68,8 +68,8 @@ const fakeOngoingOrders = {
                 {fid: 101, rid: 1000, rname: "LiWoW", address: "20 Tampines Central 1, #01-24, Singapore 529538", fname: "Avocado Melon Tea", quantity: 1}
             ]
         },
-        {oid: 100000, totalCost: 10.1, paymentMode: "Cash On Delivery", custid: "ivantee",
-            deliveryLocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
+        {oid: 100000, totalcost: 10.1, paymentmode: "Cash On Delivery", custid: "ivantee",
+            deliverylocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
             dt_order_placed: "2020-02-22 09:10:25", dt_rider_departs: "2020-02-22 09:20:25",
             dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
             cart: [

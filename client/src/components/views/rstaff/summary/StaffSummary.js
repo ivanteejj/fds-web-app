@@ -13,10 +13,8 @@ const fakeOrders = {
     /* TODO: Active orders (restaurant pov) so get orders where dt_rider_departs_rest == null
     *  filter, sort desc order by dt_order_placed
     */
-    uncompleted_orders: [
-        {oid: 100123, totalCost: 49.5, deliveryFee: 4.1, cartCost: 45.4,
-            promoApplied: null, paymentMode: "Cash On Delivery",
-            deliveryLocation: "NUS Central Library", riderid: "benwang",
+    data: [
+        {oid: 100123, riderid: "benwang",
             dt_order_placed: "2020-02-22 19:10:25", dt_rider_departs: "2020-02-22 19:20:00",
             dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
             cart: [
@@ -25,10 +23,7 @@ const fakeOrders = {
                 {fid: 102, rid: 1000, rname: "LiWoW", fname: "Brown Sugar Fries", quantity: 3, price: 9.7}
             ]
         },
-        {oid: 100100, totalCost: 10.1, deliveryFee: 3.2, cartCost: 9.9,
-            promoApplied: {details: '$3 off on delivery fee', offset: 3},
-            paymentMode: "Cash On Delivery",
-            deliveryLocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
+        {oid: 100100, riderid: "chukai",
             dt_order_placed: "2020-02-22 09:10:25", dt_rider_departs: "2020-02-22 09:20:25",
             dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
             cart: [
@@ -36,10 +31,7 @@ const fakeOrders = {
                 {fid: 101, rid: 1000, rname: "LiWoW", fname: "Avocado Melon Tea", quantity: 1, price: 2.9}
             ]
         },
-        {oid: 100000, totalCost: 10.1, deliveryFee: 3.2, cartCost: 9.9,
-            promoApplied: {details: '$3 off on delivery fee', offset: 3},
-            paymentMode: "Cash On Delivery",
-            deliveryLocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
+        {oid: 100000, riderid: "chukai",
             dt_order_placed: "2020-02-22 09:10:25", dt_rider_departs: "2020-02-22 09:20:25",
             dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
             cart: [
@@ -55,7 +47,7 @@ const fakeStats = {
         /* TODO: period is concat of Month and Year of dt_order_placed
         *  sorted in descending order by month and year
         */
-        {period: "March 2020", totalNumberOfOrders: 2000, totalProfit: 34000.20,
+        {period: "March 2020", totalorders: 2000, totalProfit: 34000.20,
             topFavorites: [ // sorted in descending order by qty_sold
                 {fid: 100, fname: "Avocado Milk Tea", qty_sold: 200},
                 {fid: 101, fname: "Regular Milk Tea", qty_sold: 190},
@@ -64,7 +56,7 @@ const fakeStats = {
                 {fid: 104, fname: "Creme Brulee", qty_sold: 73}
             ]
         },
-        {period: "February 2020", totalNumberOfOrders: 1500, totalProfit: 20000.10,
+        {period: "February 2020", totalorders: 1500, totalProfit: 20000.10,
             topFavorites: [
                 {fid: 101, fname: "Regular Milk Tea", qty_sold: 150},
                 {fid: 100, fname: "Avocado Milk Tea", qty_sold: 133},
@@ -148,7 +140,7 @@ export default function StaffSummary() {
         (async() => {
             // TODO: (backend) code here for first rendering of page
             // only render uncompleted orders for restaurant (dt_rider_departs_rest == null)
-            setOrders(fakeOrders.uncompleted_orders)
+            setOrders(fakeOrders.data)
             setFilterSummary({type: "initialize", payload: fakeStats.data})
             setPromotions(fakePromoStats.data)
         })()

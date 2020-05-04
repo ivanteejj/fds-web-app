@@ -5,31 +5,31 @@ import FdsStatsTable from "../../../../elements/fds/stats/FdsStatsTable";
 
 const fakeRiderStats = {
     //TODO: aggregated data
-    //      totalRatings refers to total number of reviews (NOT STARS!) for the month
-    //      avgRating = total number of stars for the month / totalRatings
+    //      totalratings refers to total number of reviews (NOT STARS!) for the month
+    //      avgrating = total number of stars for the month / totalratings
     data: [
-        {period: "March 2020", riderid: "chukai", totalNumberOfOrders: 105, totalHours: 80, totalSalary: 1200,
-            avgDeliveryTime: 23, totalRatings: 12, avgRating: 3.4},
-        {period: "March 2020", riderid: "sean", totalNumberOfOrders: 150, totalHours: 100, totalSalary: 1800,
-            avgDeliveryTime: 10, totalRatings: 42, avgRating: 4.4},
-        {period: "March 2020", riderid: "alexandra", totalNumberOfOrders: 120, totalHours: 110, totalSalary: 1900,
-            avgDeliveryTime: 15, totalRatings: 70, avgRating: 4.9},
-        {period: "February 2020", riderid: "chukai", totalNumberOfOrders: 105, totalHours: 80, totalSalary: 1200,
-            avgDeliveryTime: 23, totalRatings: 12, avgRating: 3.4},
-        {period: "February 2020", riderid: "sean", totalNumberOfOrders: 150, totalHours: 100, totalSalary: 1800,
-            avgDeliveryTime: 10, totalRatings: 42, avgRating: 4.4},
-        {period: "February 2020", riderid: "alexandra", totalNumberOfOrders: 120, totalHours: 110, totalSalary: 1900,
-            avgDeliveryTime: 15, totalRatings: 70, avgRating: 4.9},
-        {period: "February 2020", riderid: "alexandra", totalNumberOfOrders: 120, totalHours: 110, totalSalary: 1900,
-            avgDeliveryTime: 15, totalRatings: 70, avgRating: 4.9},
-        {period: "February 2020", riderid: "alexandra", totalNumberOfOrders: 120, totalHours: 110, totalSalary: 1900,
-            avgDeliveryTime: 15, totalRatings: 70, avgRating: 4.9},
-        {period: "February 2020", riderid: "alexandra", totalNumberOfOrders: 120, totalHours: 110, totalSalary: 1900,
-            avgDeliveryTime: 15, totalRatings: 70, avgRating: 4.9},
-        {period: "February 2020", riderid: "alexandra", totalNumberOfOrders: 120, totalHours: 110, totalSalary: 1900,
-            avgDeliveryTime: 15, totalRatings: 70, avgRating: 4.9},
-        {period: "February 2020", riderid: "alexandra", totalNumberOfOrders: 120, totalHours: 110, totalSalary: 1900,
-            avgDeliveryTime: 15, totalRatings: 70, avgRating: 4.9}
+        {period: "March 2020", riderid: "chukai", totalorders: 105, totalhours: 80, totalsalary: 1200,
+            avgdeliverytime: 23, totalratings: 12, avgrating: 3.4},
+        {period: "March 2020", riderid: "sean", totalorders: 150, totalhours: 100, totalsalary: 1800,
+            avgdeliverytime: 10, totalratings: 42, avgrating: 4.4},
+        {period: "March 2020", riderid: "alexandra", totalorders: 120, totalhours: 110, totalsalary: 1900,
+            avgdeliverytime: 15, totalratings: 70, avgrating: 4.9},
+        {period: "February 2020", riderid: "chukai", totalorders: 105, totalhours: 80, totalsalary: 1200,
+            avgdeliverytime: 23, totalratings: 12, avgrating: 3.4},
+        {period: "February 2020", riderid: "sean", totalorders: 150, totalhours: 100, totalsalary: 1800,
+            avgdeliverytime: 10, totalratings: 42, avgrating: 4.4},
+        {period: "February 2020", riderid: "alexandra", totalorders: 120, totalhours: 110, totalsalary: 1900,
+            avgdeliverytime: 15, totalratings: 70, avgrating: 4.9},
+        {period: "February 2020", riderid: "alexandra", totalorders: 120, totalhours: 110, totalsalary: 1900,
+            avgdeliverytime: 15, totalratings: 70, avgrating: 4.9},
+        {period: "February 2020", riderid: "alexandra", totalorders: 120, totalhours: 110, totalsalary: 1900,
+            avgdeliverytime: 15, totalratings: 70, avgrating: 4.9},
+        {period: "February 2020", riderid: "alexandra", totalorders: 120, totalhours: 110, totalsalary: 1900,
+            avgdeliverytime: 15, totalratings: 70, avgrating: 4.9},
+        {period: "February 2020", riderid: "alexandra", totalorders: 120, totalhours: 110, totalsalary: 1900,
+            avgdeliverytime: 15, totalratings: 70, avgrating: 4.9},
+        {period: "February 2020", riderid: "alexandra", totalorders: 120, totalhours: 110, totalsalary: 1900,
+            avgdeliverytime: 15, totalratings: 70, avgrating: 4.9}
     ]
 }
 
@@ -51,19 +51,19 @@ export default function FdsRiderStats() {
                     },
                     {
                         Header: "Total Orders",
-                        accessor: "totalNumberOfOrders",
+                        accessor: "totalorders",
                         Filter: ReactTableFilters.NumberRangeColumnFilter,
                         filter: "between"
                     },
                     {
                         Header: "Hours Worked",
-                        accessor: "totalHours",
+                        accessor: "totalhours",
                         Filter: ReactTableFilters.NumberRangeColumnFilter,
                         filter: "between"
                     },
                     {
                         Header: "Salary",
-                        accessor: "totalSalary",
+                        accessor: "totalsalary",
                         Filter: ReactTableFilters.NumberRangeColumnFilter,
                         filter: "between",
                         Cell: ({cell: {value}}) => {
@@ -76,7 +76,7 @@ export default function FdsRiderStats() {
                     },
                     {
                         Header: "Average Delivery Time",
-                        accessor: "avgDeliveryTime",
+                        accessor: "avgdeliverytime",
                         Filter: ReactTableFilters.NumberRangeColumnFilter,
                         filter: "between",
                         Cell: ({cell: {value}}) => {
@@ -89,11 +89,11 @@ export default function FdsRiderStats() {
                     },
                     {
                         Header: "Total Reviews",
-                        accessor: "totalRatings"
+                        accessor: "totalratings"
                     },
                     {
                         Header: "Average Rating",
-                        accessor: "avgRating",
+                        accessor: "avgrating",
                         Filter: ReactTableFilters.NumberRangeColumnFilter,
                         filter: "between"
                     }

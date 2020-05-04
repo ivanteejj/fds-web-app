@@ -18,10 +18,10 @@ const fakeCid = 20
 //NOTE: ORDERS SHOULD ALR BE SORTED IN DESC ORDER BASED ON dt_order_placed UNDER BOTH UNCOMPLETED AND COMPLETED ORDER GROUPS
 const fakeOrders = {
     data: [
-        {oid: 100123, deliveryFee: 4.1, cartCost: 45.4,
+        {oid: 100123, deliveryfee: 4.1, cartcost: 45.4,
             promo_details_text: null, discount_amount: null,
-            paymentMode: "Cash On Delivery",
-            deliveryLocation: "NUS Central Library", riderid: "benwang",
+            paymentmode: "Cash On Delivery",
+            deliverylocation: "NUS Central Library", riderid: "benwang",
             dt_order_placed: "2020-02-22 19:10:25", dt_rider_departs: "2020-02-22 19:20:00",
             dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
             cart: [
@@ -30,10 +30,10 @@ const fakeOrders = {
                 {fid: 102, rid: 1000, rname: "LiWoW", fname: "Brown Sugar Fries", quantity: 3, price: 9.7}
             ]
         },
-        {oid: 100121, deliveryFee: 4.1, cartCost: 45.4,
+        {oid: 100121, deliveryfee: 4.1, cartcost: 45.4,
             promo_details_text: null, discount_amount: null,
-            paymentMode: "Cash On Delivery",
-            deliveryLocation: "NUS Central Library", riderid: "benwang",
+            paymentmode: "Cash On Delivery",
+            deliverylocation: "NUS Central Library", riderid: "benwang",
             dt_order_placed: "2020-02-22 19:10:25", dt_rider_departs: "2020-02-22 19:20:00",
             dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
             cart: [
@@ -42,10 +42,10 @@ const fakeOrders = {
                 {fid: 102, rid: 1000, rname: "LiWoW", fname: "Brown Sugar Fries", quantity: 3, price: 9.7}
             ]
         },
-        {oid: 100100, deliveryFee: 3.2, cartCost: 9.9,
+        {oid: 100100, deliveryfee: 3.2, cartcost: 9.9,
             promo_details_text: '$3 off on delivery fee', discount_amount: 3,
-            paymentMode: "Cash On Delivery",
-            deliveryLocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
+            paymentmode: "Cash On Delivery",
+            deliverylocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
             dt_order_placed: "2019-12-22 19:10:25", dt_rider_departs: "2019-12-22 19:20:25",
             dt_rider_arrives_rest: "2019-12-22 19:22:25", dt_rider_departs_rest: "2019-12-22 19:25:25",
             dt_order_delivered: "2019-12-22 19:35:00",
@@ -54,10 +54,10 @@ const fakeOrders = {
                 {fid: 101, rid: 1000, rname: "LiWoW", fname: "Avocado Melon Tea", quantity: 1, price: 2.9}
             ], review: null
         },
-        {oid: 100000, deliveryFee: 3.2, cartCost: 9.9,
+        {oid: 100000, deliveryfee: 3.2, cartcost: 9.9,
             promo_details_text: null, discount_amount: null,
-            paymentMode: "Credit Card",
-            deliveryLocation: "NUS Central Library", riderid: "phukai",
+            paymentmode: "Credit Card",
+            deliverylocation: "NUS Central Library", riderid: "phukai",
             dt_order_placed: "2019-12-12 12:10:25", dt_rider_departs: "2019-12-12 12:20:25",
             dt_rider_arrives_rest: "2019-12-12 12:22:25", dt_rider_departs_rest: "2019-12-12 12:25:25",
             dt_order_delivered: "2019-12-12 12:35:00",
@@ -67,7 +67,7 @@ const fakeOrders = {
             ],
             review: {
                 rider: {riderid: "phukai", rating: 5, review: "Friendly and polite"},
-                foodRating: [
+                foodrating: [
                     {fid: 101, fname: "Avocado Melon Tea", rating: 5, review: "Best melon tea in singapore!"},
                     {fid: 100, fname: "Regular Milk Tea", rating: 2, review: "Too bland and the pearls are hard to chew..."}
                 ]
@@ -110,7 +110,7 @@ function nestArrays(order, cart, riderReview, foodRating) {
             review: riderReview.some(b => b.oid === x.oid) ?
                 {
                     rider: riderReview.filter(c => c.oid === x.oid),
-                    foodRating: foodRating.filter(d => d.oid === x.oid)
+                    foodrating: foodRating.filter(d => d.oid === x.oid)
                 } : null
         }
     })
@@ -129,7 +129,7 @@ const filterOrders = (orders, filter) => {
 
 const groupOrders = (orders) => {
     return {
-        uncompleted_orders: orders.filter(x => x.dt_order_delivered),
+        uncompleted_orders: orders.filter(x => x.dt_order_delivered === null),
         completed_orders: orders.filter(x => x.dt_order_delivered !== null)
     }
 }
@@ -284,7 +284,7 @@ export default function Order() {
                         {`rider: ${showReview.review.rider.riderid} rating: ${showReview.review.rider.rating} 
                         review: ${showReview.review.rider.review}`}
                     </text>
-                    {showReview.review.foodRating.map(item => (
+                    {showReview.review.foodrating.map(item => (
                         <text>{`food: ${item.fname} rating: ${item.rating} review: ${item.review}`}</text>
                     ))}
                 </>

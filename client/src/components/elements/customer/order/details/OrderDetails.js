@@ -15,7 +15,7 @@ export default function OrderDetails({o}) {
                 </Grid.Column>
 
                 <Grid.Column textAlign={'right'}>
-                    <h3>{`$${Utils.roundDecimalPlace(o.cartCost, 1)}`}</h3>
+                    <h3>{`$${Utils.roundDecimalPlace(o.cartcost, 1)}`}</h3>
                 </Grid.Column>
             </Grid.Row>
 
@@ -25,7 +25,7 @@ export default function OrderDetails({o}) {
                 </Grid.Column>
 
                 <Grid.Column textAlign={'right'}>
-                    <h3>{`$${Utils.roundDecimalPlace(o.deliveryFee,1)}`}</h3>
+                    <h3>{`$${Utils.roundDecimalPlace(o.deliveryfee,1)}`}</h3>
                 </Grid.Column>
             </Grid.Row>
 
@@ -47,7 +47,7 @@ export default function OrderDetails({o}) {
                 </Grid.Column>
 
                 <Grid.Column textAlign={'right'}>
-                    <h2>{`$${Utils.roundDecimalPlace(computeTotalCost(o.cartCost, o.deliveryFee, o.discount_amount), 1)}`}</h2>
+                    <h2>{`$${Utils.roundDecimalPlace(computeTotalCost(o.cartcost, o.deliveryfee, o.discount_amount), 1)}`}</h2>
                 </Grid.Column>
             </Grid.Row>
         </Grid>

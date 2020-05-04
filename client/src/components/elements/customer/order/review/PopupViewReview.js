@@ -28,7 +28,7 @@ export default function PopupViewReview({hidePopup, review}) {
                     <Divider/>
                     <h3>Food Review</h3>
                     <Card fluid>
-                    {review.foodRating.map(item => (
+                    {review.foodrating.map(item => (
                         <>
                             <Card.Content>
                                 <h3>{item.fname}</h3>

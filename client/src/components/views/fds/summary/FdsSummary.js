@@ -7,8 +7,8 @@ const fakeSummary = {
         /* TODO: period is concat of Month and Year of dt_order_placed
         *  sorted in descending order by month and year
         */
-        {period: "March 2020", totalNewCustomers: 20, totalNumberOfOrders: 2000, totalCost: 22049.2},
-        {period: "February 2020", totalNewCustomers: 15, totalNumberOfOrders: 1500, totalCost: 20000.10},
+        {period: "March 2020", totalnewcustomers: 20, totalorders: 2000, totalcost: 22049.2},
+        {period: "February 2020", totalnewcustomers: 15, totalorders: 1500, totalcost: 20000.10},
     ]
 }
 

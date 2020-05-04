@@ -34,7 +34,7 @@ const LoginSchema = Yup.object().shape({
 
 const LoginForm = () => {
     return (
-        <Grid className="segment centered">
+        <Grid padded className="segment centered">
         <Formik
             initialValues={{ userid: '', username: '', password: '', type: type[0].value}}
             validationSchema={LoginSchema}
@@ -53,7 +53,7 @@ const LoginForm = () => {
           isSubmitting,
           setFieldValue }) => (
         <Form>
-            <h1>Sign In </h1>
+            <h1>Login </h1>
             <span>
                 as a{' '}
                 <Dropdown
@@ -108,7 +108,7 @@ const LoginForm = () => {
                ): null}
 
           <Form.Button onClick={handleSubmit} disabled={isSubmitting}>
-              Submit
+              Sign In
          </Form.Button>
         </Form>
       )}        

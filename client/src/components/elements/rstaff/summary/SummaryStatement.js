@@ -44,7 +44,7 @@ export default function SummaryStatement({stats}) {
                     <Segment padded horizontal textAlign={'center'}>
                         <Statistic.Group widths={'two'} size='small'>
                             <Statistic>
-                                <Statistic.Value>{stats.totalNumberOfOrders}</Statistic.Value>
+                                <Statistic.Value>{stats.totalorders}</Statistic.Value>
                                 <Statistic.Label>Orders</Statistic.Label>
                             </Statistic>
                             <Statistic>

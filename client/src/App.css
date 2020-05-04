@@ -76,3 +76,7 @@
   height: 60px;
   width: 100%;
 }
+
+.Main html, body {
+  background-color: white !important;
+}

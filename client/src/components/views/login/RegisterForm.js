@@ -12,33 +12,23 @@ const type = [
     {
         text: 'Customer',
         value: 'Customer',
-    },
-    {
-        text: 'Restaurant Staff',
-        value: 'Restaurant Staff',
-    },
-    {
-        text: 'FDS Manager',
-        value: 'FDS Manager',
     }
 ]
 
 const RegisterSchema = Yup.object().shape({
     userid: Yup.string()
         .required("Userid is required"),
-    username: Yup.string()
-        .required("Username is required"),
     password: Yup.string()
         .min(8, "Password must be 8 characters at minimum")
         .required("Password is required")
 });
 
-const RegisterPage = () => {
+const RegisterForm = () => {
 
     return (
-        <Grid className="segment centered">
+        <Grid padded className="segment centered">
         <Formik
-            initialValues={{ userid: '', username: '', password: '', type: type[0].value}}
+            initialValues={{ userid: '', password: '', type: type[0].value}}
             validationSchema={RegisterSchema}
             onSubmit={(values) => {
                 //backend code here
@@ -55,7 +45,7 @@ const RegisterPage = () => {
           isSubmitting,
           setFieldValue }) => (
         <Form> 
-            <h1>Register </h1>
+            <h1>Sign Up </h1>
             <span>
                 as a{' '}
                 <Dropdown
@@ -92,25 +82,6 @@ const RegisterPage = () => {
 
           <Form.Group>
             <Form.Input
-              label="Username"
-              type="text"
-              name="username"
-              placeholder="Username"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.username}
-              className={touched.username && errors.username ? "has-error" : null}
-               />   
-          </Form.Group>
-
-          {touched.username && errors.username ? (
-                <Label className="error-message" basic color='red' pointing>
-                   {errors.username}
-                </Label>
-               ): null}
-
-          <Form.Group>
-            <Form.Input
               label="Password"
               type="password"
               name="password"
@@ -129,7 +100,7 @@ const RegisterPage = () => {
                ): null}
 
           <Form.Button type='submit' onClick={handleSubmit}>
-              Submit
+              Register
          </Form.Button>
         </Form>
       )}        
@@ -140,4 +111,4 @@ const RegisterPage = () => {
     );
 }
 
-export default RegisterPage;
+export default RegisterForm;
