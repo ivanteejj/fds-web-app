@@ -11,24 +11,7 @@ import Popup from "../../../../elements/customer/shop/rid/PopupCheckOut"
 import Utils from "../../../../commons/Utils";
 import axios from 'axios'
 
-const fakeMenu = {
-    data: [
-        {fid: 100, fname: "Regular Milk Tea", rid: 1000, price: 3.5, category: "Beverages", qty_left: "100", rating: 4,
-        reviews: ["Amazing food!", "Smells and taste like heavenly", "Michelin Quality drink"]},
-        {fid: 101, fname: "Avocado Melon Tea", rid: 1000, price: 2.9, category: "Beverages", qty_left: "20", rating: 5,
-        reviews: ["Mind Blowing drink"]},
-        {fid: 102, fname: "Brown Sugar Fries", rid: 1000, price: 9.70, category: "Western", qty_left: "10", rating: null},
-        {fid: 103, fname: "Eww Eel Bento", rid: 1000, price: 25.90, category: "Japanese", qty_left: "15", rating: null},
-        {fid: 104, fname: "Yaya Papaya Macaron", rid: 1000, price: 10.9, category: "Dessert", qty_left: "5", rating: 2},
-        {fid: 105, fname: "Creme Brulee", rid: 1000, price: 5.9, category: "Dessert", qty_left: "10", rating: 4}
-    ]
-}
-
-const fakeRDetails = {
-    data: [
-        {rid: 1000, rname: "LiWOW", area: "West", address: "Block 443 Tampines Street AAA Avenue 10"}
-    ]
-}
+const fakeCid = 20
 
 const fakePromos = {
     data: [
@@ -144,28 +127,42 @@ export default function Restaurant({ match }) {
     
     useEffect(() => {
         (async() => {
-             const userid = location.state.userid
-            setUserid(userid)
-            // const menu = await axios
-            //     .get('/customer/shop/menu', {
-            //         params: {
-            //           rid: params.rid
-            //         }
-            //       })
-            //     .then((response) => setMenu(Utils.groupBy(response.data, 'category')))
-            //     .then((error) => console.log(error))
-            //
-            // const restDetails = await axios
-            //       .get('/customer/shop/restaurant', {
-            //         params: {
-            //             rid: 2
-            //           }
-            //       })
-            //       .then((response) => setRDetails(response.data[0]))
-            //
-            setMenu(Utils.groupBy(fakeMenu.data, 'category'))
-            setRDetails(fakeRDetails.data[0])
-            setRecentDeliveryLoc(fakeRecentDeliverLoc.data)
+            const test = location.state.userid
+
+            const menu = await axios
+                 .get('/customer/shop/getMenu', {
+                     params: {
+                       rid: params.rid
+                     }
+                   })
+                 .then((response) => setMenu(Utils.groupBy(response.data, 'category')))
+                 .then((error) => console.log(error))
+
+             const restDetails = await axios
+                   .get('/customer/shop/getRestaurantDetails', {
+                     params: {
+                         rid: params.rid
+                       }
+                   })
+                   .then((response) => setRDetails(response.data[0]))
+
+
+            const deliveryLOC = await axios
+                .get("/customer/shop/getRecentDeliveryAddress/", {
+                    params: {
+                        cid: fakeCid
+                    }
+                })
+                .then((response) => setRecentDeliveryLoc(response.data))
+
+            const promos = await axios
+                .get('/customer/shop/getAllRelevantPromosForOneCust', {
+                params: {
+                    rid: params.rid
+                }
+            })
+            .then((response) => setPromos(response.data))
+
             setPaymentMtds(fakePaymentOptions.data);
         })();
     }, []);

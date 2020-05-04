@@ -79,7 +79,7 @@ export default function Results({columns, data}) {
     useEffect(() => {
         // redirect here
         if (selectedRid !== null) {
-            history.push(`/shop/${selectedRid}`, {userid: "tester123"})
+            history.push(`/customer/shop/${selectedRid}`, {userid: "tester123"})
         }
     }, [selectedRid])
 

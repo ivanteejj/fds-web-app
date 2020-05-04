@@ -1,13 +1,24 @@
 var express = require('express');
 
-const cust = [
-    {id: 1, firstName: 'Abbey'},
-    {id: 2, firstname: 'Barry'},
-    {id: 3, firstName: 'Chendol'}
-];
+const getAllRecentDeliveryLocForOnePerson =
+    "select delivery_location as address\n" +
+    "from Orders join Customers using(cid)\n" +
+    "where cid = $1\n" +
+    "order by order_placed DESC\n" +
+    "limit 5;"
 
-const getAllCustomerDetails = (req, res) => {
-    res.json(cust)
+const getRecentDeliveryAddress = (req, res, db) => {
+    const cid = req.query.cid;
+    console.log(cid);
+
+    const output = db.query(getAllRecentDeliveryLocForOnePerson, [cid],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            console.log(result.rows)
+            res.status(200).json(result.rows);
+        })
 }
 
 const getCustomerDetails = (req, res) => {
@@ -20,6 +31,6 @@ const getCustomerDetails = (req, res) => {
 }
 
 module.exports = {
-    getAllCustomerDetails: getAllCustomerDetails,
+    getRecentDeliveryAddress: getRecentDeliveryAddress,
     getCustomerDetails: getCustomerDetails
 };

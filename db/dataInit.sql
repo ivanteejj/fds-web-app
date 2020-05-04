@@ -8,7 +8,7 @@ INSERT INTO Restaurants (rest_id,rname,address,area,minAmt) VALUES (3,'C-South X
 INSERT INTO Restaurants (rest_id,rname,address,area,minAmt) VALUES (4,'D-West Western Food Store','64 Jurong Rd','WEST', 20);
 
 INSERT INTO Staff (staff_id,sname,rest_id,username) VALUES (10, 'Yuan Xin', 1, 'YX S');
-INSERT INTO Customers (cid , cname, credit_card_number, join_date, username) VALUES (20,'Ivan','2080 7117 4551 2585','2018-02-14','Ivan C');
+INSERT INTO Customers (cid , cname, credit_card_number, join_date, username) VALUES (20,'Ivan','2080 7117 4551 2585','14/02/2018','Ivan C');
 INSERT INTO Riders (rider_id,rname,rider_type,base_salary,username) VALUES (30,'Bing sen','FT', 2000,'BS R');
 
 INSERT INTO Shifts (shift_id,time_start1,time_end1,time_start2,time_end2) VALUES (1,'10:00:00','14:00:00','15:00:00','19:00:00');
