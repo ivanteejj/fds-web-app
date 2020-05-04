@@ -12,7 +12,9 @@ import CompletedOrders from "../../../elements/customer/order/CompletedOrders";
 import PopupLeaveReview from "../../../elements/customer/order/review/PopupLeaveReview";
 import PopupViewReview from "../../../elements/customer/order/review/PopupViewReview";
 import generateReviewSkeleton from "../../../elements/customer/order/review/ReviewSkeleton";
+import axios from "axios";
 
+const fakeCid = 20
 //NOTE: ORDERS SHOULD ALR BE SORTED IN DESC ORDER BASED ON dt_order_placed UNDER BOTH UNCOMPLETED AND COMPLETED ORDER GROUPS
 const fakeOrders = {
     data: [
@@ -197,9 +199,14 @@ export default function Order() {
 
     useEffect(() => {
         (async() => {
-            // TODO
-            // const result = await axios.get("sth sth");
-            setOrders({type: "initialize", payload: groupOrders(fakeOrders.data)})
+            const allRelevantOrders = await axios
+                .get('/customer/shop/getAllOrderDetailsForOneCust/', {
+                    params: {
+                        cid: fakeCid
+                    }
+                })
+                .then((response) => setOrders({type: "initialize", payload: groupOrders(response.data)})
+                )
         })();
     }, []);
 

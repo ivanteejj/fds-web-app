@@ -29,7 +29,7 @@ const queryToGetAllRelevantPromos = "WITH numUsedPreProcess as (\n" +
     "\n" +
     "SELECT promo_cat as type, promo_rate as disc, promo_type as disc_type, promo_details_text as details \n" +
     "FROM Restaurant_Promotions rp1\n" +
-    "WHERE rp1.rest_id = $1\n" +
+    "WHERE rp1.rid = $1\n" +
     "AND now()::timestamp BETWEEN start_datetime AND end_datetime\n" +
     "AND rp1.promo_max_num_redemption > (\n" +
     "\tSELECT nupp1.num\n" +
@@ -44,7 +44,7 @@ const queryToGetAllRelevantPromos = "WITH numUsedPreProcess as (\n" +
 "WITH RelevantRestaurantPromos as (" +
 "SELECT * " +
 "FROM Restaurant_Promotions rp1 " +
-"WHERE rp1.rest_id = $1" +
+"WHERE rp1.rid = $1" +
 ")" +
 "SELECT RRP1.pid " +
 "FROM RelevantRestaurantPromos RRP1"
@@ -127,7 +127,7 @@ WITH numUsedPreProcess as (
 
 SELECT promo_cat as type, promo_rate as disc, promo_type as disc_type, promo_details_text as details
 FROM Restaurant_Promotions rp1
-WHERE rp1.rest_id = 4
+WHERE rp1.rid = 4
 AND now()::timestamp BETWEEN start_datetime AND end_datetime
 AND rp1.promo_max_num_redemption > (
 	SELECT nupp1.num

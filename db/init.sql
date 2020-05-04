@@ -58,18 +58,18 @@ CREATE TABLE Accounts (
 );
 
 CREATE TABLE Restaurants (
-    rest_id 			INTEGER,
+    rid 			    INTEGER,
     rname           	TEXT NOT NULL,
     address         	TEXT NOT NULL,
 	area				AREA_ENUM NOT NULL,
     minAmt         		NUMERIC NOT NULL
 						CHECK (minAmt >= 0),
-    PRIMARY KEY (rest_id)
+    PRIMARY KEY (rid)
 );
 
 CREATE TABLE Food (
     fid             		INTEGER,
-	rest_id					INTEGER NOT NULL,
+	rid					    INTEGER NOT NULL,
     fname           		TEXT NOT NULL,
     price           		NUMERIC NOT NULL
 							CHECK (price > 0),
@@ -81,16 +81,16 @@ CREATE TABLE Food (
         CHECK (daily_availability in ('AVAILABLE', 'NOT AVAILABLE')),
     category        		CAT_ENUM NOT NULL,
     PRIMARY KEY (fid),
-	FOREIGN KEY (rest_id) REFERENCES Restaurants (rest_id) on delete cascade
+	FOREIGN KEY (rid) REFERENCES Restaurants (rid) on delete cascade
 );
 
 CREATE TABLE Staff (
 	staff_id            INTEGER,
 	sname           	TEXT NOT NULL,
-    rest_id             INTEGER NOT NULL,
+    rid             INTEGER NOT NULL,
 	username			TEXT NOT NULL,
     PRIMARY KEY (staff_id),
-    FOREIGN KEY (rest_id) REFERENCES Restaurants (rest_id),
+    FOREIGN KEY (rid) REFERENCES Restaurants (rid),
 	FOREIGN KEY (username) REFERENCES Accounts (username)
 );
 
@@ -203,10 +203,10 @@ CREATE TABLE Restaurant_Promotions(
     promo_max_discount_limit        INTEGER,
     promo_max_num_redemption        INTEGER,
     promo_details_text              TEXT NOT NULL,
-	rest_id				INTEGER,
+	rid				                INTEGER,
 	PRIMARY KEY (pid),
 	FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade,
-	FOREIGN KEY (rest_id) REFERENCES Restaurants (rest_id)
+	FOREIGN KEY (rid) REFERENCES Restaurants (rid)
 );
 
 CREATE TABLE FDS_Promo_Applies(
