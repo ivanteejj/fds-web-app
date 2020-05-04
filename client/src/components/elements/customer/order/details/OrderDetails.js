@@ -2,6 +2,10 @@ import React from "react"
 import {Grid} from "semantic-ui-react";
 import Utils from "../../../../commons/Utils";
 
+const computeTotalCost = (cartCost, deliveryFee, discount) => {
+    return cartCost + deliveryFee - discount;
+}
+
 export default function OrderDetails({o}) {
     return (
         <Grid columns={2}>
@@ -25,14 +29,14 @@ export default function OrderDetails({o}) {
                 </Grid.Column>
             </Grid.Row>
 
-            {o.promoApplied &&
+            {o.promo_details_text &&
             <Grid.Row>
                 <Grid.Column textAlign={'left'}>
-                    <h3>{`Promo applied: ${o.promoApplied.details}`}</h3>
+                    <h3>{`Promo applied: ${o.promo_details_text}`}</h3>
                 </Grid.Column>
 
                 <Grid.Column textAlign={'right'}>
-                    <h3>{`- $${Utils.roundDecimalPlace(o.promoApplied.offset, 1)}`}</h3>
+                    <h3>{`- $${Utils.roundDecimalPlace(o.discount_amount, 1)}`}</h3>
                 </Grid.Column>
             </Grid.Row>
             }
@@ -43,7 +47,7 @@ export default function OrderDetails({o}) {
                 </Grid.Column>
 
                 <Grid.Column textAlign={'right'}>
-                    <h2>{`$${Utils.roundDecimalPlace(o.totalCost, 1)}`}</h2>
+                    <h2>{`$${Utils.roundDecimalPlace(computeTotalCost(o.cartCost, o.deliveryFee, o.discount_amount), 1)}`}</h2>
                 </Grid.Column>
             </Grid.Row>
         </Grid>

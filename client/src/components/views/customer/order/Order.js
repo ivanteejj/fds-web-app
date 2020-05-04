@@ -16,8 +16,9 @@ import generateReviewSkeleton from "../../../elements/customer/order/review/Revi
 //NOTE: ORDERS SHOULD ALR BE SORTED IN DESC ORDER BASED ON dt_order_placed UNDER BOTH UNCOMPLETED AND COMPLETED ORDER GROUPS
 const fakeOrders = {
     uncompleted_orders: [
-        {oid: 100123, totalCost: 49.5, deliveryFee: 4.1, cartCost: 45.4,
-            promoApplied: null, paymentMode: "Cash On Delivery",
+        {oid: 100123, deliveryFee: 4.1, cartCost: 45.4,
+            promo_details_text: null, discount_amount: null,
+            paymentMode: "Cash On Delivery",
             deliveryLocation: "NUS Central Library", riderid: "benwang",
             dt_order_placed: "2020-02-22 19:10:25", dt_rider_departs: "2020-02-22 19:20:00",
             dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
@@ -27,8 +28,9 @@ const fakeOrders = {
                 {fid: 102, rid: 1000, rname: "LiWoW", fname: "Brown Sugar Fries", quantity: 3, price: 9.7}
             ]
         },
-        {oid: 100121, totalCost: 49.5, deliveryFee: 4.1, cartCost: 45.4,
-            promoApplied: null, paymentMode: "Cash On Delivery",
+        {oid: 100121, deliveryFee: 4.1, cartCost: 45.4,
+            promo_details_text: null, discount_amount: null,
+            paymentMode: "Cash On Delivery",
             deliveryLocation: "NUS Central Library", riderid: "benwang",
             dt_order_placed: "2020-02-22 19:10:25", dt_rider_departs: "2020-02-22 19:20:00",
             dt_rider_arrives_rest: null, dt_rider_departs_rest: null, dt_order_delivered: null,
@@ -40,8 +42,8 @@ const fakeOrders = {
         }
     ],
     completed_orders: [
-        {oid: 100100, totalCost: 10.1, deliveryFee: 3.2, cartCost: 9.9,
-            promoApplied: {details: '$3 off on delivery fee', offset: 3},
+        {oid: 100100, deliveryFee: 3.2, cartCost: 9.9,
+            promo_details_text: '$3 off on delivery fee', discount_amount: 3,
             paymentMode: "Cash On Delivery",
             deliveryLocation: "Kent Ridge MRT Station Exit B", riderid: "chukai",
             dt_order_placed: "2019-12-22 19:10:25", dt_rider_departs: "2019-12-22 19:20:25",
@@ -52,8 +54,8 @@ const fakeOrders = {
                 {fid: 101, rid: 1000, rname: "LiWoW", fname: "Avocado Melon Tea", quantity: 1, price: 2.9}
             ], review: null
         },
-        {oid: 100000, totalCost: 13.1, deliveryFee: 3.2, cartCost: 9.9,
-            promoApplied: null,
+        {oid: 100000, deliveryFee: 3.2, cartCost: 9.9,
+            promo_details_text: null, discount_amount: null,
             paymentMode: "Credit Card",
             deliveryLocation: "NUS Central Library", riderid: "phukai",
             dt_order_placed: "2019-12-12 12:10:25", dt_rider_departs: "2019-12-12 12:20:25",
