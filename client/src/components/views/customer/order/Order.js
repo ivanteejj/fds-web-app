@@ -15,7 +15,7 @@ import generateReviewSkeleton from "../../../elements/customer/order/review/Revi
 
 //NOTE: ORDERS SHOULD ALR BE SORTED IN DESC ORDER BASED ON dt_order_placed UNDER BOTH UNCOMPLETED AND COMPLETED ORDER GROUPS
 const fakeOrders = {
-    uncompleted_orders: [
+    data: [
         {oid: 100123, deliveryFee: 4.1, cartCost: 45.4,
             promo_details_text: null, discount_amount: null,
             paymentMode: "Cash On Delivery",
@@ -39,9 +39,7 @@ const fakeOrders = {
                 {fid: 101, rid: 1000, rname: "LiWoW", fname: "Avocado Melon Tea", quantity: 2, price: 2.9},
                 {fid: 102, rid: 1000, rname: "LiWoW", fname: "Brown Sugar Fries", quantity: 3, price: 9.7}
             ]
-        }
-    ],
-    completed_orders: [
+        },
         {oid: 100100, deliveryFee: 3.2, cartCost: 9.9,
             promo_details_text: '$3 off on delivery fee', discount_amount: 3,
             paymentMode: "Cash On Delivery",
@@ -127,6 +125,13 @@ const filterOrders = (orders, filter) => {
     }
 }
 
+const groupOrders = (orders) => {
+    return {
+        uncompleted_orders: orders.filter(x => x.dt_order_delivered),
+        completed_orders: orders.filter(x => x.dt_order_delivered !== null)
+    }
+}
+
 export default function Order() {
 
     const orderReducer = (state, action) => {
@@ -194,7 +199,7 @@ export default function Order() {
         (async() => {
             // TODO
             // const result = await axios.get("sth sth");
-            setOrders({type: "initialize", payload: fakeOrders})
+            setOrders({type: "initialize", payload: groupOrders(fakeOrders.data)})
         })();
     }, []);
 
