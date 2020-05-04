@@ -127,7 +127,7 @@ const filterOrders = (orders, filter) => {
 
 const groupOrders = (orders) => {
     return {
-        uncompleted_orders: orders.filter(x => x.dt_order_delivered),
+        uncompleted_orders: orders.filter(x => x.dt_order_delivered === null),
         completed_orders: orders.filter(x => x.dt_order_delivered !== null)
     }
 }
