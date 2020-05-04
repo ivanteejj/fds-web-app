@@ -10,34 +10,32 @@ import './App.css'
 
 
 //Pages
-import RegisterPage from "./pages/register"
-import LoginPage from "./pages/login"
-import NotFoundPage from "./pages/404"
+import NotFoundPage from "./components/views/404"
 
 /* -------------------------- Customer ------------------------------------------*/
-import Home from './components/customers/home/homepage'
-import RestaurantPage from './components/customers/restaurant/RestaurantPage'
-import OrderPage from "./components/customers/orders/OrderPage";
+import Home from './components/views/customer/shop/ShopPage'
+import RestaurantPage from './components/views/customer/shop/rid/RestaurantPage'
+import OrderPage from "./components/views/customer/order/OrderPage";
 
 /* -------------------------- Restaurant Staff ------------------------------------------*/
-import MenuPage from "./components/staff/Menu/MenuPage";
-import SummaryPage from "./components/staff/Home/SummaryPage";
+import MenuPage from "./components/views/rstaff/menu/MenuPage";
+import StaffSummaryPage from "./components/views/rstaff/summary/StaffSummaryPage";
 
 /* -------------------------- Rider ------------------------------------------*/
-import SchedulePage from "./components/rider/schedule/SchedulePage";
-import EarningsPage from "./components/rider/earnings/EarningsPage";
-import ReviewsPage from "./components/rider/reviews/ReviewsPage";
-import RiderSummaryPage from "./components/rider/home/RiderSummaryPage";
+import SchedulePage from "./components/views/rider/schedule/SchedulePage";
+import EarningsPage from "./components/views/rider/earnings/EarningsPage";
+import ReviewsPage from "./components/views/rider/reviews/ReviewsPage";
+import RiderSummaryPage from "./components/views/rider/summary/RiderSummaryPage";
 
 /* -------------------------- FDS Manager ------------------------------------------*/
-import FdsSummaryPage from "./components/fds/home/FdsSummaryPage";
-import FdsCustomerStatsPage from "./components/fds/cust_stats/FdsCustomerStatsPage";
-import FdsRiderStatsPage from "./components/fds/rider_stats/FdsRiderStatsPage";
-import FdsAreaStatsPage from "./components/fds/area_stats/FdsAreaStatsPage";
+import FdsSummaryPage from "./components/views/fds/summary/FdsSummaryPage";
+import FdsCustomerStatsPage from "./components/views/fds/stats/customer/FdsCustomerStatsPage";
+import FdsRiderStatsPage from "./components/views/fds/stats/rider/FdsRiderStatsPage";
+import FdsAreaStatsPage from "./components/views/fds/stats/area/FdsAreaStatsPage";
 
-/* -------------------------- Login/Register ------------------------------------------*/
-//import Login from './components/customers/account/login'
-import Signup from './components/customers/account/signup'
+/* -------------------------- LoginPage/Register ------------------------------------------*/
+import LoginPage from './components/views/login/LoginPage'
+import RegisterPage from './components/views/register/RegisterPage'
 
 class App extends Component {
     constructor(props) {
@@ -48,7 +46,7 @@ class App extends Component {
     render() {
         return <Router>
             <Switch>
-            <Route exact path= "/test" component = { OrderPage }></Route>
+            <Route exact path= "/test" component = { SchedulePage }></Route>
             <Route exact path= "/order" component = { OrderPage }></Route>
             <Route exact path= "/shop" component = { Home }></Route>
             <Route exact path = "/shop/:rid" component = { RestaurantPage }></Route>

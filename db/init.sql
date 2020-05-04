@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS 	Accounts, Restaurants, Menus, Food, Staff, Customers,
 						Schedules, Shifts, Monthly_Work_Schedule,
 						Weekly_Work_Schedule CASCADE;
 						
-DROP TYPE IF EXISTS CAT_ENUM, AREA_ENUM CASCADE;
+DROP TYPE IF EXISTS CAT_ENUM, AREA_ENUM, PROMO_CAT_ENUM, PROMO_TYPE_ENUM CASCADE;
 
 
 CREATE TYPE AREA_ENUM AS ENUM (
@@ -27,8 +27,9 @@ CREATE TYPE AREA_ENUM AS ENUM (
 );
 
 CREATE TYPE CAT_ENUM AS ENUM (
-    'Local', 
-	'Asian', 
+    'Local',
+	'Asian',
+    'Chinese',
 	'Japanese', 
 	'Western', 
 	'Italian', 
@@ -37,6 +38,16 @@ CREATE TYPE CAT_ENUM AS ENUM (
 	'Breakfast', 
 	'Desserts', 
 	'Beverage'
+);
+
+CREATE TYPE PROMO_CAT_ENUM as ENUM (
+    'CART',
+    'DELIVERY'
+);
+
+CREATE TYPE PROMO_TYPE_ENUM as ENUM (
+    'PERCENT',
+    'DOLLAR'
 );
 
 CREATE TABLE Accounts (
@@ -64,10 +75,10 @@ CREATE TABLE Food (
 							CHECK (price > 0),
     daily_limit     		INTEGER
 							CHECK (daily_limit >= 0),
-	daily_sold_qty			INTEGER NOT NULL DEFAULT (0)
-							CHECK (daily_sold_qty >= 0),
-	daily_availability		TEXT NOT NULL DEFAULT('AVAILABLE')
-							CHECK (daily_availability in ('AVAILABLE', 'NOT AVAILABLE')),
+    daily_sold_qty			INTEGER NOT NULL DEFAULT (0)
+        CHECK (daily_sold_qty >= 0),
+    daily_availability		TEXT NOT NULL DEFAULT('AVAILABLE')
+        CHECK (daily_availability in ('AVAILABLE', 'NOT AVAILABLE')),
     category        		CAT_ENUM NOT NULL,
     PRIMARY KEY (fid),
 	FOREIGN KEY (rest_id) REFERENCES Restaurants (rest_id) on delete cascade
@@ -77,7 +88,7 @@ CREATE TABLE Staff (
 	staff_id            INTEGER,
 	sname           	TEXT NOT NULL,
     rest_id             INTEGER NOT NULL,
-	username				TEXT,
+	username			TEXT NOT NULL,
     PRIMARY KEY (staff_id),
     FOREIGN KEY (rest_id) REFERENCES Restaurants (rest_id),
 	FOREIGN KEY (username) REFERENCES Accounts (username)
@@ -90,7 +101,7 @@ CREATE TABLE Customers(
 							CHECK(points >= 0),
 	credit_card_number		VARCHAR(19) UNIQUE,
 	join_date				DATE,
-	username					TEXT,
+	username				TEXT NOT NULL,
 	PRIMARY KEY (cid),
 	FOREIGN KEY (username) REFERENCES Accounts (username)
 );
@@ -103,9 +114,14 @@ CREATE TABLE Riders(
                         CHECK (rider_type in ('FT','PT')),
     base_salary         NUMERIC NOT NULL
                         CHECK (base_salary > 0),
-	username				TEXT,
+	username			TEXT NOT NULL,
     PRIMARY KEY (rider_id),
 	FOREIGN KEY (username) REFERENCES Accounts (username)
+);
+
+CREATE TABLE Promotions(
+        pid        				INTEGER,
+        PRIMARY KEY (pid)
 );
 
 CREATE TABLE Orders(
@@ -117,18 +133,21 @@ CREATE TABLE Orders(
 	order_delivered							timestamp,
 	payment_method							TEXT NOT NULL
 											CHECK (payment_method IN ('CREDITCARD','CASHONDELIVERY')),
-	delivery_fee							numeric NOT NULL
-											CHECK (delivery_fee >= 0),
-	total_cost								numeric NOT NULL
-											CHECK (total_cost >= 0),
-	delivery_location						TEXT NOT NULL,
+    cart_fee						    	numeric NOT NULL
+                                            CHECK (cart_fee >= 0),
+    delivery_fee							numeric NOT NULL
+                                            CHECK (delivery_fee >= 0),
+    discount_amount							numeric NOT NULL,
+    delivery_location						TEXT NOT NULL,
 	rider_id								INTEGER NOT NULL,
 	rider_rating							INTEGER NOT NULL DEFAULT(5)
 											CHECK (rider_rating >= 1 AND rider_rating <= 5),
 	cid										INTEGER NOT NULL,
+	pid                                     INTEGER,
 	PRIMARY KEY (oid),
 	FOREIGN KEY (rider_id) references Riders (rider_id),
 	FOREIGN KEY (cid) references Customers (cid),
+	FOREIGN KEY (pid) references Promotions (pid),
 	CHECK(
 		(EXTRACT(HOUR FROM order_placed) >= 10 AND EXTRACT(HOUR FROM order_placed) <= 22)
 		AND
@@ -152,31 +171,39 @@ CREATE TABLE ShoppingCarts(
 	FOREIGN KEY (fid) REFERENCES Food (fid)
 );
 
-CREATE TABLE Promotions(
-    pid        				INTEGER,
-    promo_rate      		INTEGER NOT NULL
-							CHECK (promo_rate > 0),
-    start_datetime  		TIMESTAMP,
-    end_datetime    		TIMESTAMP
-							CHECK (end_datetime > start_datetime),
-	num_times				INTEGER NOT NULL
-							CHECK (num_times >= 0),
-	infinite_num_times		BOOLEAN DEFAULT(FALSE),
-	PRIMARY KEY (pid)
-);
 
 CREATE TABLE FDS_Promotions(
     pid        		INTEGER,
-    promo_type  	VARCHAR(10) NOT NULL
-					CHECK (promo_type IN ('Delivery', 'Order')),
-	PRIMARY KEY (pid),
-	FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade
+    promo_rate      		INTEGER NOT NULL,
+        CHECK (promo_rate > 0),
+    promo_type              PROMO_TYPE_ENUM NOT NULL,
+    promo_cat  	    PROMO_CAT_ENUM NOT NULL,
+    start_datetime  		timestamp,
+    end_datetime    		timestamp
+        CHECK (end_datetime > start_datetime),
+    promo_min_cost          INTEGER,
+    promo_max_discount_limit        INTEGER,
+    promo_max_num_redemption        INTEGER,
+    promo_details_text              TEXT NOT NULL,
+
+    PRIMARY KEY (pid),
+    FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade
 );
 
 CREATE TABLE Restaurant_Promotions(
-    pid       			INTEGER,				
+    pid        		INTEGER,
+    promo_rate      		INTEGER NOT NULL,
+        CHECK (promo_rate > 0),
+    promo_type              PROMO_TYPE_ENUM NOT NULL,
+    promo_cat  	    PROMO_CAT_ENUM NOT NULL,
+    start_datetime  		timestamp,
+    end_datetime    		timestamp
+        CHECK (end_datetime > start_datetime),
+    promo_min_cost                  INTEGER,
+    promo_max_discount_limit        INTEGER,
+    promo_max_num_redemption        INTEGER,
+    promo_details_text              TEXT NOT NULL,
 	rest_id				INTEGER,
-	threshold_amt		NUMERIC,
 	PRIMARY KEY (pid),
 	FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade,
 	FOREIGN KEY (rest_id) REFERENCES Restaurants (rest_id)
@@ -289,7 +316,8 @@ CREATE TRIGGER food_daily_limit_trigger
     EXECUTE FUNCTION update_food_availability();
 	
 	
-	
+
+/*
 
 CREATE OR REPLACE FUNCTION create_first_order_discount() RETURNS TRIGGER AS
 $$
@@ -321,8 +349,5 @@ CREATE TRIGGER first_order_discount_trigger
 	FOR EACH ROW
 	EXECUTE FUNCTION create_first_order_discount();
 
-
-
-
-
+*/
 
