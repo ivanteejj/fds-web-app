@@ -99,7 +99,7 @@ const RegisterForm = () => {
                 </Label>
                ): null}
 
-          <Form.Button type='submit' onClick={handleSubmit}>
+          <Form.Button type='submit' onClick={handleSubmit} color={'orange'}>
               Register
          </Form.Button>
         </Form>

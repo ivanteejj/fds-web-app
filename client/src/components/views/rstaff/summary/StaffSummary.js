@@ -5,6 +5,7 @@ import {
     Dropdown,
     Grid
 } from "semantic-ui-react";
+import DateTimeUtils from "../../../commons/DateTimeUtils";
 import OrdersSideBar from "../../../elements/rstaff/summary/OrdersSideBar";
 import SummaryStatement from "../../../elements/rstaff/summary/SummaryStatement";
 import Promotions from "../../../elements/rstaff/summary/Promotions";
@@ -47,7 +48,7 @@ const fakeStats = {
         /* TODO: period is concat of Month and Year of dt_order_placed
         *  sorted in descending order by month and year
         */
-        {period: "March 2020", totalorders: 2000, totalProfit: 34000.20,
+        {month: 3, year: 2020, totalorders: 2000, totalProfit: 34000.20,
             topFavorites: [ // sorted in descending order by qty_sold
                 {fid: 100, fname: "Avocado Milk Tea", qty_sold: 200},
                 {fid: 101, fname: "Regular Milk Tea", qty_sold: 190},
@@ -56,7 +57,7 @@ const fakeStats = {
                 {fid: 104, fname: "Creme Brulee", qty_sold: 73}
             ]
         },
-        {period: "February 2020", totalorders: 1500, totalProfit: 20000.10,
+        {month: 2, year: 2020, totalorders: 1500, totalProfit: 20000.10,
             topFavorites: [
                 {fid: 101, fname: "Regular Milk Tea", qty_sold: 150},
                 {fid: 100, fname: "Avocado Milk Tea", qty_sold: 133},
@@ -141,7 +142,7 @@ export default function StaffSummary() {
             // TODO: (backend) code here for first rendering of page
             // only render uncompleted orders for restaurant (dt_rider_departs_rest == null)
             setOrders(fakeOrders.data)
-            setFilterSummary({type: "initialize", payload: fakeStats.data})
+            setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(fakeStats.data)})
             setPromotions(fakePromoStats.data)
         })()
     }, [])

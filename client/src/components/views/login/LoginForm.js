@@ -107,7 +107,7 @@ const LoginForm = () => {
                 </Label>
                ): null}
 
-          <Form.Button onClick={handleSubmit} disabled={isSubmitting}>
+          <Form.Button onClick={handleSubmit} disabled={isSubmitting} color={'teal'}>
               Sign In
          </Form.Button>
         </Form>

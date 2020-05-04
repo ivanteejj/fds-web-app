@@ -3,6 +3,7 @@ import {Button, Card, Divider, Header, Item} from "semantic-ui-react";
 import OrderStatus from "./details/OrderStatus";
 import CartDetails from "./details/CartDetails";
 import OrderDetails from "./details/OrderDetails";
+import DateTimeUtils from "../../../commons/DateTimeUtils";
 
 export default function CompletedOrders({orders, openReview}) {
     return (
@@ -24,7 +25,7 @@ export default function CompletedOrders({orders, openReview}) {
                             />
 
                             <Item>
-                                <Item.Description>{`Order placed: ${order.dt_order_placed}`}</Item.Description>
+                                <Item.Description>{`Order placed: ${DateTimeUtils.stringtifyPrettyDT(order.dt_order_placed)}`}</Item.Description>
                                 <Item.Description>{`Restaurant: ${order.cart[0].rname}`}</Item.Description>
                                 <Item.Description>{`Rider: ${order.riderid}`}</Item.Description>
                                 <Item.Description>{`Delivery Address: ${order.deliverylocation}`}</Item.Description>

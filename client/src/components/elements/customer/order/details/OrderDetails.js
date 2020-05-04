@@ -3,7 +3,7 @@ import {Grid} from "semantic-ui-react";
 import Utils from "../../../../commons/Utils";
 
 const computeTotalCost = (cartCost, deliveryFee, discount) => {
-    return cartCost + deliveryFee - discount;
+    return Number.parseFloat(cartCost) + Number.parseFloat(deliveryFee) - Number.parseFloat(discount);
 }
 
 export default function OrderDetails({o}) {
