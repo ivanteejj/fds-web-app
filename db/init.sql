@@ -50,6 +50,16 @@ CREATE TYPE PROMO_TYPE_ENUM as ENUM (
     'DOLLAR'
 );
 
+CREATE TABLE Year (
+    year			double precision,
+    primary key (year)
+);
+CREATE TABLE Month (
+    month	        double precision,
+    primary key (month)
+);
+
+
 CREATE TABLE Accounts (
 	username				TEXT,
 	password			TEXT NOT NULL,

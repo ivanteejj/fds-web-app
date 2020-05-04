@@ -47,6 +47,7 @@ class App extends Component {
         return <Router>
             <Switch>
             <Route exact path= "/test" component = { StaffSummaryPage }></Route>
+            <Route exact path= "/fdsmanager/" component = { FdsSummaryPage }></Route>
             <Route exact path= "/customer/order" component = { OrderPage }></Route>
             <Route exact path= "/customer/shop" component = { Home }></Route>
             <Route exact path = "/customer/shop/:rid" component = { RestaurantPage }></Route>

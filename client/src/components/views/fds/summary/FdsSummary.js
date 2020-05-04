@@ -2,6 +2,7 @@ import React, {useEffect, useReducer} from "react"
 import {Button, Dropdown, Grid, Header} from "semantic-ui-react";
 import FdsSummaryDetails from "../../../elements/fds/summary/FdsSummaryDetails";
 import DateTimeUtils from "../../../commons/DateTimeUtils";
+import axios from "axios";
 
 const fakeSummary = {
     data: [
@@ -52,10 +53,13 @@ export default function FdsSummary() {
         value: idx
     }))
 
+    //            setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(fakeSummary.data)})
     useEffect(() => {
         (async() => {
-            // TODO: (backend) code here for first rendering of page
-            setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(fakeSummary.data)})
+            const allRelevantOrders = await axios
+                .get('/customer/FDSManager/getMainSummaryData/', {
+                })
+                .then((response) => setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(response.data)}))
         })()
     }, [])
 

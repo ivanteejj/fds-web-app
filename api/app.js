@@ -14,6 +14,7 @@ var foodController = require('./controllers/food');
 var restController = require('./controllers/restaurant');
 var orderController = require('./controllers/order');
 var promoController = require('./controllers/promotion');
+var fdsStatsController = require('./controllers/fdsstats');
 
 
 // view engine setup
@@ -39,6 +40,7 @@ app.get('/customer/shop/getRestaurantDetails/', (req, res) => restController.get
 app.get('/customer/shop/getRecentDeliveryAddress/', (req, res) => customerController.getRecentDeliveryAddress(req, res, db))
 app.get('/customer/shop/getAllOrderDetailsForOneCust/', (req, res) => orderController.getAllOrderDetailsForOrderPage(req, res, db))
 app.get('/customer/shop/getAllRelevantPromosForOneCust/', (req, res) => promoController.getAllRelevantPromos(req, res, db))
+app.get('/customer/FDSManager/getMainSummaryData/', (req, res) => fdsStatsController.getMainSummaryData(req, res, db))
 
 
 // app.get('/customer/account/:userName', (req, res) => customerController.getCustomerDetails(req, res))
