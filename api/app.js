@@ -42,6 +42,8 @@ app.get('/customer/shop/getAllOrderDetailsForOneCust/', (req, res) => orderContr
 app.get('/customer/shop/getAllRelevantPromosForOneCust/', (req, res) => promoController.getAllRelevantPromos(req, res, db))
 app.get('/FDSManager/getMainSummaryData/', (req, res) => fdsStatsController.getMainSummaryData(req, res, db))
 app.get('/FDSManager/getSummaryDataByCustomer/', (req, res) => fdsStatsController.getSummaryDetailsByCustomer(req, res, db))
+app.get('/FDSManager/getSummaryDataByArea/', (req, res) => fdsStatsController.getSummaryDetailsByArea(req, res, db))
+
 
 
 

@@ -113,10 +113,59 @@ const getSummaryDetailsByCustomer = (req, res, db) => {
         })
 }
 
+const queryToGetSummaryDetailsByArea = "WITH currentDateHour as (\n" +
+    "\tSELECT DISTINCT now()::timestamp::date as date, EXTRACT(hour FROM now()::timestamp) as hour \n" +
+    "\tFROM month\n" +
+    "), preprocessDateHour as (\n" +
+    "\tSELECT (now()::timestamp - (interval '1h') * h1.hour) as relevantDates\n" +
+    "\tFROM DaysInWeek diw1, Hour h1\n" +
+    "), relevantDateHour as (\n" +
+    "\tSELECT pdh1.relevantDates::date as date, EXTRACT(HOUR FROM pdh1.relevantDates) as hour\n" +
+    "\tFROM preprocessDateHour pdh1\n" +
+    "), preprocessOrders as (\n" +
+    "\tSELECT oid, order_placed::date as date, EXTRACT(HOUR FROM order_placed) as hour, delivery_location_area\n" +
+    "\tFROM Orders o1\n" +
+    "), finalOrdersSummary as (\n" +
+    "\tSELECT date, hour, delivery_location_area as area, count(*)as summary\n" +
+    "\tFROM preprocessOrders po1\n" +
+    "\tGROUP BY po1.date, po1.hour, po1.delivery_location_area\n" +
+    "\t\n" +
+    ")\n" +
+    "\n" +
+    "SELECT rdh2.date, rdh2.hour, a1.area, CASE\n" +
+    "\tWHEN EXISTS (\n" +
+    "\t\tSELECT 1\n" +
+    "\t\tFROM finalOrdersSummary fos\n" +
+    "\t\tWHERE fos.date = rdh2.date\n" +
+    "\t\tAND fos.hour = rdh2.hour\n" +
+    "\t\tAND fos.area = a1.area\n" +
+    "\t) THEN (\n" +
+    "\t\tSELECT fos1.summary\n" +
+    "\t\tFROM finalOrdersSummary fos1\n" +
+    "\t\tWHERE fos1.date = rdh2.date\n" +
+    "\t\tAND fos1.hour = rdh2.hour\n" +
+    "\t\tAND fos1.area = a1.area\n" +
+    "\t) ELSE 0\n" +
+    "\tEND AS totalorders\n" +
+    "FROM relevantDateHour rdh2, Areas a1"
+
+const getSummaryDetailsByArea = (req, res, db) => {
+    const output = db.query(queryToGetSummaryDetailsByArea,
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            console.log(result.rows)
+            res.status(200).json(result.rows);
+        })
+}
+
+
 
 module.exports = {
     getMainSummaryData: getMainSummaryData,
-    getSummaryDetailsByCustomer: getSummaryDetailsByCustomer
+    getSummaryDetailsByCustomer: getSummaryDetailsByCustomer,
+    getSummaryDetailsByArea: getSummaryDetailsByArea
 };
 
 
