@@ -10,9 +10,9 @@ export default function CompletedOrders({orders, openReview}) {
         <>
             <Header as={'h1'}>{`Completed Orders`}</Header>
             <Divider/>
-            {orders && orders.map(order => {
+            {orders && orders.map((order, idx) => {
                 return (
-                    <Card fluid>
+                    <Card fluid key={idx}>
                         <Card.Content>
                             <h2>{`Order ID: #${order.oid}`}</h2>
                             <Button floated={'right'} size="small"

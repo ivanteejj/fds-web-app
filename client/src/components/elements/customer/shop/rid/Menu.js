@@ -29,10 +29,10 @@ export default function Menu({addCart, menu}) {
                 <span>
                     <Item.Group>
                         <Header as={'h2'}>{cat}</Header>
-                        {food.map(item => {
+                        {food.map((item, idx) => {
                             return (
                                 <>
-                                <Item>
+                                <Item key={idx}>
                                     <Item.Content>
                                         <Item.Header as={'a'}>{item.fname}</Item.Header>
                                         <Grid columns={2}>

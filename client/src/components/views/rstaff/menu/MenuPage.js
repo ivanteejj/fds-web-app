@@ -1,21 +1,18 @@
-import React, { Component } from "react"
+import React from "react"
 import Menu from "./Menu";
 import StaffMenuBar from "../../../menubar/StaffMenuBar";
+import StaffHeader from "../../../header/StaffHeader";
 
-class MenuPage extends Component {
-    render() {
-        return (
-            <>
-                <div className="Home">
-                    <header className={"App-header"}>
-                        <h1>FDS (Staff)</h1>
-                    </header>
-                    <StaffMenuBar/>
-                    <Menu />
-                </div>
-            </>
-        )
-    }
+function MenuPage (props) {
+    return (
+        <>
+            <div className="Home">
+                <StaffHeader/>
+                <StaffMenuBar userid={props.user.userid} signout={props.handleSignOut}/>
+                <Menu userid={props.user.userid}/>
+            </div>
+        </>
+    )
 }
 
 export default MenuPage

@@ -66,7 +66,7 @@ function getOccupiedDates(data) {
         .map(x => moment(x, date_format).toDate());
 }
 
-export default function Schedule() {
+export default function Schedule({userid}) {
     const calendarComponentRef = createRef()
 
     const [schedule, setSchedule] = useState([])
@@ -81,6 +81,7 @@ export default function Schedule() {
     useEffect(() => {
         (async() => {
             // TODO: (backend) code here for first rendering of page
+            let user = userid
             setSchedule(fakeSchedulePT.data);
             // retrieve rider type
             setRiderType("full-time");

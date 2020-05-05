@@ -6,9 +6,9 @@ const CartDetails = ({cart}) => {
     return (
         <>
             <h3>Order Items</h3>
-            {cart.map(item => {
+            {cart.map((item, idx) => {
                 return (
-                    <Item>
+                    <Item key={idx}>
                         <Item.Header>{item.fname}</Item.Header>
                         <Grid columns={2}>
                             <Grid.Row>

@@ -4,7 +4,7 @@ import {
     Header,
     Card
 } from 'semantic-ui-react'
-import {useParams, useLocation} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 import Menu from "../../../../elements/customer/shop/rid/Menu"
 import ShoppingCart from "../../../../elements/customer/shop/rid/ShoppingCart"
 import Popup from "../../../../elements/customer/shop/rid/PopupCheckOut"
@@ -46,9 +46,8 @@ function sumCartCost(cart) {
     , 0)
 }
 
-export default function Restaurant({ match }) {
+export default function Restaurant({ userid }) {
     let params = useParams()
-    let location = useLocation()
 
     const [menu, setMenu] = useState([]);
     const [rdetails, setRDetails] = useState({});
@@ -60,7 +59,7 @@ export default function Restaurant({ match }) {
     const [promos, setPromos] = useState([]);
     const [recentDeliveryLoc, setRecentDeliveryLoc] = useState([]);
     const [paymentMtds, setPaymentMtds] = useState([]);
-    const [userid, setUserid] = useState(null)
+    const [user, setUser] = useState(null)
 
     const [test, setTest] = useState(null)
 
@@ -127,7 +126,8 @@ export default function Restaurant({ match }) {
     
     useEffect(() => {
         (async() => {
-            const test = location.state.userid
+            const test = userid
+            setUser(test)
 
             const menu = await axios
                  .get('/customer/shop/getMenu', {
@@ -224,7 +224,7 @@ export default function Restaurant({ match }) {
                 <text>{`area: ${test.area}, address: ${test.address}`}</text>
             )}
 
-            {userid && (<text>{userid}</text>)}
+            {user && (<text>{user}</text>)}
         </>
     )
 

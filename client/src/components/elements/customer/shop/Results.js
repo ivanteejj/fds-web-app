@@ -33,6 +33,7 @@ const handleClick = () => searchFocus.current.focus()
 
 export default function Results({columns, data}) {
     let history = useHistory()
+
     const [filterInput, setFilterInput] = useState("")
 
     const [searchType, setSearchType] = useState(filterOptions[0].value) 
@@ -79,7 +80,7 @@ export default function Results({columns, data}) {
     useEffect(() => {
         // redirect here
         if (selectedRid !== null) {
-            history.push(`/customer/shop/${selectedRid}`, {userid: "tester123"})
+            history.push(`/customer/shop/${selectedRid}`)
         }
     }, [selectedRid])
 

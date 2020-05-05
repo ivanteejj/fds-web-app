@@ -1,20 +1,17 @@
-import React, {Component} from "react"
+import React from "react"
 import RiderMenuBar from "../../../menubar/RiderMenuBar";
 import Reviews from "./Reviews";
+import RiderHeader from "../../../header/RiderHeader";
 
-class ReviewsPage extends Component {
-    render() {
-        return (
-            <div className="Home">
-                <header className={"App-header"}>
-                    <h1>FDS (Rider)</h1>
-                </header>
-                <RiderMenuBar/>
-                <Reviews/>
-                <div className="Footer"/>
-            </div>
-        )
-    }
+function ReviewsPage (props) {
+    return (
+        <div className="Home">
+            <RiderHeader/>
+            <RiderMenuBar userid={props.user.userid} signout={props.handleSignOut}/>
+            <Reviews userid={props.user.userid}/>
+            <div className="Footer"/>
+        </div>
+    )
 }
 
 export default ReviewsPage

@@ -17,12 +17,13 @@ const fakeReviews = {
     ]
 }
 
-export default function Reviews() {
+export default function Reviews({userid}) {
     const [reviews, setReviews] = useState(null);
 
     useEffect(() => {
         (async() => {
             // TODO: (backend) code here for first rendering of page
+            let user = userid
             setReviews(fakeReviews.data)
         })()
     }, [])

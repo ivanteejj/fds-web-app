@@ -1,20 +1,17 @@
 import React, { Component } from "react"
 import RiderMenuBar from "../../../menubar/RiderMenuBar";
 import Schedule from "./Schedule";
+import RiderHeader from "../../../header/RiderHeader";
 
-class SchedulePage extends Component {
-    render() {
-        return (
-            <div className="Home">
-                <header className={"App-header"}>
-                    <h1>FDS (Rider)</h1>
-                </header>
-                <RiderMenuBar/>
-                <Schedule/>
-                <div className="Footer"/>
-            </div>
-        )
-    }
+function SchedulePage (props) {
+    return (
+        <div className="Home">
+            <RiderHeader/>
+            <RiderMenuBar userid={props.user.userid} signout={props.handleSignOut}/>
+            <Schedule userid={props.user.userid}/>
+            <div className="Footer"/>
+        </div>
+    )
 }
 
 export default SchedulePage

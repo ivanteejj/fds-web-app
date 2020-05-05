@@ -1,19 +1,16 @@
-import React, { Component } from "react"
+import React from "react"
 import StaffSummary from "./StaffSummary";
 import StaffMenuBar from "../../../menubar/StaffMenuBar";
+import StaffHeader from "../../../header/StaffHeader";
 
-class StaffSummaryPage extends Component {
-    render() {
-        return (
-            <div className="Home">
-                <header className={"App-header"}>
-                    <h1>FDS (Staff)</h1>
-                </header>
-                <StaffMenuBar/>
-                <StaffSummary/>
-            </div>
-        )
-    }
+function StaffSummaryPage (props) {
+    return (
+        <div className="Home">
+            <StaffHeader/>
+            <StaffMenuBar userid={props.user.userid} signout={props.handleSignOut}/>
+            <StaffSummary userid={props.user.userid}/>
+        </div>
+    )
 }
 
 export default StaffSummaryPage

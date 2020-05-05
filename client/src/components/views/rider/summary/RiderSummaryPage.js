@@ -1,20 +1,17 @@
-import React, {Component} from "react"
+import React from "react"
 import RiderMenuBar from "../../../menubar/RiderMenuBar";
+import RiderHeader from "../../../header/RiderHeader";
 import Summary from "./Summary";
 
-class RiderSummaryPage extends Component {
-    render() {
-        return (
-            <div className="Home">
-                <header className={"App-header"}>
-                    <h1>FDS (Rider)</h1>
-                </header>
-                <RiderMenuBar/>
-                <Summary/>
-                <div className="Footer"/>
-            </div>
-        )
-    }
+function RiderSummaryPage (props) {
+    return (
+        <div className="Home">
+            <RiderHeader/>
+            <RiderMenuBar userid={props.user.userid} signout={props.handleSignOut}/>
+            <Summary userid={props.user.userid} />
+            <div className="Footer"/>
+        </div>
+    )
 }
 
 export default RiderSummaryPage

@@ -14,7 +14,6 @@ import PopupViewReview from "../../../elements/customer/order/review/PopupViewRe
 import generateReviewSkeleton from "../../../elements/customer/order/review/ReviewSkeleton";
 import axios from "axios";
 
-const fakeCid = 20
 //NOTE: ORDERS SHOULD ALR BE SORTED IN DESC ORDER BASED ON dt_order_placed UNDER BOTH UNCOMPLETED AND COMPLETED ORDER GROUPS
 const fakeOrders = {
     data: [
@@ -134,7 +133,7 @@ const groupOrders = (orders) => {
     }
 }
 
-export default function Order() {
+export default function Order({userid}) {
 
     const orderReducer = (state, action) => {
         switch (action.type) {
@@ -202,7 +201,7 @@ export default function Order() {
             const allRelevantOrders = await axios
                 .get('/customer/shop/getAllOrderDetailsForOneCust/', {
                     params: {
-                        cid: fakeCid
+                        cid: userid
                     }
                 })
                 .then((response) => setOrders({type: "initialize", payload: groupOrders(response.data)})
