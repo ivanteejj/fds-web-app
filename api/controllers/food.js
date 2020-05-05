@@ -38,13 +38,12 @@ const queryToGetFoodForRestaurantPage =
     "WITH perDayPurchase as (\n" +
     "\tSELECT o1.order_placed, sc1.fid, sc1.quantity\n" +
     "\tFROM Orders o1 NATURAL JOIN ShoppingCarts sc1\n" +
-    "\tWHERE DATE(order_placed) >= '18/03/2020' AND DATE(order_placed) < '18/03/2020'::date + INTERVAL '1 DAY'\n" +
+    "\tWHERE DATE(order_placed) >= CURRENT_DATE AND DATE(order_placed) < CURRENT_DATE::DATE + INTERVAL '1 DAY'\n" +
     ")\n" +
     "\n" +
-    "SELECT f1.fid, f1.fname, f1.rid as rid, f1.price, f1.category, f1.daily_limit, quantity as daily_sold\n" +
-    "FROM Food f1, perDayPurchase pdp1\n" +
-    "WHERE f1.rid = $1\n" +
-    "AND f1.fid = pdp1.fid"
+    "SELECT f1.fid, f1.fname, f1.rid as rid, f1.price, f1.category, f1.daily_limit, COALESCE(quantity, 0) as daily_sold\n" +
+    "FROM Food f1 LEFT JOIN perDayPurchase USING (fid)\n" +
+    "WHERE f1.rid = $1"
 const getFoodForRestaurantPage = (req, res, db) => {
     const rid = req.query.rid;
     console.log("rest_id is");
