@@ -112,7 +112,8 @@ const reducer = (state, action) => {
         case "initialize":
             return {
                 stats: action.payload,
-                filterOptions: generateFilterOption(action.payload),
+                filterOptions: action.payload && action.payload.length > 0 ?
+                    generateFilterOption(action.payload) : null,
                 filter: action.payload && action.payload.length > 0 ? action.payload[0].period : null,
                 filteredStats: action.payload && action.payload.length > 0 ?
                                 filterStats(action.payload, action.payload[0].period) : null
@@ -183,12 +184,7 @@ export default function StaffSummary({userid, rid}) {
                         rid: rid
                     }
                 })
-                .then((response) => {
-                        console.log(response.data.length)
-                        setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(response.data)})
-                }
-
-                )
+                .then((response) => setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(response.data)}))
 
 
             setPromotions(fakePromoStats.data)
@@ -243,26 +239,34 @@ export default function StaffSummary({userid, rid}) {
                     <Grid.Column width={1}/>
 
                     <Grid.Column width={11} textAlign={"left"}>
-                        <Grid.Row>
-                            <h1>Summary of {' '}
-                                <Dropdown
-                                    inline
-                                    options={options}
-                                    value={filter}
-                                    onChange={(e, { value }) => {
-                                        setFilterSummary({type: "filter", payload: value})
-                                    }}
-                                />
-                            </h1>
-                            <SummaryStatement stats={filteredStats}/>
-                        </Grid.Row>
+                        {(!stats || stats.length < 1) && (<h1>No Summary</h1>)}
+                        {stats && stats.length > 0 && (
+                            <Grid.Row>
+                                <h1>Summary of {' '}
+                                    <Dropdown
+                                        inline
+                                        options={options}
+                                        value={filter}
+                                        onChange={(e, { value }) => {
+                                            setFilterSummary({type: "filter", payload: value})
+                                        }}
+                                    />
+                                </h1>
+                                <SummaryStatement stats={filteredStats}/>
+                            </Grid.Row>
+                        )}
+
                         <Divider/>
+
                         <Grid.Row>
                             <h1>Promotions</h1>
                             <Button floated={'right'} size={'mini'} color={'pink'}
                                     content={'Add Promo'} onClick={() => openPopup("addPromo", true, null)}
                             />
-                            <Promotions promotions={promotions} openPromo={openPopup}/>
+                            {(!promotions || promotions.length < 1) && (<h2>No Promotions</h2>)}
+                            {promotions && promotions.length > 0 && (
+                                <Promotions promotions={promotions} openPromo={openPopup}/>
+                            )}
                         </Grid.Row>
                     </Grid.Column>
 

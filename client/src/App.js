@@ -32,6 +32,7 @@ import FdsSummaryPage from "./components/views/fds/summary/FdsSummaryPage";
 import FdsCustomerStatsPage from "./components/views/fds/stats/customer/FdsCustomerStatsPage";
 import FdsRiderStatsPage from "./components/views/fds/stats/rider/FdsRiderStatsPage";
 import FdsAreaStatsPage from "./components/views/fds/stats/area/FdsAreaStatsPage";
+import FdsPromotionsPage from "./components/views/fds/promotions/FdsPromotionsPage";
 
 /* -------------------------- LoginPage/Register ------------------------------------------*/
 import LoginPage from './components/views/login/LoginPage'
@@ -112,6 +113,8 @@ function App() {
                                    component={ FdsCustomerStatsPage} handleSignOut={handleSignOut}/>
                 <ProtectedFdsRoute exact path="/fds/stats/rider" user={user}
                                    component={ FdsRiderStatsPage} handleSignOut={handleSignOut}/>
+                <ProtectedFdsRoute exact path="/fds/promotions" user={user}
+                                   component={ FdsPromotionsPage} handleSignOut={handleSignOut}/>
 
                 <ProtectedRiderRoute exact path="/rider/summary" user={user}
                                      component={ RiderSummaryPage} handleSignOut={handleSignOut}/>
