@@ -41,9 +41,25 @@ const LoginForm = ({validLogin}) => {
             initialValues={{ userid: '', username: '', password: '', type: type[0].value}}
             validationSchema={LoginSchema}
             onSubmit={(values) => {
-                //backend code here
-                validLogin(20, "staff");
-                return history.push("/staff/summary")
+                // TODO: backend code here
+                //comment out the unused user roles
+                // validLogin (userid, user_type)
+
+                // fds
+                validLogin(20, "fds");
+                return history.push("/fds/summary")
+
+                // customer
+                // validLogin(20, "customer");
+                // return history.push("/customer/shop")
+
+                // rider
+                // validLogin(20, "rider");
+                // return history.push("/rider/summary")
+
+                // staff
+                // validLogin(20, "staff");
+                // return history.push("/staff/summary")
             }}
         > 
 

@@ -56,7 +56,7 @@ export default function FdsSummary() {
         value: idx
     }))
 
-    //            setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(fakeSummary.data)})
+    //setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(fakeSummary.data)})
     useEffect(() => {
         (async() => {
             const allRelevantOrders = await axios
