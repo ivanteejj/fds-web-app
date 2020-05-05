@@ -117,7 +117,7 @@ function App() {
                        handleLogin={handleLogin}
                        render={props => <LoginPage {...props} handleLogin={handleLogin} />}
                 />
-                <Redirect to = "/404"></Redirect>
+                <Redirect to = "/login"></Redirect>
             </Switch>
         </Router>
     )
