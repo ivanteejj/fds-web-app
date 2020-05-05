@@ -6,7 +6,6 @@ import moment from "moment"
 import axios from "axios";
 
 const fakeAreaStats = {
-    //TODO: aggregated data
     //data should already be sorted in descending order by date
     data: [
         {date: "02/05/2020", hour: 11, area: "North", totalorders: 200},

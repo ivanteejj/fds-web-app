@@ -6,8 +6,6 @@ import DateTimeUtils from "../../../../commons/DateTimeUtils";
 import axios from "axios";
 
 const fakeCustStats = {
-    //TODO: aggregated data
-    //     period is concat of Month and Year
     //data should already be sorted in descending order by period
     data: [
         {month: 3, year: 2020, custid: "ivantee", totalorders: 15, totalcost: 251.2},
