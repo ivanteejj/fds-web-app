@@ -10,7 +10,7 @@ import OrdersSideBar from "../../../elements/rstaff/summary/OrdersSideBar";
 import SummaryStatement from "../../../elements/rstaff/summary/SummaryStatement";
 import Promotions from "../../../elements/rstaff/summary/Promotions";
 import Utils from "../../../commons/Utils";
-import PopupEditPromo from "./PopupEditPromo";
+import PopupEditPromo from "../../../elements/rstaff/summary/PopupEditPromo";
 import axios from "axios";
 
 const fakeRID = 1
