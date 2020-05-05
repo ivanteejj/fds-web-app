@@ -7,9 +7,6 @@ import axios from "axios";
 
 const fakeSummary = {
     data: [
-        /* TODO: period is concat of Month and Year of dt_order_placed
-        *  sorted in descending order by month and year
-        */
         {month: 3, year: 2020, totalnewcustomers: 20, totalorders: 2000, totalcost: 22049.2},
         {month: 2, year: 2020, totalnewcustomers: 15, totalorders: 1500, totalcost: 20000.10},
     ]

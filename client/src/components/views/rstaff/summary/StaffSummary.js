@@ -14,9 +14,6 @@ import axios from "axios";
 const fakeRID = 1
 
 const fakeOrders = {
-    /* TODO: Active orders (restaurant pov) so get orders where dt_rider_departs_rest == null
-    *  filter, sort desc order by dt_order_placed
-    */
     data: [
         {oid: 100123, riderid: "benwang",
             dt_order_placed: "2020-02-22 19:10:25", dt_rider_departs: "2020-02-22 19:20:00",
@@ -48,9 +45,7 @@ const fakeOrders = {
 
 const fakeStats = {
     data: [
-        /* TODO: period is concat of Month and Year of dt_order_placed
-        *  sorted in descending order by month and year
-        */
+
         {month: 3, year: 2020, totalorders: 2000, totalProfit: 34000.20,
             topFavorites: [ // sorted in descending order by qty_sold
                 {fid: 100, fname: "Avocado Milk Tea", qty_sold: 200},
