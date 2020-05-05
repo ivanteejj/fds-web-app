@@ -3,6 +3,7 @@ import ReactTableFilters from "../../../../commons/ReactTableFilters";
 import {Grid, Header} from "semantic-ui-react";
 import FdsStatsTable from "../../../../elements/fds/stats/FdsStatsTable";
 import moment from "moment"
+import axios from "axios";
 
 const fakeAreaStats = {
     //TODO: aggregated data
@@ -60,8 +61,12 @@ export default function FdsAreaStats() {
 
     useEffect(() => {
         (async() => {
-            // TODO: (backend) code here for first rendering of page
-            setData(formatHour(fakeAreaStats.data))
+            const allRelevantOrders = await axios
+                .get('/FDSManager/getSummaryDataByArea/', {
+
+                })
+                .then((response) => setData(formatHour(response.data))
+                )
         })()
     }, [])
 

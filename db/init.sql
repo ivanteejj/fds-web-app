@@ -13,17 +13,14 @@ DROP TABLE IF EXISTS 	Accounts, Restaurants, Menus, Food, Staff, Customers,
 						FDS_Promo_Applies, Delivery_Reviews, 
 						Food_Reviews, Riders, Rider_Works, 
 						Schedules, Shifts, Monthly_Work_Schedule,
-						Weekly_Work_Schedule CASCADE;
+						Weekly_Work_Schedule, Year, Month, DaysInWeek, Hour CASCADE;
 						
-DROP TYPE IF EXISTS CAT_ENUM, AREA_ENUM, PROMO_CAT_ENUM, PROMO_TYPE_ENUM CASCADE;
+DROP TYPE IF EXISTS CAT_ENUM, PROMO_CAT_ENUM, PROMO_TYPE_ENUM CASCADE;
 
 
-CREATE TYPE AREA_ENUM AS ENUM (
-	'NORTH',
-	'SOUTH',
-	'WEST',
-	'EAST',
-	'CENTRAL'
+CREATE TABLE AREAS (
+    area        text,
+    primary key (area)
 );
 
 CREATE TYPE CAT_ENUM AS ENUM (
@@ -50,6 +47,24 @@ CREATE TYPE PROMO_TYPE_ENUM as ENUM (
     'DOLLAR'
 );
 
+CREATE TABLE Year (
+    year			double precision,
+    primary key (year)
+);
+CREATE TABLE Month (
+    month	        double precision,
+    primary key (month)
+);
+CREATE TABLE DaysInWeek (
+    day            double precision,
+    primary key (day)
+);
+CREATE TABLE Hour (
+    hour            double precision,
+    primary key (hour)
+);
+
+
 CREATE TABLE Accounts (
 	username				TEXT,
 	password			TEXT NOT NULL,
@@ -61,7 +76,7 @@ CREATE TABLE Restaurants (
     rid 			    INTEGER,
     rname           	TEXT NOT NULL,
     address         	TEXT NOT NULL,
-	area				AREA_ENUM NOT NULL,
+	area				TEXT NOT NULL references Areas (area),
     minAmt         		NUMERIC NOT NULL
 						CHECK (minAmt >= 0),
     PRIMARY KEY (rid)
@@ -139,7 +154,8 @@ CREATE TABLE Orders(
                                             CHECK (delivery_fee >= 0),
     discount_amount							numeric NOT NULL,
     delivery_location						TEXT NOT NULL,
-	rider_id								INTEGER NOT NULL,
+    delivery_location_area					TEXT NOT NULL references Areas (area),
+    rider_id								INTEGER NOT NULL,
 	rider_rating							INTEGER NOT NULL DEFAULT(5)
 											CHECK (rider_rating >= 1 AND rider_rating <= 5),
 	cid										INTEGER NOT NULL,
