@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    Button,
     Divider,
     Form,
     Input,
@@ -11,7 +12,7 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import "../../../stylesheets/Popup.css"
 
-export default function PopupEditFood({closePopup, item, categories, submitEditFood}) {
+export default function PopupEditFood({closePopup, item, categories, submitEditFood, submitDeleteFood}) {
     const EditFoodSchema = Yup.object().shape({
         fname: Yup.string().required("Food name is required"),
         price: Yup.number().required("Price is required"),
@@ -32,6 +33,12 @@ export default function PopupEditFood({closePopup, item, categories, submitEditF
             <div className="box">
                 <span className="close-icon" onClick={() => closePopup("editFood", false)}>x</span>
                 <>
+                    <Button
+                        floated={'left'} size="medium"
+                        content={'Delete Food'}
+                        color={'red'}
+                        onClick={() => submitDeleteFood(item)}
+                    />
                     <h1>{item.fname}</h1>
                     <Divider/>
 
