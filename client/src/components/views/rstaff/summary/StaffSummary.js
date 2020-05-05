@@ -9,6 +9,9 @@ import DateTimeUtils from "../../../commons/DateTimeUtils";
 import OrdersSideBar from "../../../elements/rstaff/summary/OrdersSideBar";
 import SummaryStatement from "../../../elements/rstaff/summary/SummaryStatement";
 import Promotions from "../../../elements/rstaff/summary/Promotions";
+import axios from "axios";
+
+const fakeRID = 1
 
 const fakeOrders = {
     /* TODO: Active orders (restaurant pov) so get orders where dt_rider_departs_rest == null
@@ -142,7 +145,17 @@ export default function StaffSummary({userid}) {
             // TODO: (backend) code here for first rendering of page
             // only render uncompleted orders for restaurant (dt_rider_departs_rest == null)
             let user = userid
-            setOrders(fakeOrders.data)
+
+
+            const allRelevantOrders = await axios
+                .get('/staff/getAllOrders/', {
+                    params: {
+                        rid: user
+                    }
+                })
+                .then((response) => setOrders(response.data))
+
+
             setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(fakeStats.data)})
             setPromotions(fakePromoStats.data)
         })()
