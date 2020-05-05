@@ -28,15 +28,15 @@ export default function Promotions({promotions, openPromo}) {
                         <Table.Row>
                             <Table.Cell>{promo.pid}</Table.Cell>
                             <Table.Cell>{promo.promo_details_text}</Table.Cell>
-                            <Table.Cell>{promo.promo_min_cost}</Table.Cell>
-                            <Table.Cell>{promo.promo_max_discount_limit}</Table.Cell>
+                            <Table.Cell>{`$${promo.promo_min_cost > 0 ? promo.promo_min_cost : 0}`}</Table.Cell>
+                            <Table.Cell>{`$${promo.promo_max_discount_limit > 0 ? promo.promo_max_discount_limit : 0}`}</Table.Cell>
                             <Table.Cell>{promo.start_datetime}</Table.Cell>
                             <Table.Cell>{promo.end_datetime}</Table.Cell>
                             <Table.Cell>
                                 {moment(promo.end_datetime, datetime_format).diff(moment(promo.start_datetime, datetime_format), 'hour')}
                             </Table.Cell>
                             <Table.Cell>{promo.avgorders}</Table.Cell>
-                            <Table.Cell>{promo.promo_max_num_redemption}</Table.Cell>
+                            <Table.Cell>{promo.promo_max_num_redemption ? promo.promo_max_num_redemption : "NA"}</Table.Cell>
                             {moment().isBefore(moment(promo.end_datetime, datetime_format)) ? (
                                 <Table.Cell>
                                     <Button content={'Edit'}

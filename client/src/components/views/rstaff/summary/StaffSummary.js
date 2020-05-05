@@ -11,6 +11,7 @@ import SummaryStatement from "../../../elements/rstaff/summary/SummaryStatement"
 import Promotions from "../../../elements/rstaff/summary/Promotions";
 import Utils from "../../../commons/Utils";
 import PopupEditPromo from "../../../elements/rstaff/summary/PopupEditPromo";
+import PopupAddPromo from "../../../elements/rstaff/summary/PopupAddPromo";
 import axios from "axios";
 
 const fakeRID = 1
@@ -194,18 +195,32 @@ export default function StaffSummary({userid, rid}) {
         })()
     }, [])
 
+    const submitAddPromo = (item) => {
+        closePopup("addPromo", false)
+        // TODO: (backend) code to add new promo
+        /* Note:
+        * item object contains:
+        * promo_details_text, promo_type, promo_cat, promo_rate, start_datetime,
+        * end_datetime, promo_max_discount_limit, promo_min_cost, promo_max_num_redemption
+        */
+
+        // TODO: (backend) once successfully, get the entire promo schema from db, update the promo at front end
+        // setPromotions(*sth sth*)
+    }
+
     const submitEditPromo = (item) => {
         closePopup("editPromo", false)
         // TODO: (backend) code to update promo
         /* Note:
-        * item object contains the promo tuple record
-        * use pid to update db
+        * item object contains:
+        * pid, promo_details_text, promo_type, promo_cat, promo_rate, start_datetime,
+        * end_datetime, promo_max_discount_limit, promo_min_cost, promo_max_num_redemption
+        *
         * to access item attributes: item.pid, item.promo_rate etc..
         */
 
         // TODO: (backend) once successful, update the promos at front end by retrieving updated promo from db
         // setPromotions(*sth sth*)
-
     }
 
     const submitDeletePromo = (item) => {
@@ -245,7 +260,7 @@ export default function StaffSummary({userid, rid}) {
                         <Grid.Row>
                             <h1>Promotions</h1>
                             <Button floated={'right'} size={'mini'} color={'pink'}
-                                    content={'Add Promo'}
+                                    content={'Add Promo'} onClick={() => openPopup("addPromo", true, null)}
                             />
                             <Promotions promotions={promotions} openPromo={openPopup}/>
                         </Grid.Row>
@@ -263,6 +278,11 @@ export default function StaffSummary({userid, rid}) {
                 <PopupEditPromo closePopup={closePopup}
                                 submitDeletePromo={submitDeletePromo} submitEditPromo={submitEditPromo}
                                 item={showPopup.item} types={promo_type} cats={promo_cat}/>
+            )}
+
+            {showPopup.addPromo && (
+                <PopupAddPromo closePopup={closePopup} submitAddPromo={submitAddPromo}
+                               types={promo_type} cats={promo_cat}/>
             )}
         </>
     )
