@@ -155,8 +155,17 @@ export default function StaffSummary({userid}) {
                 })
                 .then((response) => setOrders(response.data))
 
+            const mostPopularItemsByMonth = await axios
+                .get('/staff/getMostPopularByMonth/', {
+                    params: {
+                        rid: user
+                    }
+                })
+                .then((response) => setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(response.data)})
+                )
 
-            setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(fakeStats.data)})
+
+
             setPromotions(fakePromoStats.data)
         })()
     }, [])
