@@ -54,7 +54,7 @@ const queryToGetAllOrderDetailsforRestaurantStaffPage =
     "\tGROUP BY oid\n" +
     ")\n" +
     "\n" +
-    "SELECT oid, rname as rid, order_placed as dt_order_placed, rider_depart_for_rest as dt_rider_departs, rider_arrive_rest as dt_rider_arrives_rest, rider_depart_for_delivery_location as dt_rider_departs_rest, order_delivered as dt_order_delivered, cart \n" +
+    "SELECT oid, rname as riderid, order_placed as dt_order_placed, rider_depart_for_rest as dt_rider_departs, rider_arrive_rest as dt_rider_arrives_rest, rider_depart_for_delivery_location as dt_rider_departs_rest, order_delivered as dt_order_delivered, cart \n" +
     "FROM (Orders o1 JOIN Riders USING (rider_id)) JOIN aggregatedCart USING (oid)\n" +
     "WHERE rider_depart_for_delivery_location ISNULL"
 
