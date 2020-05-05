@@ -25,7 +25,7 @@ export default function SummaryStatement({stats}) {
                                     </Table.Header>
 
                                     <Table.Body>
-                                        {stats.topFavorites && stats.topFavorites.map((item, idx) => (
+                                        {stats.topfavourites && stats.topfavourites.map((item, idx) => (
                                             <Table.Row>
                                                 <Table.Cell>{idx+1}</Table.Cell>
                                                 <Table.Cell>{item.fname}</Table.Cell>
@@ -48,7 +48,7 @@ export default function SummaryStatement({stats}) {
                                 <Statistic.Label>Orders</Statistic.Label>
                             </Statistic>
                             <Statistic>
-                                <Statistic.Value>${stats.totalProfit}</Statistic.Value>
+                                <Statistic.Value>${stats.totalprofit}</Statistic.Value>
                                 <Statistic.Label>Revenue</Statistic.Label>
                             </Statistic>
                         </Statistic.Group>

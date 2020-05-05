@@ -9,7 +9,7 @@ function MenuPage (props) {
             <div className="Home">
                 <StaffHeader/>
                 <StaffMenuBar userid={props.user.userid} signout={props.handleSignOut}/>
-                <Menu userid={props.user.userid}/>
+                <Menu userid={props.user.userid} rid={props.user.rid}/>
             </div>
         </>
     )

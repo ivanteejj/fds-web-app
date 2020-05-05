@@ -43,22 +43,22 @@ const LoginForm = ({validLogin}) => {
             onSubmit={(values) => {
                 // TODO: backend code here
                 //comment out the unused user roles
-                // validLogin (userid, user_type)
+                // validLogin (userid, user_type, rid (set as null if NA))
 
                 // fds
-                // validLogin(20, "fds");
+                // validLogin(20, "fds", null);
                 // return history.push("/fds/summary")
 
                 // customer
-                // validLogin(20, "customer");
+                // validLogin(20, "customer", null);
                 // return history.push("/customer/shop")
 
                 // rider
-                // validLogin(20, "rider");
+                // validLogin(20, "rider", null);
                 // return history.push("/rider/summary")
 
 
-                validLogin(2, "staff");
+                validLogin(10, "staff", 1);
                 return history.push("/staff/summary")
             }}
         > 

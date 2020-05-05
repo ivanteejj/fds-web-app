@@ -27,7 +27,7 @@ function top5Items(data) {
     return data.slice(0,5);
 }
 
-export default function Menu({userid}) {
+export default function Menu({userid, rid}) {
     const [menu, setMenu] = useState([])
     const [topItems, setTopItems] = useState([])
     const [categories, setCategories] = useState([])
@@ -51,7 +51,6 @@ export default function Menu({userid}) {
     const submitEditFood = (item) => {
         closePopup("editFood", false)
         // TODO: (backend) code to update food
-
         /* Note:
         * item object contains the following: fname, fid, price, category, daily_limit
         * use fid to update db
@@ -66,10 +65,22 @@ export default function Menu({userid}) {
     const submitAddFood = (item) => {
         closePopup("addFood", false)
         // TODO: (backend) code to add new food
-
         /* Note:
         * item param DOES NOT include rid
         * item object contains: fname, price, category, daily_limit
+        */
+
+        // TODO: (backend) once successfully, get the entire updated menu schema from db, update the menu at front end
+        // setMenu(Utils.groupBy("sth sth", "category"))
+    }
+
+    const submitDeleteFood = (item) => {
+        closePopup("editFood", false)
+        // TODO: (backend) code to delete food
+        /* Note:
+        * item object contains the following: fname, fid, price, category, daily_limit
+        * use fid to update db
+        * to access item attributes: item.fname, item.fid etc..
         */
 
         // TODO: (backend) once successfully, get the entire updated menu schema from db, update the menu at front end
@@ -80,6 +91,7 @@ export default function Menu({userid}) {
         (async() => {
             // TODO: (backend) code here for first rendering of page
             let user = userid
+            let rest_id = rid
             setTopItems(top5Items(fakeMenu.data.slice()))
             setMenu(Utils.groupBy(fakeMenu.data, "category"))
         })()
@@ -152,7 +164,7 @@ export default function Menu({userid}) {
             {showPopup.editFood && showPopup.item &&
                 <PopupEditFood closePopup={closePopup}
                                item={showPopup.item} categories={categories}
-                               submitEditFood={submitEditFood}
+                               submitEditFood={submitEditFood} submitDeleteFood={submitDeleteFood}
                 />
             }
 
