@@ -1,5 +1,6 @@
 import React, {useEffect, useReducer} from "react"
 import {Button, Dropdown, Grid, Header} from "semantic-ui-react";
+import {useHistory} from "react-router-dom"
 import FdsSummaryDetails from "../../../elements/fds/summary/FdsSummaryDetails";
 import DateTimeUtils from "../../../commons/DateTimeUtils";
 
@@ -38,6 +39,8 @@ const reducer = (state, action) => {
 }
 
 export default function FdsSummary() {
+    let history = useHistory()
+
     const [filterSummary, setFilterSummary] = useReducer(reducer, {
         stats: [],
         filterOptions: [],
@@ -83,9 +86,12 @@ export default function FdsSummary() {
 
                     <Header as={'h3'}>View All Statistics Breakdown</Header>
                     <Button.Group>
-                        <Button content={'By Customer'}/>
-                        <Button content={'By Area'}/>
-                        <Button content={'By Rider'}/>
+                        <Button content={'By Customer'}
+                                onClick={() => history.push("/fds/stats/customer")}/>
+                        <Button content={'By Area'}
+                                onClick={() => history.push("/fds/stats/area")}/>
+                        <Button content={'By Rider'}
+                                onClick={() => history.push("/fds/stats/rider")}/>
                     </Button.Group>
                 </Grid.Column>
             </Grid.Row>

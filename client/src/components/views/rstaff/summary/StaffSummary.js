@@ -119,7 +119,7 @@ const reducer = (state, action) => {
     }
 }
 
-export default function StaffSummary() {
+export default function StaffSummary({userid}) {
     const [orders, setOrders] = useState([])
     const [promotions, setPromotions] = useState([])
 
@@ -141,6 +141,7 @@ export default function StaffSummary() {
         (async() => {
             // TODO: (backend) code here for first rendering of page
             // only render uncompleted orders for restaurant (dt_rider_departs_rest == null)
+            let user = userid
             setOrders(fakeOrders.data)
             setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(fakeStats.data)})
             setPromotions(fakePromoStats.data)

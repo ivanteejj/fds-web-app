@@ -23,7 +23,7 @@ const RegisterSchema = Yup.object().shape({
         .required("Password is required")
 });
 
-const RegisterForm = () => {
+const RegisterForm = (validRegister) => {
 
     return (
         <Grid padded className="segment centered">
@@ -32,7 +32,7 @@ const RegisterForm = () => {
             validationSchema={RegisterSchema}
             onSubmit={(values) => {
                 //backend code here
-                
+                return validRegister(20, "customer")
             }}
         > 
 

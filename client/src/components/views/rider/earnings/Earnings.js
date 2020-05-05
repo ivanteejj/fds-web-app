@@ -31,7 +31,7 @@ const fakeRider = {
 
 const date_format = "DD/MM/YYYY";
 
-export default function Earnings() {
+export default function Earnings({userid}) {
     const [currEarnings, setCurrEarnings] = useState(null)
     const [pastEarnings, setPastEarnings] = useState(null)
     const [rider, setRider] = useState(null)
@@ -39,6 +39,7 @@ export default function Earnings() {
     useEffect(() => {
         (async() => {
             // TODO: (backend) code here for first rendering of page
+            let user = userid
             groupEarnings(fakeEarnings.data)
             // retrieve rider information
             setRider(fakeRider.data);

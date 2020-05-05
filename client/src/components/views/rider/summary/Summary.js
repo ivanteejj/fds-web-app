@@ -108,7 +108,7 @@ const reducer = (state, action) => {
 const date_format = "DD/MM/YYYY";
 const pretty_date_format = "Do MMM YY"
 
-export default function Summary() {
+export default function Summary({userid}) {
     const [orders, setOrders] = useState(null)
     const [filterSummary, setFilterSummary] = useReducer(reducer, {
         stats: [],
@@ -129,6 +129,7 @@ export default function Summary() {
         (async() => {
             // TODO: (backend) code here for first rendering of page
             // only render incompleted orders (dt_rider_departs_rest == null)
+            let user = userid
             setOrders(fakeOngoingOrders.data)
             setFilterSummary({type: "initialize", payload: fakeSummary.data})
         })()

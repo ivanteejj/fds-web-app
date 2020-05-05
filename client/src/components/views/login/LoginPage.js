@@ -8,10 +8,9 @@ import {
 import LoginForm from './LoginForm'
 import RegisterForm from "./RegisterForm";
 
-class LoginPage extends Component {
-    render() {
-        return (
-            <div style={{backgroundColor: "#252839"}}>
+const LoginPage = props => {
+    return (
+        <div style={{backgroundColor: "#252839"}}>
             <Grid textAlign='center' style={{ height: '110vh' }} verticalAlign='middle'>
                 <Grid.Column width={2}/>
                 <Grid.Column width={12} textAlign={'center'}>
@@ -19,10 +18,10 @@ class LoginPage extends Component {
                     <Segment textAlign='center' basic>
                         <Grid columns={2} relaxed='very' centered padded>
                             <Grid.Column>
-                                <LoginForm />
+                                <LoginForm validLogin={props.handleLogin}/>
                             </Grid.Column>
                             <Grid.Column verticalAlign='middle'>
-                                <RegisterForm />
+                                <RegisterForm validRegister={props.handleLogin}/>
                             </Grid.Column>
                         </Grid>
                         <Divider vertical style={{color: "white"}}>Or</Divider>
@@ -30,9 +29,8 @@ class LoginPage extends Component {
                 </Grid.Column>
                 <Grid.Column width={2}/>
             </Grid>
-            </div>
+        </div>
         )
-    }
 }
 
 export default LoginPage

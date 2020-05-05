@@ -39,7 +39,7 @@ export default function OngoingOrders({orders}) {
             <Divider/>
             {orders && orders.map((order, idx) => {
                 return (
-                    <Card fluid>
+                    <Card fluid key={idx}>
                         <Card.Content>
                             <h2>{`Order ID: #${order.oid}`}</h2>
 

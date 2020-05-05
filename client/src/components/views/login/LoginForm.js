@@ -7,6 +7,7 @@ import {
 } from 'semantic-ui-react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import {useHistory} from "react-router-dom"
 
 const type = [
     {
@@ -32,7 +33,8 @@ const LoginSchema = Yup.object().shape({
         .required("Password is required")
 });
 
-const LoginForm = () => {
+const LoginForm = ({validLogin}) => {
+    let history = useHistory()
     return (
         <Grid padded className="segment centered">
         <Formik
@@ -40,7 +42,8 @@ const LoginForm = () => {
             validationSchema={LoginSchema}
             onSubmit={(values) => {
                 //backend code here
-
+                validLogin(20, "staff");
+                return history.push("/staff/summary")
             }}
         > 
 

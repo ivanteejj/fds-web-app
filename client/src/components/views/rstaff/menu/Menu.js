@@ -27,7 +27,7 @@ function top5Items(data) {
     return data.slice(0,5);
 }
 
-export default function Menu() {
+export default function Menu({userid}) {
     const [menu, setMenu] = useState([])
     const [topItems, setTopItems] = useState([])
     const [categories, setCategories] = useState([])
@@ -79,6 +79,7 @@ export default function Menu() {
     useEffect(() => {
         (async() => {
             // TODO: (backend) code here for first rendering of page
+            let user = userid
             setTopItems(top5Items(fakeMenu.data.slice()))
             setMenu(Utils.groupBy(fakeMenu.data, "category"))
         })()

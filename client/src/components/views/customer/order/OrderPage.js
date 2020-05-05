@@ -1,23 +1,19 @@
-import React, { Component } from 'react'
+import React from 'react'
 import CustomerMenuBar from "../../../menubar/CustomerMenuBar";
 import Order from "./Order";
+import CustomerHeader from "../../../header/CustomerHeader";
 
-
-class OrderPage extends Component {
-    render() {
-        return (
-            <>
-                <div>
-                    <header className={"App-header"}>
-                        <h1>FDS</h1>
-                    </header>
-                    <CustomerMenuBar/>
-                    <Order/>
-                    <div className="Footer"/>
-                </div>
-            </>
-        )
-    }
+function OrderPage (props) {
+    return (
+        <>
+            <div>
+                <CustomerHeader/>
+                <CustomerMenuBar userid={props.user.userid}/>
+                <Order userid={props.user.userid} signout={props.handleSignOut}/>
+                <div className="Footer"/>
+            </div>
+        </>
+    )
 }
 
 export default OrderPage

@@ -4,30 +4,39 @@ import {
     Dropdown,
     Menu,
 } from 'semantic-ui-react'
+import {useHistory} from "react-router-dom"
 
-const DropDown = () => (
-    <Dropdown text = 'Alice'>
-        <Dropdown.Menu>
-            <Dropdown.Item text = 'Account Details'/>
-            <Dropdown.Item text = 'Logout'/>
-        </Dropdown.Menu>
-    </Dropdown>
-)
+export default function CustomerMenuBar({userid, signout}) {
+    let history = useHistory()
 
-const CustomerMenuBar = () => (
-    <Menu secondary>
-        <Menu.Menu position='right'>
-            <Button
-                size={'tiny'}
-                icon={'eye'}
-                content={'My Orders'}
-            />
+    const DropDown = () => (
+        <Dropdown text = {userid.toString()}>
+            <Dropdown.Menu>
+                <Dropdown.Item text = 'Account Details'/>
+                <Dropdown.Item text = 'Logout'
+                               onClick={() => {
+                                   signout()
+                                   return history.push("/login")
+                               }}
+                />
+            </Dropdown.Menu>
+        </Dropdown>
+    )
 
-            <Menu.Item>
-                <DropDown/>
-            </Menu.Item>
-        </Menu.Menu>
-    </Menu>
-)
+    return (
+        <Menu secondary>
+            <Menu.Menu position='right'>
+                <Button
+                    size={'tiny'}
+                    icon={'eye'}
+                    content={'My Orders'}
+                    onClick={() => history.push("/customer/order")}
+                />
 
-export default CustomerMenuBar
+                <Menu.Item>
+                    <DropDown/>
+                </Menu.Item>
+            </Menu.Menu>
+        </Menu>
+    )
+}
