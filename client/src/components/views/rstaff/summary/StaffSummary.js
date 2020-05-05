@@ -9,6 +9,8 @@ import DateTimeUtils from "../../../commons/DateTimeUtils";
 import OrdersSideBar from "../../../elements/rstaff/summary/OrdersSideBar";
 import SummaryStatement from "../../../elements/rstaff/summary/SummaryStatement";
 import Promotions from "../../../elements/rstaff/summary/Promotions";
+import Utils from "../../../commons/Utils";
+import PopupEditPromo from "./PopupEditPromo";
 
 const fakeOrders = {
     /* TODO: Active orders (restaurant pov) so get orders where dt_rider_departs_rest == null
@@ -48,8 +50,8 @@ const fakeStats = {
         /* TODO: period is concat of Month and Year of dt_order_placed
         *  sorted in descending order by month and year
         */
-        {month: 3, year: 2020, totalorders: 2000, totalProfit: 34000.20,
-            topFavorites: [ // sorted in descending order by qty_sold
+        {month: 3, year: 2020, totalorders: 2000, totalprofit: 34000.20,
+            topfavourites: [ // sorted in descending order by qty_sold
                 {fid: 100, fname: "Avocado Milk Tea", qty_sold: 200},
                 {fid: 101, fname: "Regular Milk Tea", qty_sold: 190},
                 {fid: 102, fname: "Brown Sugar Fries", qty_sold: 123},
@@ -57,8 +59,8 @@ const fakeStats = {
                 {fid: 104, fname: "Creme Brulee", qty_sold: 73}
             ]
         },
-        {month: 2, year: 2020, totalorders: 1500, totalProfit: 20000.10,
-            topFavorites: [
+        {month: 2, year: 2020, totalorders: 1500, totalprofit: 20000.10,
+            topfavourites: [
                 {fid: 101, fname: "Regular Milk Tea", qty_sold: 150},
                 {fid: 100, fname: "Avocado Milk Tea", qty_sold: 133},
                 {fid: 102, fname: "Brown Sugar Fries", qty_sold: 80},
@@ -72,22 +74,24 @@ const fakeStats = {
 const fakePromoStats = {
     data: [
         /* TODO: sorted in descending order by dt_start
-        *  duration in hours (dt_end - dt_start)
         */
-        {promoid: 1204, details: "33% on all food items", dt_start: "2020-03-13 09:00:00", dt_end: "2020-03-13 22:00:00", duration: 13, avgOrders: 921},
-        {promoid: 1205, details: "10% on all food items", dt_start: "2020-03-01 09:00:00", dt_end: "2020-03-13 22:00:00", duration: 301, avgOrders: 762},
-        {promoid: 1202, details: "Free Delivery", dt_start: "2020-02-20 09:00:00", dt_end: "2020-02-28 22:00:00", duration: 181, avgOrders: 562},
-        {promoid: 1203, details: "24% on all food items", dt_start: "2020-02-13 09:00:00", dt_end: "2020-02-14 22:00:00", duration: 37, avgOrders: 777},
+        {pid: 1204, promo_details_text: "33% on all food items", start_datetime: "13/03/2020 09:00:00", end_datetime: "13/05/2020 22:00:00",
+            promo_type: "PERCENT", promo_cat: "CART",avgorders: 921, promo_min_cost: 100, promo_rate: 0.33,
+            promo_max_discount_limit: 20, promo_max_num_redemption: 50},
+        {pid: 1205, promo_details_text: "10% on all food items", start_datetime: "01/03/2020 09:00:00", end_datetime: "13/03/2020 22:00:00",
+            promo_type: "PERCENT", promo_cat: "CART",avgorders: 762, promo_min_cost: 100, promo_rate: 0.10,
+            promo_max_discount_limit: 20, promo_max_num_redemption: 50},
+        {pid: 1202, promo_details_text: "Free Delivery", start_datetime: "20/02/2020 09:00:00", end_datetime: "28/02/2020 22:00:00",
+            promo_type: "PERCENT", promo_cat: "CART",avgorders: 562, promo_min_cost: 100, promo_rate: 1,
+            promo_max_discount_limit: 20, promo_max_num_redemption: 50},
+        {pid: 1203, promo_details_text: "24% on all food items", start_datetime: "13/02/2020 09:00:00", end_datetime: "14/02/2020 22:00:00",
+            promo_type: "PERCENT", promo_cat: "CART",avgorders: 777, promo_min_cost: 100, promo_rate: 0.24,
+            promo_max_discount_limit: 20, promo_max_num_redemption: 50}
     ]
 }
 
-// flexible sort on array
-// const sortBy = (field, array) => {
-//     const key = array ? x => {return array(x[field])} : x => {return x[field]}
-//     return (a, b) => {
-//         return a = key(a), b = key(b), (a > b) - (b > a)
-//     }
-// }
+const promo_type = ["PERCENT", "DOLLAR"]
+const promo_cat = ["DELIVERY", "CART"]
 
 const generateFilterOption = (stats) => {
     return stats.map(item => {
@@ -129,6 +133,23 @@ export default function StaffSummary({userid}) {
         filter: "",
         filteredStats: {}
     })
+
+    const [showPopup, setShowPopup] = useReducer(Utils.reducer, {
+        addPromo: false,
+        editPromo: false,
+        item: null
+    })
+
+    const openPopup = (type, boo, item) => {
+        setShowPopup({type: "item", payload: item})
+        setShowPopup({type: type, payload: boo})
+    }
+
+    const closePopup = (type, boo) => {
+        setShowPopup({type: "item", payload: null})
+        setShowPopup({type: type, payload: boo})
+    }
+
     const {stats, filterOptions, filter, filteredStats} = filterSummary
 
     const options = filterOptions.map(item => ({
@@ -147,6 +168,33 @@ export default function StaffSummary({userid}) {
             setPromotions(fakePromoStats.data)
         })()
     }, [])
+
+    const submitEditPromo = (item) => {
+        closePopup("editPromo", false)
+        // TODO: (backend) code to update promo
+        /* Note:
+        * item object contains the promo tuple record
+        * use pid to update db
+        * to access item attributes: item.pid, item.promo_rate etc..
+        */
+
+        // TODO: (backend) once successful, update the promos at front end by retrieving updated promo from db
+        // setPromotions(*sth sth*)
+
+    }
+
+    const submitDeletePromo = (item) => {
+        closePopup("editPromo", false)
+        // TODO: (backend) code to update promo
+        /* Note:
+        * item object contains the promo tuple record
+        * use pid to update db
+        * to access item attributes: item.pid, item.promo_rate etc..
+        */
+
+        // TODO: (backend) once successful, update the promos at front end by retrieving updated promo from db
+        // setPromotions(*sth sth*)
+    }
 
     return (
         <>
@@ -174,7 +222,7 @@ export default function StaffSummary({userid}) {
                             <Button floated={'right'} size={'mini'} color={'pink'}
                                     content={'Add Promo'}
                             />
-                            <Promotions promotions={promotions}/>
+                            <Promotions promotions={promotions} openPromo={openPopup}/>
                         </Grid.Row>
                     </Grid.Column>
 
@@ -185,6 +233,12 @@ export default function StaffSummary({userid}) {
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
+
+            {showPopup.editPromo && showPopup.item && (
+                <PopupEditPromo closePopup={closePopup}
+                                submitDeletePromo={submitDeletePromo} submitEditPromo={submitEditPromo}
+                                item={showPopup.item} types={promo_type} cats={promo_cat}/>
+            )}
         </>
     )
 }
