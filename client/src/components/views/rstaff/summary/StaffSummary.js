@@ -166,7 +166,7 @@ export default function StaffSummary({userid, rid}) {
         (async() => {
             // TODO: (backend) code here for first rendering of page
             // only render uncompleted orders for restaurant (dt_rider_departs_rest == null)
-            let user = userid
+            let user = rid
 
             const allRelevantOrders = await axios
                 .get('/staff/getAllOrders/', {
@@ -183,8 +183,6 @@ export default function StaffSummary({userid, rid}) {
                     }
                 })
                 .then((response) => setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(response.data)})
-                )
-
                 )
 
 

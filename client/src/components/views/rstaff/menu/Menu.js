@@ -4,6 +4,8 @@ import Utils from "../../../commons/Utils";
 import MenuItems from "../../../elements/rstaff/menu/MenuItems";
 import PopupEditFood from "../../../elements/rstaff/menu/PopupEditFood";
 import PopupAddFood from "../../../elements/rstaff/menu/PopupAddFood";
+import axios from "axios";
+import DateTimeUtils from "../../../commons/DateTimeUtils";
 
 const fakeMenu = {
     data: [
@@ -89,11 +91,19 @@ export default function Menu({userid, rid}) {
 
     useEffect(() => {
         (async() => {
-            // TODO: (backend) code here for first rendering of page
             let user = userid
             let rest_id = rid
-            setTopItems(top5Items(fakeMenu.data.slice()))
-            setMenu(Utils.groupBy(fakeMenu.data, "category"))
+
+            const allRelevantFood = await axios
+                .get('/staff/menu/getFoodForRestaurantPage/', {
+                    params: {
+                        rid: rid
+                    }})
+                .then( function(response) {
+                    setTopItems(top5Items(response.data.slice()))
+                    setMenu(Utils.groupBy(response.data, "category"))
+                })
+
         })()
     }, [])
 

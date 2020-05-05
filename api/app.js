@@ -45,6 +45,7 @@ app.get('/FDSManager/getSummaryDataByCustomer/', (req, res) => fdsStatsControlle
 app.get('/FDSManager/getSummaryDataByArea/', (req, res) => fdsStatsController.getSummaryDetailsByArea(req, res, db))
 app.get('/staff/getAllOrders/', (req, res) => orderController.getAllOrderDetailsforRestaurantStaffPage(req, res, db))
 app.get('/staff/getMostPopularByMonth/', (req, res) => orderController.getMostPopularByMonth(req, res, db))
+app.get('/staff/menu/getFoodForRestaurantPage/', (req, res) => foodController.getFoodForRestaurantPage(req, res, db))
 
 
 
