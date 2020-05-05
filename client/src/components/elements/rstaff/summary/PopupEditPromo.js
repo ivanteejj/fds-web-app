@@ -23,7 +23,7 @@ export default function PopupEditPromo({closePopup, item, types, cats, submitEdi
 
         promo_rate: Yup.number().when('promo_type', {
             is: (val) => val === "PERCENT",
-            then: Yup.number().required("Promo rate is required").moreThan(0).lessThan(1, "Promo rate should not exceed 100%!"),
+            then: Yup.number().required("Promo rate is required").moreThan(0).max(1, "Promo rate should not exceed 100%!"),
             otherwise: Yup.number().required("Promo rate is required").moreThan(0)}),
 
         promo_min_cost: Yup.number().optional(),

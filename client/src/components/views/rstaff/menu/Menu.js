@@ -27,9 +27,8 @@ function top5Items(data) {
     return data.slice(0,5);
 }
 
-export default function Menu({userid}) {
+export default function Menu({userid, rid}) {
     const [menu, setMenu] = useState([])
-    const [rid, setRid] = useState(null)
     const [topItems, setTopItems] = useState([])
     const [categories, setCategories] = useState([])
 
@@ -92,9 +91,7 @@ export default function Menu({userid}) {
         (async() => {
             // TODO: (backend) code here for first rendering of page
             let user = userid
-            // Get rid based on userid
-            let rid = 20
-            setRid(rid)
+            let rest_id = rid
             setTopItems(top5Items(fakeMenu.data.slice()))
             setMenu(Utils.groupBy(fakeMenu.data, "category"))
         })()

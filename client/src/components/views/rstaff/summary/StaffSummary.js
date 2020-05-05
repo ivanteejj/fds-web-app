@@ -112,8 +112,9 @@ const reducer = (state, action) => {
             return {
                 stats: action.payload,
                 filterOptions: generateFilterOption(action.payload),
-                filter: action.payload[0].period,
-                filteredStats: filterStats(action.payload, action.payload[0].period)
+                filter: action.payload && action.payload.length > 0 ? action.payload[0].period : null,
+                filteredStats: action.payload && action.payload.length > 0 ?
+                                filterStats(action.payload, action.payload[0].period) : null
             };
         case "filter":
             return {
@@ -126,7 +127,7 @@ const reducer = (state, action) => {
     }
 }
 
-export default function StaffSummary({userid}) {
+export default function StaffSummary({userid, rid}) {
     const [orders, setOrders] = useState([])
     const [promotions, setPromotions] = useState([])
 
@@ -167,11 +168,10 @@ export default function StaffSummary({userid}) {
             // only render uncompleted orders for restaurant (dt_rider_departs_rest == null)
             let user = userid
 
-
             const allRelevantOrders = await axios
                 .get('/staff/getAllOrders/', {
                     params: {
-                        rid: user
+                        rid: rid
                     }
                 })
                 .then((response) => setOrders(response.data))
@@ -179,12 +179,15 @@ export default function StaffSummary({userid}) {
             const mostPopularItemsByMonth = await axios
                 .get('/staff/getMostPopularByMonth/', {
                     params: {
-                        rid: user
+                        rid: rid
                     }
                 })
-                .then((response) => setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(response.data)})
-                )
+                .then((response) => {
+                        console.log(response.data.length)
+                        setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(response.data)})
+                }
 
+                )
 
 
             setPromotions(fakePromoStats.data)

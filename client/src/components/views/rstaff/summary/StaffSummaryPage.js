@@ -8,7 +8,7 @@ function StaffSummaryPage (props) {
         <div className="Home">
             <StaffHeader/>
             <StaffMenuBar userid={props.user.userid} signout={props.handleSignOut}/>
-            <StaffSummary userid={props.user.userid}/>
+            <StaffSummary userid={props.user.userid} rid={props.user.rid}/>
         </div>
     )
 }

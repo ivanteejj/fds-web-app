@@ -47,15 +47,24 @@ const reducer = (state, action) => {
     switch (action.type) {
         case "signin":
             return {
+                ...state,
                 isSignedIn: true,
                 userid: action.userid,
                 usertype: action.usertype
             };
+        case "staff_signin":
+            return {
+                isSignedIn: true,
+                userid: action.userid,
+                usertype: action.usertype,
+                rid: action.rid
+            }
         case "signout":
             return {
                 isSignedIn: false,
                 userid: null,
-                usertype: null
+                usertype: null,
+                rid: null
             };
         default:
             return state;
@@ -66,12 +75,18 @@ function App() {
     const [user, setUser] = useReducer(reducer, {
         isSignedIn: false,
         userid: null,
-        usertype: null
+        usertype: null,
+        rid: null
     })
 
-    const handleLogin = (userid, type) => {
+    const handleLogin = (userid, type, rid) => {
         console.log("here")
-        setUser({type: "signin", userid: userid, usertype: type})
+        if (type !== "staff") {
+            setUser({type: "signin", userid: userid, usertype: type})
+        } else {
+            setUser({type: "staff_signin", userid: userid, usertype: type, rid: rid})
+        }
+
     }
 
     const handleSignOut = () => {
