@@ -155,7 +155,6 @@ const getSummaryDetailsByArea = (req, res, db) => {
             if (error) {
                 console.log(error)
             }
-            console.log(result.rows)
             res.status(200).json(result.rows);
         })
 }

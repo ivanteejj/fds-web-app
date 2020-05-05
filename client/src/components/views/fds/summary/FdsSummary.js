@@ -60,8 +60,7 @@ export default function FdsSummary() {
     useEffect(() => {
         (async() => {
             const allRelevantOrders = await axios
-                .get('/FDSManager/getMainSummaryData/', {
-                })
+                .get('/FDSManager/getMainSummaryData/')
                 .then((response) => setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(response.data)}))
         })()
     }, [])
