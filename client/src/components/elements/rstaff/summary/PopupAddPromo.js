@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import {
     Button,
     Divider,
@@ -14,9 +14,8 @@ import moment from "moment"
 import DatePicker from "react-datepicker/es";
 import "../../../stylesheets/Popup.css"
 
-const datetime_format = "DD/MM/YYYY HH:mm:ss";
-export default function PopupEditPromo({closePopup, item, types, cats, submitEditPromo, submitDeletePromo}) {
-    const EditPromoSchema = Yup.object().shape({
+export default function PopupAddPromo({closePopup, types, cats, submitAddPromo}) {
+    const AddPromoSchema = Yup.object().shape({
         promo_details_text: Yup.string().required("Promo details is required"),
         promo_type: Yup.string().required("Promo type is required"),
         promo_cat: Yup.string().required("Promo category is required"),
@@ -29,10 +28,11 @@ export default function PopupEditPromo({closePopup, item, types, cats, submitEdi
         promo_min_cost: Yup.number().optional(),
         promo_max_discount_limit: Yup.number().optional(),
         promo_max_num_redemption: Yup.number().optional(),
-        start_datetime: Yup.date().required("Start Date is required"),
+        start_datetime: Yup.date().required("Start Date is required").min(moment().toDate(), "Start date must be present time"),
         end_datetime: Yup.date().required("End date is required")
-                                .min(moment().toDate(), "End date must be present time")
-                                .when("start_datetime", (start_datetime, yup) => start_datetime && yup.min(start_datetime, "End time cannot be before start time"))
+            .min(moment().toDate(), "End date must be present time")
+            .when("start_datetime", (start_datetime, yup) => start_datetime &&
+                yup.min(moment(start_datetime).add(5,'minute').toDate(), "End time must have at least 5 minutes interval from start time"))
 
     })
 
@@ -46,28 +46,22 @@ export default function PopupEditPromo({closePopup, item, types, cats, submitEdi
     return (
         <div className="popup-box">
             <div className="box">
-                <span className="close-icon" onClick={() => closePopup("editPromo", false)}>x</span>
+                <span className="close-icon" onClick={() => closePopup("addPromo", false)}>x</span>
                 <>
-                    <Button
-                        floated={'left'} size="medium"
-                        content={'Delete Promo'}
-                        color={'red'}
-                        onClick={() => submitDeletePromo(item)}
-                    />
-                    <h1>{item.promo_details_text}</h1>
+                    <h1>Add New Promotion</h1>
                     <Divider/>
 
                     <Formik
                         initialValues={{
-                            pid: item.pid, promo_details_text: item.promo_details_text,
-                            promo_type: item.promo_type, promo_cat: item.promo_cat, promo_rate: item.promo_rate,
-                            start_datetime: moment(item.start_datetime, datetime_format).toDate(),
-                            end_datetime: moment(item.end_datetime, datetime_format).toDate(),
-                            promo_max_discount_limit: item.promo_max_discount_limit, promo_min_cost: item.promo_min_cost,
-                            promo_max_num_redemption: item.promo_max_num_redemption
+                            promo_details_text: "",
+                            promo_type: types[0], promo_cat: cats[0], promo_rate: "",
+                            start_datetime: "",
+                            end_datetime: "",
+                            promo_max_discount_limit: "", promo_min_cost: "",
+                            promo_max_num_redemption: ""
                         }}
-                        validationSchema={EditPromoSchema}
-                        onSubmit={(values) => submitEditPromo(values)}
+                        validationSchema={AddPromoSchema}
+                        onSubmit={(values) => submitAddPromo(values)}
                     >
 
                         {( {values,
@@ -245,19 +239,13 @@ export default function PopupEditPromo({closePopup, item, types, cats, submitEdi
                                                 }}
                                                 name={"start_datetime"}
                                                 dateFormat="dd/MM/yyyy h:mm aa"
-                                                minDate={
-                                                    values.start_datetime
-                                                    ? values.start_datetime
-                                                    : moment().toDate()
-                                                }
+                                                minDate={moment().toDate()}
                                                 selectsStart
                                                 startDate={values.start_datetime}
                                                 endDate={values.end_datetime}
                                                 onBlur={handleBlur}
                                                 value={values.start_datetime}
                                                 className={touched.start_datetime && errors.start_datetime ? "has-error" : null}
-                                                disabled={moment().isAfter(values.start_datetime)}
-                                                color={moment().isAfter(values.start_datetime) ? "grey" : "white"}
                                             />
                                         </Grid.Column>
                                         <Grid.Column width={8}>
