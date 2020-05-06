@@ -91,17 +91,21 @@ INSERT INTO Food (fid,rid,fname,price,daily_limit,category) VALUES (108,4,'Pork 
 INSERT INTO Promotions(pid) VALUES (1);
 INSERT INTO Promotions(pid) VALUES (2);
 INSERT INTO Promotions(pid) VALUES (3);
-INSERT INTO FDS_Promotions(pid, promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text) VALUES (1, 1, 'PERCENT', 'DELIVERY', '01/01/2020 12:00:00', '30/12/2020 23:59:59', 10, null, null, 'Free delivery for all of 2020!');
+INSERT INTO FDS_Promotions(pid, promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text) 
+VALUES (1, 1, 'PERCENT', 'DELIVERY', '01/01/2020 12:00:00', '30/12/2020 23:59:59', 10, null, null, 'Free delivery for all of 2020!');
 INSERT INTO Restaurant_Promotions(pid, promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text, rid) VALUES (2, 10, 'DOLLAR', 'CART', '01/03/2020 12:00:00', '30/03/2020 12:00:00', 15, 15, 100, '10$ off with minimum order of 15$ at Western Food Store during March!', 4);
-INSERT INTO Restaurant_Promotions(pid, promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text, rid) VALUES (3, 5, 'DOLLAR', 'CART', '01/04/2020 12:00:00', '30/04/2020 12:00:00', 10, 5, 100, '5$ off with minimum order of 10$ at South XLB store during April! First 50 customers only!', 3);
+INSERT INTO Restaurant_Promotions(pid, promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text, rid) VALUES (3, 5, 'DOLLAR', 'CART', '01/04/2020 12:00:00', '30/06/2020 12:00:00', 10, 5, 100, '5$ off with minimum order of 10$ at South XLB store during April! First 50 customers only!', 3);
 
 
-INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee, discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (1,'18/03/2020 19:39:07','18/03/2020 19:40:07','18/03/2020 19:46:07','18/03/2020 19:58:07','18/03/2020 20:04:07','CREDITCARD', 21,5,5,'Ivan House 1','NORTH',30,5,20,1);
-INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee, discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (2,'24/04/2020 11:33:51','24/04/2020 11:35:51','24/04/2020 11:41:51','24/04/2020 11:50:51',null,'CASHONDELIVERY',22,7,10,'Ivan House 2','SOUTH',30,4,20,2);
-INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee, discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (3,'23/03/2020 12:39:07','23/03/2020 12:40:07', '23/03/2020 13:20:07', '23/03/2020 13:30:07', '23/03/2020 14:00:07','CREDITCARD', 20.50,5,5,'Jackson House 1','EAST',30,5,21,3);
-INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee, discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (4,'11/04/2020 16:39:07','11/04/2020 17:10:07', '11/04/2020 17:15:07', null, null,'CASHONDELIVERY', 24,5,5,'Jackson House 1','EAST',30,5,21,1);
-INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee, discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (5,'19/04/2020 20:39:07','19/04/2020 21:03:07', '19/04/2020 21:24:07', '19/04/2020 21:29:07', '19/04/2020 21:35:07','CASHONDELIVERY', 9,5,0,'Bob House 1','WEST',30,4,22, null);
-INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee, discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (6,'01/05/2020 10:03:07','01/05/2020 10:15:07', '01/05/2020 10:25:07', '01/05/2020 10:31:037', '01/05/2020 11:01:02','CREDITCARD', 22,7,7,'Ivan House 1','NORTH',30,5,20,1);
+INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee, rider_bonus, discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (1,'18/03/2020 19:39:07','18/03/2020 19:40:07','18/03/2020 19:46:07','18/03/2020 19:58:07','18/03/2020 20:04:07','CREDITCARD', 21,5,5,1,'Ivan House 1','NORTH',30,5,20,1);
+INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee,rider_bonus, discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (2,'24/04/2020 11:33:51','24/04/2020 11:35:51','24/04/2020 11:41:51','24/04/2020 11:50:51','24/04/2020 11:55:51','CASHONDELIVERY',22,7,10,1,'Ivan House 2','SOUTH',30,4,20,2);
+INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee,rider_bonus, discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (3,'23/03/2020 12:39:07','23/03/2020 12:40:07', '23/03/2020 13:20:07', '23/03/2020 13:30:07', '23/03/2020 14:00:07','CREDITCARD', 20,50,5,5,'Jackson House 1','EAST',30,5,21,2);
+INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee, rider_bonus,discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (4,'11/04/2020 16:39:07','11/04/2020 17:10:07', '11/04/2020 17:15:07', null, null,'CASHONDELIVERY', 24,5,5,1,'Jackson House 1','EAST',30,5,21,2);
+INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee, rider_bonus,discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (5,'19/04/2020 20:39:07','19/04/2020 21:03:07', '19/04/2020 21:24:07', '19/04/2020 21:29:07', '19/04/2020 21:35:07','CASHONDELIVERY', 9,5,0,1,'Bob House 1','WEST',30,4,22,null);
+INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee, rider_bonus,discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (6,'01/05/2020 10:03:07','01/05/2020 10:15:07', '01/05/2020 10:25:07', '01/05/2020 10:31:037', '01/05/2020 11:01:02','CREDITCARD', 22,7,7,1,'Ivan House 1','NORTH',30,5,20,1);
+INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee,rider_bonus, discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (7,'24/04/2020 11:33:51','24/04/2020 11:35:51','24/04/2020 11:41:51','24/04/2020 11:50:51','24/04/2020 11:58:51','CASHONDELIVERY',22,7,10,1,'Ivan House 2','SOUTH',30,4,20,3);
+INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee, rider_bonus,discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (8,'19/04/2020 20:39:07','19/04/2020 21:03:07', '19/04/2020 21:24:07', '19/04/2020 21:29:07', '19/04/2020 21:35:07','CASHONDELIVERY', 9,5,0,1,'Bob House 1','WEST',30,4,22, 3);
+
 
 
 INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (1, 101, 3);
@@ -115,19 +119,3 @@ INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (5, 107, 1);
 INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (5, 108, 1);
 INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (6, 101, 2);
 INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (6, 102, 2);
-
-
-
-
-/*
-    1 FDS promotion
-2 Food promotion
- */
-
-
-
-
-
-
-
-
