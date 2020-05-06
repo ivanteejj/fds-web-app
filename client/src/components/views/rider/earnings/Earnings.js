@@ -8,24 +8,25 @@ const fakeEarnings = {
     //  1) Min Date as start_dt, Max Date as end_dt
     //  2) Total Orders delivered
     //  3) Sum(time_interval) as total_hours
+    //  4) Sum (rider_bonus) as bonus
     // data should already be sorted in desc order by data
     data: [
-        {sch_id: 1221, start_dt: "25/04/2020", end_dt: "02/05/2020", total_hours: 30, total_orders_delivered: 100},
-        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100},
-        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100},
-        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100},
-        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100},
-        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100},
-        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100},
-        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100},
-        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100},
-        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100}
+        {sch_id: 1221, start_dt: "25/04/2020", end_dt: "02/05/2020", total_hours: 30, total_orders_delivered: 100, bonus: 1000},
+        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100, bonus: 1200},
+        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100, bonus: 1300},
+        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100, bonus: 1000},
+        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100, bonus: 1200},
+        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100, bonus: 1200},
+        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100, bonus: 1000},
+        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100, bonus: 1300},
+        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100, bonus: 1200},
+        {sch_id: 1222, start_dt: "15/03/2020", end_dt: "22/03/2020", total_hours: 30, total_orders_delivered: 100, bonus: 1100}
     ]
 }
 
 const fakeRider = {
     // NOTE: Incentives are on % basis for each completed order
-    data: {rider_type: "part-time", incentive: 0.02, base_salary: 50}
+    data: {rider_type: "part-time", base_salary: 50}
     // {rider_type: "full-time, incentive: 0.05, base_salary: "220"}
 }
 
@@ -57,7 +58,7 @@ export default function Earnings({userid}) {
     }
 
     const computeIncentive = (item) => {
-        return rider.incentive * item.total_orders_delivered
+        return item.bonus
     }
 
     const computeTotalSalary = (item) => {
@@ -84,17 +85,6 @@ export default function Earnings({userid}) {
 
                                                 <Grid.Column textAlign={'right'}>
                                                     <h4>{`$${Utils.roundDecimalPlace(rider.base_salary,1)}`}</h4>
-                                                </Grid.Column>
-                                            </Grid.Row>
-                                        </Grid>
-                                        <Grid columns={2}>
-                                            <Grid.Row>
-                                                <Grid.Column textAlign={'left'}>
-                                                    <h4>Incentive on every order</h4>
-                                                </Grid.Column>
-
-                                                <Grid.Column textAlign={'right'}>
-                                                    <h4>{`${Utils.roundDecimalPlace(rider.incentive*100,0)}%`}</h4>
                                                 </Grid.Column>
                                             </Grid.Row>
                                         </Grid>
@@ -135,11 +125,11 @@ export default function Earnings({userid}) {
 
                                             <Grid.Row>
                                                 <Grid.Column textAlign={'left'}>
-                                                    <h4>{`Incentives (+${item.total_orders_delivered} orders)`}</h4>
+                                                    <h4>{`Rider Bonus (+${item.total_orders_delivered} orders)`}</h4>
                                                 </Grid.Column>
 
                                                 <Grid.Column textAlign={'right'}>
-                                                    <h3>{`$${Utils.roundDecimalPlace((computeIncentive(item)),1)}`}</h3>
+                                                    <h3>{`$${item.bonus}`}</h3>
                                                 </Grid.Column>
                                             </Grid.Row>
 
