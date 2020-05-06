@@ -102,11 +102,22 @@ const getAllPromoStatisticsForFDSManagerPage = (req, res, db) => {
 }
 
 const queryToAddNewPromotion =
-    "INSERT INTO Promotions (pid, promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text, rid)\n" +
-    "VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);\n"
+    "INSERT INTO Promotions (promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text, rid)\n" +
+    "VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);\n"
 
 const addNewPromotion = (req, res, db) => {
-    const output = db.query(queryToAddNewPromotion, [pid, promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text, rid],
+    const promo_rate = req.query.promo_rate
+    const promo_type = req.query.promo_type
+    console.log(promo_type)
+    const promo_cat = req.query.promo_cat
+    const start_datetime = req.query.start_datetime
+    const end_datetime = req.query.end_datetime
+    const promo_min_cost = req.query.promo_min_cost
+    const promo_max_discount_limit = req.query.promo_max_discount_limit
+    const promo_max_num_redemption = req.query.promo_max_num_redemption
+    const promo_details_text = req.query.promo_details_text
+    const rid =  req.query.rid
+    const output = db.query(queryToAddNewPromotion, [promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text, rid],
         (error,  results) => {
             if (error) {
                 console.log(error)
