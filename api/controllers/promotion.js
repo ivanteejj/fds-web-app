@@ -65,7 +65,7 @@ const queryToGetAllPromoStatisticsForStaffPage =
     "on u1.pid = o1.pid\n" +
     "group by u1.pid, start_datetime, end_datetime\n" +
     ")\n" +
-    "select u2.pid, promo_details_text,start_datetime, end_datetime, promo_type, promo_cat, totalCount/promoDuration as avgOrders,\n" +
+    "select u2.pid, promo_details_text,start_datetime, end_datetime, promo_type, promo_cat, promoDuration as duration, totalCount/promoDuration as avgOrders,\n" +
     "promo_min_cost, promo_rate, promo_max_discount_limit, promo_max_num_redemption\n" +
     "from usePromo u2, unionPromo z1\n" +
     "where u2.pid = z1.pid"
