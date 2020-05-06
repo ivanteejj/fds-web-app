@@ -9,6 +9,7 @@ import Menu from "../../../../elements/customer/shop/rid/Menu"
 import ShoppingCart from "../../../../elements/customer/shop/rid/ShoppingCart"
 import Popup from "../../../../elements/customer/shop/rid/PopupCheckOut"
 import Utils from "../../../../commons/Utils";
+import PromoUtils from "../../../../commons/PromoUtils";
 import axios from 'axios'
 
 const fakeCid = 20
@@ -59,7 +60,7 @@ export default function Restaurant({ userid }) {
     const [promos, setPromos] = useState([]);
     const [recentDeliveryLoc, setRecentDeliveryLoc] = useState([]);
     const [paymentMtds, setPaymentMtds] = useState([]);
-    const [user, setUser] = useState(null)
+    const [rewardPts, setRewardPts] = useState(0);
 
     const [test, setTest] = useState(null)
 
@@ -126,8 +127,9 @@ export default function Restaurant({ userid }) {
     
     useEffect(() => {
         (async() => {
-            const test = userid
-            setUser(test)
+            //TODO: get user's reward points
+            //userid
+            setRewardPts(100)
 
             const menu = await axios
                  .get('/customer/shop/getMenu', {
@@ -176,8 +178,8 @@ export default function Restaurant({ userid }) {
     useEffect(() => {
         // triggered when detect change in checkout variable
         if (checkout) {
-            var cart = cartCost
             setPromos(promos)
+            //setPromos(PromoUtils(promos, cartCost))
         }
     }, [checkout])
 
@@ -210,7 +212,7 @@ export default function Restaurant({ userid }) {
                 </Grid.Row>
             </Grid>
             {checkout &&
-                <Popup remainPopup={openPopupCheckOut}
+                <Popup remainPopup={openPopupCheckOut} rewardPts={rewardPts}
                        promos={promos} cart={cart} deliveryFee={deliveryFee} totalCost={totalCost} cartCost={cartCost}
                        deliveryLoc={recentDeliveryLoc} paymentMtds={paymentMtds} submitOrder={submitOrder}
                 />
@@ -224,7 +226,7 @@ export default function Restaurant({ userid }) {
                 <text>{`area: ${test.area}, address: ${test.address}`}</text>
             )}
 
-            {user && (<text>{user}</text>)}
+            {userid && (<text>{userid}</text>)}
         </>
     )
 

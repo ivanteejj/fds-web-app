@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useReducer} from "react";
 import {
     Button,
     Header,
@@ -15,13 +15,39 @@ import Utils from "../../../../commons/Utils";
 import PromoUtils from "../../../../commons/PromoUtils";
 
 const areaOptions = [
-    {key: 1, text: "North", value: "North"},
-    {key: 2, text: "South", value: "South"},
-    {key: 3, text: "East", value: "East"},
-    {key: 4, text: "West", value: "West"},
+    {key: 1, text: "North", value: "NORTH"},
+    {key: 2, text: "South", value: "SOUTH"},
+    {key: 3, text: "East", value: "EAST"},
+    {key: 4, text: "West", value: "WEST"},
+    {key: 4, text: "West", value: "CENTRAL"},
 ]
 
-export default function Popup({remainPopup, submitOrder, promos, cart, cartCost, deliveryFee, totalCost, deliveryLoc, paymentMtds}) {
+const offsetReducer = (state, action) => {
+    switch (action.type) {
+        case "promo":
+            return {
+                offset_type: "promo",
+                promo_details_text: action.details,
+                value: action.value
+            };
+        case "rewards":
+            return {
+                offset_type: "rewards",
+                promo_details_text: `{action.value} reward points redeemed`,
+                value: action.value,
+            };
+        case "reset":
+            return {
+                offset_type: null,
+                promo_details_text: null,
+                value: null
+            };
+        default:
+            return state;
+    }
+}
+
+export default function Popup({remainPopup, submitOrder, rewardPts, promos, cart, cartCost, deliveryFee, totalCost, deliveryLoc, paymentMtds}) {
     const [appliedPromo, setAppliedPromo] = useState()
     const [costOffset, setCostOffset] = useState(0)
     const [total, setTotal] = useState(totalCost)
@@ -29,6 +55,12 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
     const [deliveryAreaInput, setDeliveryAreaInput] = useState(areaOptions[0].value)
     const [deliveryLocInput, setDeliveryLocInput] = useState("")
     const [paymentMode, setPaymentMode] = useState("")
+
+    const [offset, setOffSet] = useReducer(offsetReducer, {
+        offset_type: null,
+        promo_details_text: null,
+        value: null
+    })
 
     const placeOrder = () => {
         const address = selectedLoc !== "" ? selectedLoc.address : deliveryLocInput;
