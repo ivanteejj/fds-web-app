@@ -145,13 +145,14 @@ CREATE TABLE Orders(
 	rider_arrive_rest						timestamp,
 	rider_depart_for_delivery_location		timestamp,
 	order_delivered							timestamp,
+	rider_review							TEXT,
 	payment_method							TEXT NOT NULL
 											CHECK (payment_method IN ('CREDITCARD','CASHONDELIVERY')),
     cart_fee						    	numeric NOT NULL
                                             CHECK (cart_fee >= 0),
     delivery_fee							numeric NOT NULL
                                             CHECK (delivery_fee >= 0),
-	rider_bonus								NUMERIC DEFAULT(0),
+	rider_bonus								NUMERIC NOT NULL,
     discount_amount							NUMERIC NOT NULL,
     delivery_location						TEXT NOT NULL,
     delivery_location_area					TEXT NOT NULL references Areas (area),
@@ -201,7 +202,6 @@ CREATE TABLE FDS_Promotions(
     promo_max_discount_limit        INTEGER,
     promo_max_num_redemption        INTEGER,
     promo_details_text              TEXT NOT NULL,
-    rid                             INTEGER DEFAULT NULL,
     PRIMARY KEY (pid),
     FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade
 );
@@ -244,11 +244,8 @@ CREATE TABLE Food_Reviews(
 
 CREATE TABLE Schedules (
     sid              	INTEGER,
-	sche_date			DATE,
-	week				INTEGER
-						CHECK (week IN (1,2,3,4)),
 	rider_id			INTEGER,
-    PRIMARY KEY (sid, sche_date),
+    PRIMARY KEY (sid),
 	FOREIGN KEY (rider_id) REFERENCES Riders (rider_id)
 );
 
@@ -263,12 +260,12 @@ CREATE TABLE Shifts (
 
 CREATE TABLE Monthly_Work_Schedule (
     sid              	INTEGER,
-	sche_date			DATE,
-	week				INTEGER
+	week				INTEGER NOT NULL
 						CHECK (week IN (1,2,3,4)),
-    shift_id            INTEGER,
+	sche_date			DATE,
+    shift_id            INTEGER NOT NULL,
 	PRIMARY KEY (sid, sche_date),
-	FOREIGN KEY (sid, sche_date) REFERENCES Schedules (sid,sche_date),
+	FOREIGN KEY (sid) REFERENCES Schedules (sid),
 	FOREIGN KEY (shift_id) REFERENCES Shifts (shift_id)
 );
 
@@ -276,16 +273,26 @@ CREATE TABLE Weekly_Work_Schedule (
     sid              	INTEGER,
 	sche_date			DATE,
 	time_start          TIME NOT NULL
-						CHECK (time_start >= '10:00:00'
-						AND time_start <= '22:00:00'),
+						CHECK (time_start IN ('10:00:00','11:00:00',
+						'12:00:00','13:00:00','14:00:00','15:00:00',
+						'16:00:00','17:00:00','18:00:00','19:00:00',
+						'20:00:00','21:00:00','22:00:00')), --to enforece constraint that end on hours
     time_end            TIME NOT NULL
 						CHECK (time_end <= time_start + INTERVAL '4 hours'
-						AND time_end >= '10:00:00'
-						AND time_end <= '22:00:00'),
+						AND time_start IN ('10:00:00','11:00:00',
+						'12:00:00','13:00:00','14:00:00','15:00:00',
+						'16:00:00','17:00:00','18:00:00','19:00:00',
+						'20:00:00','21:00:00','22:00:00')), --to enforece constraint that end on hours
 	duration			INTEGER NOT NULL,
-    PRIMARY KEY (sid, sche_date),
-	FOREIGN KEY (sid, sche_date) REFERENCES Schedules (sid, sche_date)
+    PRIMARY KEY (sid, sche_date,time_start),
+	FOREIGN KEY (sid) REFERENCES Schedules (sid)
 );
+
+
+
+
+
+
 
 
 
@@ -333,12 +340,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS food_daily_limit_trigger ON Orders;
-CREATE TRIGGER food_daily_limit_trigger
-    BEFORE INSERT ON Orders
-    FOR EACH ROW
-    EXECUTE FUNCTION update_food_availability();
-	
+--DROP TRIGGER IF EXISTS food_daily_limit_trigger ON Orders;
+--CREATE TRIGGER food_daily_limit_trigger
+--    BEFORE INSERT ON Orders
+--    FOR EACH ROW
+--    EXECUTE FUNCTION update_food_availability();
+
 	
 
 /*
@@ -376,67 +383,254 @@ CREATE TRIGGER first_order_discount_trigger
 */
 
 
-CREATE OR REPLACE FUNCTION Insert_for_next_three_week_1() RETURNS TRIGGER AS
+--option A
+--assumed if insert the MWS as a transaction, this would enforce the constraint that 4 WWS must be the same
+CREATE OR REPLACE FUNCTION check_monthly_work_schedule_constraint() RETURNS TRIGGER AS
 $$
 DECLARE
-	text VARCHAR(2);
+	num INTEGER;
 BEGIN
+
+
+	select count(*) INTO num
+	from (select EXTRACT(DOW from sche_date), shift_id
+	from Monthly_Work_Schedule
+	where sid = NEW.sid
+	and week = 1
+	intersect
+	select EXTRACT(DOW from sche_date), shift_id
+	from Monthly_Work_Schedule
+	where sid = NEW.sid
+	and week = 2
+	intersect
+	select EXTRACT(DOW from sche_date), shift_id
+	from Monthly_Work_Schedule
+	where sid = NEW.sid
+	and week = 3
+	intersect
+	select EXTRACT(DOW from sche_date), shift_id
+	from Monthly_Work_Schedule
+	where sid = NEW.sid
+	and week = 4
+	) AS Foo;
 	
-	SELECT rider_type INTO text
-	FROM Riders
-	WHERE rider_id = NEW.rider_id;
-	
-	IF text = 'FT' THEN
-	IF NEW.week = 1 THEN
-	
-		INSERT INTO Schedules
-		VALUES (NEW.sid, NEW.sche_date + INTEGER '7', 2, NEW.rider_id);
-	
-		INSERT INTO Schedules
-		VALUES (NEW.sid, NEW.sche_date + INTEGER '14', 3, NEW.rider_id);
-	
-		INSERT INTO Schedules
-		VALUES (NEW.sid, NEW.sche_date + INTEGER '21', 4, NEW.rider_id);
-		
-	END IF;
+	IF (num <> 5) THEN
+		RAISE exception 'MWS constraint violated.';
 	END IF;
 	
 	RETURN NULL;
+
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS schedule_trigger ON Schedules;
-CREATE TRIGGER schedule_trigger
-	AFTER INSERT ON Schedules
+
+DROP TRIGGER IF EXISTS monthly_work_schedule_trigger on Monthly_Work_Schedule;
+CREATE CONSTRAINT TRIGGER weekly_work_schedule_trigger
+	AFTER UPDATE OR INSERT 
+	ON Monthly_Work_Schedule
+	deferrable initially deferred
 	FOR EACH ROW
-	EXECUTE FUNCTION Insert_for_next_three_week_1();
+	EXECUTE FUNCTION check_monthly_work_schedule_constraint();
+	
+	
+	
 
-
-
-CREATE OR REPLACE FUNCTION Insert_for_next_three_week_2() RETURNS TRIGGER AS
+--Option B
+--this would also enforce the constraint that 4 WWS must be the same
+CREATE OR REPLACE FUNCTION check_monthly_work_schedule_constraint() RETURNS TRIGGER AS
 $$
+DECLARE
+	rec Record;
+	num INTEGER;
+	d1 DATE;
+	d2 DATE;
 BEGIN
+
+	--check within week
+	--num of work day in a week >= 5, false
+	select count(*) into num
+	from Monthly_Work_Schedule
+	where sid = NEW.sid
+	and week = NEW.week;
 	
-	IF NEW.week = 1 THEN
+	if num >= 5 then
+		RAISE exception 'MWS constraint violated.';
+	end if;
 	
-		INSERT INTO Monthly_Work_Schedule
-		VALUES (NEW.sid, NEW.sche_date + INTEGER '7', 2, NEW.shift_id);
+	--the range of date in a week wider than 5 days, false
+	select max(sche_date) - min(sche_date) into num
+	from Monthly_Work_Schedule
+	where sid = NEW.sid
+	and week = NEW.week;
+	
+	if num >= 5 then
+		RAISE exception 'MWS constraint violated.';
+	end if;
+	
+	
+	--check between (current and pre week) and (current and next week)
+	--two days gap between the max date of previous week and min date of current week
+	if NEW.week > 1 then
 		
-		INSERT INTO Monthly_Work_Schedule
-		VALUES (NEW.sid, NEW.sche_date + INTEGER '14', 3, NEW.shift_id);
 		
-		INSERT INTO Monthly_Work_Schedule
-		VALUES (NEW.sid, NEW.sche_date + INTEGER '21', 4, NEW.shift_id);
+		select max(sche_date) into d1
+		from Monthly_Work_Schedule
+		where sid = NEW.sid
+		and week = NEW.week-1;
+		
+		select min(sche_date) into d2
+		from Monthly_Work_Schedule
+		where sid = NEW.sid
+		and week = NEW.week;
+		
+		if d2 - d1 <= 2 then
+			RAISE exception 'MWS constraint violated.';
+		end if;
+		
+		select min(sche_date) into d1
+		from Monthly_Work_Schedule
+		where sid = NEW.sid
+		and week = NEW.week-1;
+		
+		select max(sche_date) into d2
+		from Monthly_Work_Schedule
+		where sid = NEW.sid
+		and week = NEW.week;
+		
+		if d2 - d1 > 11 then
+			RAISE exception 'MWS constraint violated.';
+		end if;
+	end if;
 	
-	END IF;
+	--two days gap between the min date of current week and max date of next week
+	if NEW.week < 4 then
+		select max(sche_date) into d1
+		from Monthly_Work_Schedule
+		where sid = NEW.sid
+		and week = NEW.week;
+		
+		select min(sche_date) into d2
+		from Monthly_Work_Schedule
+		where sid = NEW.sid
+		and week = NEW.week + 1;
+		
+		if d2 -d1 <= 2 then
+			RAISE exception 'MWS constraint violated.';
+		end if;
+		
+		select min(sche_date) into d1
+		from Monthly_Work_Schedule
+		where sid = NEW.sid
+		and week = NEW.week;
+		
+		select max(sche_date) into d2
+		from Monthly_Work_Schedule
+		where sid = NEW.sid
+		and week = NEW.week + 1;
+		
+		if d2 -d1 > 11 then
+			RAISE exception 'MWS constraint violated.';
+		end if;
+	end if;
+
+	
+	--check across all weeks
+	--if same DOW but diff shift id, raise exception
+	FOR rec in select *
+		from Monthly_Work_Schedule
+		where sid = NEW.sid
+		and extract(DOW from NEW.sche_date) = extract(DOW from sche_date)
+	LOOP
+		
+		IF rec.shift_id <> NEW.shift_id THEN
+			RAISE exception 'MWS constraint violated.';
+		END IF;
+	END LOOP;
+
+	
+	
+	--across all weeks, if range between largest date and smallest date is larger than 25, false
+	select max(sche_date) - min(sche_date) into num
+	from Monthly_Work_Schedule
+	where sid = NEW.sid;
+	
+	if num >25 then
+		RAISE exception 'MWS constraint violated.';
+	end if;
+	
 	
 	RETURN NULL;
+
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS monthly_work_schedule_trigger ON Monthly_Work_Schedule;
-CREATE TRIGGER monthly_work_schedule_trigger
-	AFTER INSERT ON Monthly_Work_Schedule
+
+DROP TRIGGER IF EXISTS monthly_work_schedule_trigger on Monthly_Work_Schedule;
+CREATE TRIGGER weekly_work_schedule_trigger
+	AFTER UPDATE OR INSERT 
+	ON Monthly_Work_Schedule
 	FOR EACH ROW
-	EXECUTE FUNCTION Insert_for_next_three_week_2();
+	EXECUTE FUNCTION check_monthly_work_schedule_constraint();
+	
+	
+	
+
+
+
+--insert all WWS in a transaction to pass the trigger
+--to enforce the constraint that at least one hour interval between two consecutive intervals
+CREATE OR REPLACE FUNCTION check_weekly_work_schedule_constraint() RETURNS TRIGGER AS
+$$
+DECLARE
+	rec RECORD;
+	one_hour_before time;
+	one_hour_after time;
+	num INTEGER;
+BEGIN
+	
+	select coalesce(sum(duration),0) into num
+	from Weekly_Work_Schedule
+	where sid = NEW.sid;
+	
+	if num < 10 OR num > 48 then
+		RAISE exception 'The total number of hours in each WWS must be at least 10 and at most 48.';
+	end if;
+	
+	FOR rec IN SELECT time_start, time_end
+			FROM Weekly_Work_Schedule
+			WHERE sid = NEW.sid
+			and sche_date = NEW.sche_date
+			and time_start <> NEW.time_start
+	LOOP
+		
+		one_hour_before:= rec.time_start - '1 hour'::interval;
+		one_hour_after:= rec.time_end + '1 hour'::interval;
+		
+		
+		if (NEW.time_start >= rec.time_start AND NEW.time_start <= rec.time_end)
+		OR (NEW.time_end >= rec.time_start AND NEW.time_end <= rec.time_end) THEN
+			RAISE exception 'there is an overlap with the existing records.';
+		ELSIF (NEW.time_start >= one_hour_before AND NEW.time_start <= one_hour_after)
+		OR (NEW.time_end >= one_hour_before AND NEW.time_end <= one_hour_after) THEN
+			RAISE exception 'there must be at least one hour interval.';
+		END IF;
+	
+	END LOOP;
+	
+	RETURN NULL;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS weekly_work_schedule_trigger on Weekly_Work_Schedule;
+CREATE CONSTRAINT TRIGGER weekly_work_schedule_trigger
+	AFTER UPDATE OR INSERT 
+	ON Weekly_Work_Schedule
+	DEFERRABLE INITIALLY DEFERRED
+	FOR EACH ROW
+	EXECUTE FUNCTION check_weekly_work_schedule_constraint();
+
+
+
+
 
