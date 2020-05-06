@@ -68,7 +68,7 @@ export default function Restaurant({ userid }) {
     const delivery_base = 3
     const delivery_percent = 0.025
 
-    const submitOrder = (cart, appliedPromo, deliveryFee, totalCharge, deliveryLoc, deliveryArea, paymentMode) => {
+    const submitOrder = (cart, offset, deliveryFee, totalCharge, deliveryLoc, deliveryArea, paymentMode) => {
         // TODO: backend code for submit order
         // generate order in backend
         setTest({area: deliveryArea, address: deliveryLoc})
@@ -171,7 +171,7 @@ export default function Restaurant({ userid }) {
 
     useEffect(() => {
         setCartCost(sumCartCost(cart))
-        setDeliveryFee((cartCost * delivery_percent) + delivery_base)
+        setDeliveryFee(Utils.numberRoundDP((cartCost * delivery_percent) + delivery_base, 1))
         setTotalCost(deliveryFee + cartCost)
     }, [cart, cartCost, deliveryFee])
 
