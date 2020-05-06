@@ -186,15 +186,11 @@ export default function StaffSummary({userid, rid}) {
             const promoStats = await axios
                 .get('/staff/getPromoStats/', {
                     params: {
-                        rid: user
+                        rid: rid
                     }
                 })
                 .then((response) => setPromotions(response.data)
                 )
-
-
-
-
         })()
     }, [])
 

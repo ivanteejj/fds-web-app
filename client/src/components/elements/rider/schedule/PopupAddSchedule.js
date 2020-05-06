@@ -92,9 +92,9 @@ export default function PopupAddSchedule({openPopup, occupiedDates, riderType, s
             const day = (idx % 7) + 1
             const date = start_d.add(1,'days').toDate()
             var shift = workingDays.find(x => x === date.getDay())
-            shift = shift === undefined ? null : shift.shift
+            shift = shift === undefined || shift === null ? null : shift.shift
             return {week: week, day: day, date: date, shift: shift}
-        })
+        }).filter(x => x.shift)
 
         return submitSchedule(arr)
     }

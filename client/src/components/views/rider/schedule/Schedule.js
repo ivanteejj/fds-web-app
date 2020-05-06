@@ -84,7 +84,7 @@ export default function Schedule({userid}) {
             let user = userid
             setSchedule(fakeSchedulePT.data);
             // retrieve rider type
-            setRiderType("full-time");
+            setRiderType("part-time");
 
         })()
     }, [])
