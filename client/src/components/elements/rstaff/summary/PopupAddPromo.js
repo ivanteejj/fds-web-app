@@ -152,7 +152,7 @@ export default function PopupAddPromo({closePopup, types, cats, submitAddPromo})
                                         <Grid.Column width={4}>
                                             <Input
                                                 placeholder={values.promo_min_cost}
-                                                label={'Min cost'}
+                                                label={'Min Cost'}
                                                 type="text"
                                                 name="promo_min_cost"
                                                 onChange={handleChange}
@@ -295,7 +295,7 @@ export default function PopupAddPromo({closePopup, types, cats, submitAddPromo})
 
                                 <Form.Button
                                     floated={'center'} size="medium"
-                                    content={'Confirm changes'}
+                                    content={'Add Promo'}
                                     color={'orange'}
                                     onClick={handleSubmit}
                                     disabled={isSubmitting}

@@ -34,6 +34,7 @@ export default function FdsMenuBar({signout}) {
                         size={'tiny'}
                         icon={'percent'}
                         content={'Promotions'}
+                        onClick={() => history.push("/fds/promotions")}
                 />
 
                 <Button basic color={'black'}
