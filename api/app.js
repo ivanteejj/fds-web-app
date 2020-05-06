@@ -53,6 +53,7 @@ app.get('/staff/getPromoStats/', (req, res) => promoController.getAllPromoStatis
 
 app.post('/FDSManager/addNewPromo/', (req, res) => promoController.addNewPromotion(req, res, db))
 
+app.post('/staff/addFood/', (req, res) => foodController.addFoodForRestaurantPage(req, res, db))
 app.post('/staff/updateFood/', (req, res) => foodController.updateFoodForRestaurantPage(req, res, db))
 app.delete('/staff/deleteFood/', (req, res) => foodController.deleteFoodForRestaurantPage(req, res, db))
 
