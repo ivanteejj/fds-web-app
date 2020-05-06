@@ -4,6 +4,8 @@ import Utils from "../../../commons/Utils";
 import Promotions from "../../../elements/rstaff/summary/Promotions";
 import PopupEditPromo from "../../../elements/rstaff/summary/PopupEditPromo";
 import PopupAddPromo from "../../../elements/rstaff/summary/PopupAddPromo";
+import axios from "axios";
+import DateTimeUtils from "../../../commons/DateTimeUtils";
 
 const fakePromoStats = {
     data: [
@@ -48,9 +50,9 @@ export default function FdsPromotions() {
 
     useEffect(() => {
         (async() => {
-            // TODO: (backend) code here for first rendering of page
-            // get all fds promotions
-            setPromotions(fakePromoStats.data)
+            const promoStats = await axios
+                .get('/FDSManager/getPromoStats/', )
+                .then((response) => setPromotions(response.data))
         })()
     }, [])
 
