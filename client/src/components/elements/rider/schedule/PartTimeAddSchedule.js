@@ -136,6 +136,23 @@ export default function PartTimeAddSchedule({startDate, endDate, submitSchedule}
 
     }
 
+    const filterMaxDateDropdown = (type, x, idx) => {
+        switch (type) {
+            case "start":
+                return moment(x.date).hour(21).minute(0).toDate()
+            case "end":
+                if (x.shifts[idx].time_start) {
+                    return moment(x.shifts[idx].time_start).add(4, 'hour').toDate()
+                } else {
+                    return moment(x.date).hour(22).minute(0).toDate()
+                }
+            default:
+                return;
+        }
+
+    }
+
+
     const computeTotalHours = () => {
         // compute total working hours
         let total = workingDays.reduce((accum, x) =>
@@ -208,7 +225,7 @@ export default function PartTimeAddSchedule({startDate, endDate, submitSchedule}
                                                         timeIntervals={60}
                                                         customInput={<StartTimeButton/>}
                                                         minTime={filterMinDateDropdown("start", item, idx)}
-                                                        maxTime={moment(item.date).hour(21).minute(0).toDate()}
+                                                        maxTime={filterMaxDateDropdown("start", item, idx)}
                                                         dateFormat="h:mm aa"
                                                     />
 
@@ -220,7 +237,7 @@ export default function PartTimeAddSchedule({startDate, endDate, submitSchedule}
                                                         timeIntervals={60}
                                                         customInput={<EndTimeButton/>}
                                                         minTime={filterMinDateDropdown("end", item, idx)}
-                                                        maxTime={moment(item.date).hour(22).minute(0).toDate()}
+                                                        maxTime={filterMaxDateDropdown("end", item, idx)}
                                                         dateFormat="h:mm aa"
                                                     />
 
