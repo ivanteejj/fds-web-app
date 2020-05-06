@@ -35,8 +35,8 @@ const fakeRecentDeliverLoc = {
 
 const fakePaymentOptions = {
     data: [
-        {mode: "Cash On Delivery"},
-        {mode: "Credit Card"}
+        {mode: "CASHONDELIVERY"},
+        {mode: "CREDITCARD"}
     ]
 }
 

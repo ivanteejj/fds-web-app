@@ -59,19 +59,42 @@ const offsetReducer = (state, action) => {
     }
 }
 
+const paymentReducer = (state, action) => {
+    switch (action.type) {
+        case "CREDITCARD":
+            return {
+                mode: action.type,
+                value: null
+            }
+        case "update_creditcard":
+            return {
+                ...state,
+                value: action.value
+            }
+        default:
+            return {
+                mode: action.type,
+                value: null
+            }
+    }
+}
+
 const rate = 10;
 export default function Popup({remainPopup, submitOrder, rewardPts, promos, cart, cartCost, deliveryFee, totalCost, deliveryLoc, paymentMtds}) {
     const [total, setTotal] = useState(totalCost)
     const [selectedLoc, setDeliveryLoc] = useState(null)
     const [deliveryAreaInput, setDeliveryAreaInput] = useState(areaOptions[0].value)
     const [deliveryLocInput, setDeliveryLocInput] = useState("")
-    const [paymentMode, setPaymentMode] = useState("")
 
     const [offset, setOffset] = useReducer(offsetReducer, {
         offset_type: null,
         obj: null,
         value: 0,
         error: null
+    })
+    const [paymentMode, setPaymentMode] = useReducer(paymentReducer, {
+        mode: null,
+        value: null
     })
 
     const placeOrder = () => {
@@ -152,7 +175,8 @@ export default function Popup({remainPopup, submitOrder, rewardPts, promos, cart
     }
 
     const disableSubmit = () => {
-        return selectedLoc === null || (deliveryLocInput === "" && selectedLoc === "") || (paymentMode === "") ||
+        return selectedLoc === null || (deliveryLocInput === "" && selectedLoc === "") || paymentMode.mode === null ||
+            paymentMode.mode === "" || (paymentMode.mode === "CREDITCARD" && (paymentMode.value == "" || paymentMode.value === null)) ||
             (offset.offset_type && offset.error)
     }
 
@@ -372,13 +396,20 @@ export default function Popup({remainPopup, submitOrder, rewardPts, promos, cart
                                 <Form.Field>
                                 <Radio label={paymentMtd.mode}
                                        value={paymentMtd.mode}
-                                       checked={paymentMode === paymentMtd.mode}
-                                       onChange={() => setPaymentMode(paymentMtd.mode)}
+                                       checked={paymentMode.mode === paymentMtd.mode}
+                                       onChange={() => setPaymentMode({type: paymentMtd.mode})}
                                 />
                                 </Form.Field>
                             )
                         })}
                     </Form>
+
+                    {paymentMode.mode === "CREDITCARD" && (
+                        <Input label='Credit Card'
+                               value={paymentMode.value}
+                               onChange={(e, {value}) => setPaymentMode({type: "update_creditcard", value: value})}
+                        />
+                    )}
 
                     <Divider/>
 

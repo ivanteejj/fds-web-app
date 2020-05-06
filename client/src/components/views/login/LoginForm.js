@@ -50,12 +50,12 @@ const LoginForm = ({validLogin}) => {
                 // return history.push("/fds/summary")
 
                 // customer
-                // validLogin(20, "customer", null);
-                // return history.push("/customer/shop")
+                validLogin(20, "customer", null);
+                return history.push("/customer/shop")
 
                 // rider
-                validLogin(20, "rider", null);
-                return history.push("/rider/summary")
+                // validLogin(20, "rider", null);
+                // return history.push("/rider/summary")
 
                 // validLogin(10, "staff", 3);
                 // return history.push("/staff/summary")
