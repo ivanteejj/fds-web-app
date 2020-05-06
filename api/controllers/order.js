@@ -17,10 +17,7 @@ const getOneRestDetails = (req, res, db) => {
 
 const queryToGetAllOrderDetailsForOrderPage = "WITH totalPromotions as (\n" +
     "\tSELECT *\n" +
-    "\tFROM Restaurant_Promotions\n" +
-    "\tUNION\n" +
-    "\tSELECT *, null as rest_id\n" +
-    "\tFROM FDS_Promotions\n" +
+    "\tFROM Promotions\n" +
     "), aggregatedCart as (\n" +
     "\tSELECT oid, json_agg(json_build_object('fid', fid,'rid', rid, 'rname', rname, 'fname', fname, 'quantity', quantity ,'price', price)) as cart\n" +
     "\tFROM ((Orders JOIN ShoppingCarts using (oid)) JOIN Food f1 USING (fid)) JOIN Restaurants USING (rid)\n" +

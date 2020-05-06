@@ -36,15 +36,17 @@ const getFoodFromOneRes = (req, res, db) => {
 
 const queryToGetFoodForRestaurantPage =
     "WITH perDayPurchase as (\n" +
-    "\tSELECT o1.order_placed, sc1.fid, sc1.quantity\n" +
-    "\tFROM Orders o1 NATURAL JOIN ShoppingCarts sc1\n" +
+    "    SELECT sc1.fid, sum(sc1.quantity) as quantity\n" +
+    "    FROM Orders o1 NATURAL JOIN ShoppingCarts sc1\n" +
     "\tWHERE DATE(order_placed) >= CURRENT_DATE AND DATE(order_placed) < CURRENT_DATE::DATE + INTERVAL '1 DAY'\n" +
+    "\tGROUP BY fid\n" +
     ")\n" +
-    "\n" +
-    "SELECT f1.fid, f1.fname, f1.rid as rid, f1.price, f1.category, f1.daily_limit, COALESCE(quantity, 0) as daily_sold\n" +
-    "FROM Food f1 LEFT JOIN perDayPurchase USING (fid)\n" +
-    "WHERE f1.rid = $1"
-const getFoodForRestaurantPage = (req, res, db) => {
+    "\t\n" +
+    "    SELECT f1.fid, f1.fname, f1.rid as rid, f1.price, f1.category, f1.daily_limit, COALESCE(quantity, 0) as daily_sold\n" +
+    "    FROM Food f1 LEFT JOIN perDayPurchase USING (fid)\n" +
+    "    WHERE f1.rid = $1"
+
+    const getFoodForRestaurantPage = (req, res, db) => {
     const rid = req.query.rid;
     console.log("rest_id is");
     console.log(rid);
@@ -103,3 +105,19 @@ module.exports = {
     updateFoodForRestaurantPage: updateFoodForRestaurantPage,
     deleteFoodForRestaurantPage: deleteFoodForRestaurantPage
 };
+
+
+
+
+/*
+WITH perDayPurchase as (
+    SELECT sc1.fid, sum(sc1.quantity) as quantity
+    FROM Orders o1 NATURAL JOIN ShoppingCarts sc1
+	WHERE DATE(order_placed) >= CURRENT_DATE AND DATE(order_placed) < CURRENT_DATE::DATE + INTERVAL '1 DAY'
+	GROUP BY fid
+)
+
+    SELECT f1.fid, f1.fname, f1.rid as rid, f1.price, f1.category, f1.daily_limit, COALESCE(quantity, 0) as daily_sold
+    FROM Food f1 LEFT JOIN perDayPurchase USING (fid)
+    WHERE f1.rid = 1
+ */

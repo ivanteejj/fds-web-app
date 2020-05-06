@@ -9,8 +9,6 @@ import DateTimeUtils from "../../../commons/DateTimeUtils";
 
 const fakePromoStats = {
     data: [
-        /* TODO: sorted in descending order by dt_start
-        */
         {pid: 1204, promo_details_text: "33% on all food items", start_datetime: "13/03/2020 09:00:00", end_datetime: "13/05/2020 22:00:00",
             promo_type: "PERCENT", promo_cat: "CART",avgorders: 921, promo_min_cost: 100, promo_rate: 0.33,
             promo_max_discount_limit: 20, promo_max_num_redemption: 50},
