@@ -40,16 +40,6 @@ const queryToGetAllRelevantPromos = "WITH numUsedPreProcess as (\n" +
     "SELECT *\n" +
     "FROM relevantFDSPromos"
 
-/*
-"WITH RelevantRestaurantPromos as (" +
-"SELECT * " +
-"FROM Restaurant_Promotions rp1 " +
-"WHERE rp1.rid = $1" +
-")" +
-"SELECT RRP1.pid " +
-"FROM RelevantRestaurantPromos RRP1"
-*/
-
 const getAllRelevantPromos = (req, res, db) => {
     const rid = req.query.rid;
     console.log(rid);
@@ -63,8 +53,40 @@ const getAllRelevantPromos = (req, res, db) => {
         })
 }
 
+const queryToGetAllPromoStatisticsForStaffPage =
+    "with unionPromo as (\n" +
+    "select *\n" +
+    "from Restaurant_Promotions\n" +
+    "WHERE rid = $1\n" +
+    "),\n" +
+    "usePromo as (\n" +
+    "select u1.pid, COALESCE(count(*), 0) as totalCount, EXTRACT(day from (end_datetime-start_datetime)) as promoDuration\n" +
+    "from unionPromo u1 left join orders o1\n" +
+    "on u1.pid = o1.pid\n" +
+    "group by u1.pid, start_datetime, end_datetime\n" +
+    ")\n" +
+    "select u2.pid, promo_details_text,start_datetime, end_datetime, promo_type, promo_cat, totalCount/promoDuration as avgOrders,\n" +
+    "promo_min_cost, promo_rate, promo_max_discount_limit, promo_max_num_redemption\n" +
+    "from usePromo u2, unionPromo z1\n" +
+    "where u2.pid = z1.pid"
+
+const getAllPromoStatisticsForStaffPage = (req, res, db) => {
+    const rid = req.query.rid;
+    console.log(rid);
+    const output = db.query(queryToGetAllPromoStatisticsForStaffPage, [rid],
+        (error,  results) => {
+            if (error) {
+                console.log(error)
+            }
+
+            res.status(200).json(results.rows)
+        })
+}
+
+
 module.exports = {
     getAllRelevantPromos: getAllRelevantPromos,
+    getAllPromoStatisticsForStaffPage: getAllPromoStatisticsForStaffPage,
 };
 
 

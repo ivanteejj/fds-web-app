@@ -185,8 +185,18 @@ export default function StaffSummary({userid, rid}) {
                 .then((response) => setFilterSummary({type: "initialize", payload: DateTimeUtils.formatDataPeriod(response.data)})
                 )
 
+            const promoStats = await axios
+                .get('/staff/getPromoStats/', {
+                    params: {
+                        rid: user
+                    }
+                })
+                .then((response) => setPromotions(response.data)
+                )
 
-            setPromotions(fakePromoStats.data)
+
+
+
         })()
     }, [])
 
