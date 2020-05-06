@@ -78,6 +78,9 @@ INSERT INTO Shifts (shift_id,time_start1,time_end1,time_start2,time_end2) VALUES
 INSERT INTO Shifts (shift_id,time_start1,time_end1,time_start2,time_end2) VALUES (3,'12:00:00','16:00:00','17:00:00','21:00:00');
 INSERT INTO Shifts (shift_id,time_start1,time_end1,time_start2,time_end2) VALUES (4,'13:00:00','17:00:00','18:00:00','22:00:00');
 
+INSERT INTO Food (fid,rid,fname,price,daily_limit,category) VALUES (1,1,'Roasted Chicken Rice',5,90,'Local');
+INSERT INTO Food (fid,rid,fname,price,daily_limit,category) VALUES (2,1,'Roasted Chicken Rice',5,90,'Local');
+INSERT INTO Food (fid,rid,fname,price,daily_limit,category) VALUES (3,1,'Roasted Chicken Rice',5,90,'Local');
 INSERT INTO Food (fid,rid,fname,price,daily_limit,category) VALUES (101,1,'Roasted Chicken Rice',5,90,'Local');
 INSERT INTO Food (fid,rid,fname,price,daily_limit,category) VALUES (102,1,'Steamed Chicken Rice',6,85,'Local');
 INSERT INTO Food (fid,rid,fname,price,daily_limit,category) VALUES (103,2,'Classic Nasi Lemak',7,59,'Local');
@@ -115,9 +118,6 @@ INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (5, 107, 1);
 INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (5, 108, 1);
 INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (6, 101, 2);
 INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (6, 102, 2);
-
-
-
 
 /*
     1 FDS promotion

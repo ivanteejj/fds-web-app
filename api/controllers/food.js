@@ -58,10 +58,48 @@ const getFoodForRestaurantPage = (req, res, db) => {
         })
 }
 
+const queryUpdateFood =
+    "UPDATE food \n" +
+    "SET fname = $1,\n" +
+    "\tprice = $2,\n" +
+    "\tdaily_limit = $3,\n" +
+    "\tcategory = $4\n" +
+    "WHERE\n" +
+    "\tfid = $5;"
+const updateFoodForRestaurantPage = (req, res, db) => {
+    const fid = req.query.fid;
+    console.log(fid);
 
+    const output = db.query(queryUpdateFood, [req.query.fname, req.query.price, req.query.daily_limit, req.query.category, fid],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(result.rows);
+        })
+}
+
+const queryDeleteFood =
+    "DELETE FROM food\n" +
+    "WHERE fid = $1;"
+const deleteFoodForRestaurantPage = (req, res, db) => {
+    const fid = req.query.fid;
+    console.log(fid);
+
+    const output = db.query(queryDeleteFood, [fid],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(result.rows);
+        })
+}
 
 module.exports = {
     getAllFood: getAllFood,
     getFoodFromOneRes: getFoodFromOneRes,
-    getFoodForRestaurantPage: getFoodForRestaurantPage
+    getFoodForRestaurantPage: getFoodForRestaurantPage,
+
+    updateFoodForRestaurantPage: updateFoodForRestaurantPage,
+    deleteFoodForRestaurantPage: deleteFoodForRestaurantPage
 };
