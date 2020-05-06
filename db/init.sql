@@ -67,11 +67,11 @@ CREATE TABLE AREAS (
     primary key (area)
 );
 
-CREATE TABLE Base_Salary {
+CREATE TABLE Base_Salary (
 	base_salary		NUMERIC
                     CHECK (base_salary > 0),
 	primary key(base_salary)
-};
+);
 
 
 CREATE TABLE Accounts (
@@ -360,6 +360,33 @@ CREATE TRIGGER first_order_discount_trigger
 	EXECUTE FUNCTION create_first_order_discount();
 
 */
+
+CREATE OR REPLACE FUNCTION create_first_order_discount() RETURNS TRIGGER AS
+$$
+DECLARE
+	num INTEGER;
+BEGIN
+	
+	select cart_fee into num
+	from Orders
+	where oid = NEW.oid;
+	
+	UPDATE Orders
+	SET cart_fee = cart_fee + NEW.quantity * NEW.food_price_purchased
+	where oid = NEW.oid;
+	
+	RETURN NULL;
+	
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS update_cart_fee_trigger ON ShoppingCarts;
+CREATE TRIGGER update_cart_fee_trigger
+	AFTER UPDATE OR INSERT ON ShoppingCarts
+	FOR EACH ROW
+	EXECUTE FUNCTION create_first_order_discount();
+
+
 
 
 --option A
