@@ -7,23 +7,6 @@ import PopupAddPromo from "../../../elements/rstaff/summary/PopupAddPromo";
 import axios from "axios";
 import DateTimeUtils from "../../../commons/DateTimeUtils";
 
-const fakePromoStats = {
-    data: [
-        {pid: 1204, promo_details_text: "33% on all food items", start_datetime: "13/03/2020 09:00:00", end_datetime: "13/05/2020 22:00:00",
-            promo_type: "PERCENT", promo_cat: "CART",avgorders: 921, promo_min_cost: 100, promo_rate: 0.33,
-            promo_max_discount_limit: 20, promo_max_num_redemption: 50},
-        {pid: 1205, promo_details_text: "10% on all food items", start_datetime: "01/03/2020 09:00:00", end_datetime: "13/03/2020 22:00:00",
-            promo_type: "PERCENT", promo_cat: "CART",avgorders: 762, promo_min_cost: 100, promo_rate: 0.10,
-            promo_max_discount_limit: 20, promo_max_num_redemption: 50},
-        {pid: 1202, promo_details_text: "Free Delivery", start_datetime: "20/02/2020 09:00:00", end_datetime: "28/02/2020 22:00:00",
-            promo_type: "PERCENT", promo_cat: "CART",avgorders: 562, promo_min_cost: 100, promo_rate: 1,
-            promo_max_discount_limit: 20, promo_max_num_redemption: 50},
-        {pid: 1203, promo_details_text: "24% on all food items", start_datetime: "13/02/2020 09:00:00", end_datetime: "14/02/2020 22:00:00",
-            promo_type: "PERCENT", promo_cat: "CART",avgorders: 777, promo_min_cost: 100, promo_rate: 0.24,
-            promo_max_discount_limit: 20, promo_max_num_redemption: 50}
-    ]
-}
-
 const promo_type = ["PERCENT", "DOLLAR"]
 const promo_cat = ["DELIVERY", "CART"]
 
@@ -54,9 +37,31 @@ export default function FdsPromotions() {
         })()
     }, [])
 
-    const submitAddPromo = (item) => {
-            const promoStats = axios
-                .post('/FDSManager/addNewPromo/', {
+    /*
+    (async() => {
+        const promoStats = axios
+                    .post('/FDSManager/addNewPromo/', {
+                        params: {
+                            promo_rate: item.promo_rate,
+                            promo_type: item.promo_type,
+                            promo_cat: item.promo_cat,
+                            start_datetime: item.start_datetime,
+                            end_datetime: item.end_datetime,
+                            promo_min_cost: item.promo_min_cost,
+                            promo_max_discount_limit: item.promo_max_discount_limit,
+                            promo_max_num_redemption: item.promo_max_num_redemption,
+                            promo_details_text: item.promo_details_text,
+                            rid: null
+                        }
+                    })
+                    closePopup("addPromo", false)
+
+        })
+     */
+
+    const submitAddPromo = async (item) => {
+        await axios
+            .post('/FDSManager/addNewPromo/', {
                     params: {
                         promo_rate: item.promo_rate,
                         promo_type: item.promo_type,
@@ -70,7 +75,12 @@ export default function FdsPromotions() {
                         rid: null
                     }
                 })
-            closePopup("addPromo", false)
+                .then((response) => console.log("response"))
+        await axios
+            .get('/FDSManager/getPromoStats/', )
+            .then((response) => setPromotions(response.data))
+
+        closePopup("addPromo", false)
     }
 
     const submitEditPromo = (item) => {
