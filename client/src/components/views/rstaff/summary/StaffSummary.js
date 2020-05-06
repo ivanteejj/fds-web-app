@@ -17,9 +17,6 @@ import axios from "axios";
 const fakeRID = 1
 
 const fakeOrders = {
-    /* TODO: Active orders (restaurant pov) so get orders where dt_rider_departs_rest == null
-    *  filter, sort desc order by dt_order_placed
-    */
     data: [
         {oid: 100123, riderid: "benwang",
             dt_order_placed: "2020-02-22 19:10:25", dt_rider_departs: "2020-02-22 19:20:00",
@@ -74,8 +71,6 @@ const fakeStats = {
 
 const fakePromoStats = {
     data: [
-        /* TODO: sorted in descending order by dt_start
-        */
         {pid: 1204, promo_details_text: "33% on all food items", start_datetime: "13/03/2020 09:00:00", end_datetime: "13/05/2020 22:00:00",
             promo_type: "PERCENT", promo_cat: "CART",avgorders: 921, promo_min_cost: 100, promo_rate: 0.33,
             promo_max_discount_limit: 20, promo_max_num_redemption: 50},
@@ -163,10 +158,6 @@ export default function StaffSummary({userid, rid}) {
 
     useEffect(() => {
         (async() => {
-            // TODO: (backend) code here for first rendering of page
-            // only render uncompleted orders for restaurant (dt_rider_departs_rest == null)
-            let user = userid
-
             const allRelevantOrders = await axios
                 .get('/staff/getAllOrders/', {
                     params: {
