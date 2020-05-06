@@ -46,7 +46,7 @@ const LoginForm = ({validLogin}) => {
                 // validLogin (userid, user_type, rid (set as null if NA))
 
                 //fds
-                //validLogin(20, "fds", null);
+                validLogin(20, "fds", null);
                 //return history.push("/fds/summary")
 
                 // customer

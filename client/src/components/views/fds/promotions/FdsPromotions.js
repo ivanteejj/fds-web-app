@@ -55,16 +55,22 @@ export default function FdsPromotions() {
     }, [])
 
     const submitAddPromo = (item) => {
-        closePopup("addPromo", false)
-        // TODO: (backend) code to add new promo
-        /* Note:
-        * item object contains:
-        * promo_details_text, promo_type, promo_cat, promo_rate, start_datetime,
-        * end_datetime, promo_max_discount_limit, promo_min_cost, promo_max_num_redemption
-        */
-
-        // TODO: (backend) once successfully, get the entire promo schema from db, update the promo at front end
-        // setPromotions(*sth sth*)
+            const promoStats = axios
+                .post('/FDSManager/addNewPromo/', {
+                    params: {
+                        promo_rate: item.promo_rate,
+                        promo_type: item.promo_type,
+                        promo_cat: item.promo_cat,
+                        start_datetime: item.start_datetime,
+                        end_datetime: item.end_datetime,
+                        promo_min_cost: item.promo_min_cost,
+                        promo_max_discount_limit: item.promo_max_discount_limit,
+                        promo_max_num_redemption: item.promo_max_num_redemption,
+                        promo_details_text: item.promo_details_text,
+                        rid: null
+                    }
+                })
+            closePopup("addPromo", false)
     }
 
     const submitEditPromo = (item) => {
