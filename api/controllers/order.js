@@ -45,8 +45,8 @@ const getAllOrderDetailsForOrderPage = (req, res, db) => {
 
 const queryToGetAllOrderDetailsforRestaurantStaffPage =
     "WITH aggregatedCart as (\n" +
-    "    SELECT oid, json_agg(json_build_object('fid', fid,'rid', rid, 'rname', rname, 'fname', fname, 'quantity', quantity ,'price', price)) as cart\n" +
-    "    FROM ((Orders JOIN ShoppingCarts using (oid)) JOIN Food f1 USING (fid)) JOIN Restaurants USING (rid)\n" +
+    "    SELECT oid, json_agg(json_build_object('fid', fid,'rid', rid, 'rname', rname, 'fname', sc1.fname, 'quantity', quantity ,'price', sc1.food_price_purchased)) as cart\n" +
+    "    FROM ((Orders JOIN ShoppingCarts sc1 using (oid)) JOIN Food f1 USING (fid)) JOIN Restaurants USING (rid)\n" +
     "    WHERE rid = $1\n" +
     "\tGROUP BY oid\n" +
     ")\n" +
