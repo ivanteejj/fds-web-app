@@ -11,7 +11,7 @@ import * as Yup from "yup";
 import {Formik} from "formik";
 import "../../../stylesheets/Popup.css"
 
-export default function PopupEditFood({closePopup, categories, submitAddFood}) {
+export default function PopupEditFood({closePopup, categories, submitAddFood, rid}) {
 
     const AddFoodSchema = Yup.object().shape({
         fname: Yup.string().required("Food name is required"),
@@ -37,7 +37,7 @@ export default function PopupEditFood({closePopup, categories, submitAddFood}) {
                     <Divider/>
 
                     <Formik
-                        initialValues={{ fname: "", price: "", category: catOptions[0].value, daily_limit: ""}}
+                        initialValues={{ rid: rid, fname: "", price: "", category: catOptions[0].value, daily_limit: ""}}
                         validationSchema={AddFoodSchema}
                         onSubmit={(values) => submitAddFood(values)}
                     >

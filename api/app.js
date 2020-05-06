@@ -40,10 +40,12 @@ app.get('/customer/shop/getRestaurantDetails/', (req, res) => restController.get
 app.get('/customer/shop/getRecentDeliveryAddress/', (req, res) => customerController.getRecentDeliveryAddress(req, res, db))
 app.get('/customer/shop/getAllOrderDetailsForOneCust/', (req, res) => orderController.getAllOrderDetailsForOrderPage(req, res, db))
 app.get('/customer/shop/getAllRelevantPromosForOneCust/', (req, res) => promoController.getAllRelevantPromos(req, res, db))
+
 app.get('/FDSManager/getMainSummaryData/', (req, res) => fdsStatsController.getMainSummaryData(req, res, db))
 app.get('/FDSManager/getSummaryDataByCustomer/', (req, res) => fdsStatsController.getSummaryDetailsByCustomer(req, res, db))
 app.get('/FDSManager/getSummaryDataByArea/', (req, res) => fdsStatsController.getSummaryDetailsByArea(req, res, db))
 app.get('/FDSManager/getPromoStats/', (req, res) => promoController.getAllPromoStatisticsForFDSManagerPage(req, res, db))
+
 app.get('/staff/getAllOrders/', (req, res) => orderController.getAllOrderDetailsforRestaurantStaffPage(req, res, db))
 app.get('/staff/getMostPopularByMonth/', (req, res) => orderController.getMostPopularByMonth(req, res, db))
 app.get('/staff/menu/getFoodForRestaurantPage/', (req, res) => foodController.getFoodForRestaurantPage(req, res, db))
@@ -51,6 +53,9 @@ app.get('/staff/getPromoStats/', (req, res) => promoController.getAllPromoStatis
 
 app.post('/FDSManager/addNewPromo/', (req, res) => promoController.addNewPromotion(req, res, db))
 
+app.post('/staff/addFood/', (req, res) => foodController.addFoodForRestaurantPage(req, res, db))
+app.post('/staff/updateFood/', (req, res) => foodController.updateFoodForRestaurantPage(req, res, db))
+app.delete('/staff/deleteFood/', (req, res) => foodController.deleteFoodForRestaurantPage(req, res, db))
 
 
 
