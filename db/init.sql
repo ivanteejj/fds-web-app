@@ -7,13 +7,10 @@
 
 
 
-DROP TABLE IF EXISTS 	Accounts, Restaurants, Menus, Food, Staff, Customers, 
-						Orders, Makes, ShoppingCarts, Promotions, 
-						FDS_Promotions, Restaurant_Promotions, 
-						FDS_Promo_Applies, Delivery_Reviews, 
-						Food_Reviews, Riders, Rider_Works, 
-						Schedules, Shifts, Monthly_Work_Schedule,
-						Weekly_Work_Schedule, Year, Month, DaysInWeek, Hour CASCADE;
+DROP TABLE IF EXISTS 	Accounts, Restaurants, Food, Staff, Customers,
+						Orders, ShoppingCarts, Promotions,
+						Food_Reviews, Riders, Schedules, Shifts, Monthly_Work_Schedule,
+						Weekly_Work_Schedule, Year, Month, DaysInWeek, Hour, Areas, Base_Salary CASCADE;
 						
 DROP TYPE IF EXISTS CAT_ENUM, PROMO_CAT_ENUM, PROMO_TYPE_ENUM CASCADE;
 
@@ -66,13 +63,6 @@ CREATE TABLE AREAS (
     area        text,
     primary key (area)
 );
-
-CREATE TABLE Base_Salary {
-	base_salary		NUMERIC
-                    CHECK (base_salary > 0),
-	primary key(base_salary)
-};
-
 
 CREATE TABLE Accounts (
 	username				TEXT,
@@ -134,8 +124,7 @@ CREATE TABLE Riders(
     base_salary         NUMERIC NOT NULL,
 	username			TEXT NOT NULL,
     PRIMARY KEY (rider_id),
-	FOREIGN KEY (username) REFERENCES Accounts (username),
-	FOREIGN KEY (base_salary) REFERENCES Base_Salary(base_salary)
+	FOREIGN KEY (username) REFERENCES Accounts (username)
 );
 
 CREATE TABLE Promotions(

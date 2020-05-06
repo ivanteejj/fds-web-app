@@ -104,20 +104,20 @@ INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rid
 INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee,rider_bonus, discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (7,'24/04/2020 11:33:51','24/04/2020 11:35:51','24/04/2020 11:41:51','24/04/2020 11:50:51','24/04/2020 11:58:51','CASHONDELIVERY',22,7,10,1,'Ivan House 2','SOUTH',30,4,20,3);
 INSERT INTO Orders (oid,order_placed,rider_depart_for_rest,rider_arrive_rest,rider_depart_for_delivery_location,order_delivered,payment_method,cart_fee, delivery_fee, rider_bonus,discount_amount, delivery_location,delivery_location_area,rider_id,rider_rating, cid, pid) VALUES (8,'19/04/2020 20:39:07','19/04/2020 21:03:07', '19/04/2020 21:24:07', '19/04/2020 21:29:07', '19/04/2020 21:35:07','CASHONDELIVERY', 9,5,0,1,'Bob House 1','WEST',30,4,22, 3);
 
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (1, 101, 3);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (1, 102, 1);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (2, 107, 3);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (2, 108, 2);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (3, 105, 3);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (3, 106, 1);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (4, 103, 2);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (5, 107, 1);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (5, 108, 1);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (6, 101, 2);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (6, 102, 2);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (7, 105, 3);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (7, 106, 1);
-INSERT INTO ShoppingCarts(oid, fid, quantity) VALUES (8, 106, 6);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (1, 101, 3, 'Roasted Chicken Rice', 5);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (1, 102, 1, 'Steamed Chicken Rice', 6);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (2, 107, 3, 'Chicken Chop',4);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (2, 108, 2, 'Pork Chop',5);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (3, 105, 3, 'Pork Xiao Long Bao (x5)',5);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (3, 106, 1, 'Pot stickers (x5)', 5.5);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (4, 103, 2, 'Classic Nasi Lemak', 7);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (5, 107, 1, 'Chicken Chop',4);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (5, 108, 1, 'Pork Chop',5);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (6, 101, 2, 'Roasted Chicken Rice', 5);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (6, 102, 2, 'Steamed Chicken Rice', 6);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (7, 105, 3, 'Pork Xiao Long Bao (x5)',5);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (7, 106, 1, 'Pot stickers (x5)', 5.5);
+INSERT INTO ShoppingCarts(oid, fid, quantity, fname, food_price_purchased) VALUES (8, 106, 6, 'Pot stickers (x5)', 5.5);
 
 SELECT pg_catalog.setval(pg_get_serial_sequence('Promotions', 'pid'), MAX(pid)) FROM Promotions;
 SELECT pg_catalog.setval(pg_get_serial_sequence('Orders', 'oid'), MAX(oid)) FROM Orders;
