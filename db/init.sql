@@ -90,10 +90,6 @@ CREATE TABLE Food (
 							CHECK (price > 0),
     daily_limit     		INTEGER
 							CHECK (daily_limit >= 0),
-    daily_sold_qty			INTEGER NOT NULL DEFAULT (0)
-        CHECK (daily_sold_qty >= 0),
-    daily_availability		TEXT NOT NULL DEFAULT('AVAILABLE')
-        CHECK (daily_availability in ('AVAILABLE', 'NOT AVAILABLE')),
     category        		CAT_ENUM NOT NULL,
     PRIMARY KEY (fid),
 	FOREIGN KEY (rid) REFERENCES Restaurants (rid) on delete cascade
@@ -137,6 +133,44 @@ CREATE TABLE Promotions(
         pid        				INTEGER,
         PRIMARY KEY (pid)
 );
+
+
+CREATE TABLE FDS_Promotions(
+    pid        		INTEGER,
+    promo_rate      		INTEGER NOT NULL,
+        CHECK (promo_rate > 0),
+    promo_type              PROMO_TYPE_ENUM NOT NULL,
+    promo_cat  	    PROMO_CAT_ENUM NOT NULL,
+    start_datetime  		timestamp,
+    end_datetime    		timestamp
+        CHECK (end_datetime > start_datetime),
+    promo_min_cost          INTEGER,
+    promo_max_discount_limit        INTEGER,
+    promo_max_num_redemption        INTEGER,
+    promo_details_text              TEXT NOT NULL,
+    PRIMARY KEY (pid),
+    FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade
+);
+
+CREATE TABLE Restaurant_Promotions(
+    pid        		INTEGER,
+    promo_rate      		INTEGER NOT NULL,
+        CHECK (promo_rate > 0),
+    promo_type              PROMO_TYPE_ENUM NOT NULL,
+    promo_cat  	    PROMO_CAT_ENUM NOT NULL,
+    start_datetime  		timestamp,
+    end_datetime    		timestamp
+        CHECK (end_datetime > start_datetime),
+    promo_min_cost                  INTEGER,
+    promo_max_discount_limit        INTEGER,
+    promo_max_num_redemption        INTEGER,
+    promo_details_text              TEXT NOT NULL,
+	rid				                INTEGER,
+	PRIMARY KEY (pid),
+	FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade,
+	FOREIGN KEY (rid) REFERENCES Restaurants (rid)
+);
+
 
 CREATE TABLE Orders(
 	oid										INTEGER,
@@ -189,49 +223,6 @@ CREATE TABLE ShoppingCarts(
 );
 
 
-CREATE TABLE FDS_Promotions(
-    pid        		INTEGER,
-    promo_rate      		INTEGER NOT NULL,
-        CHECK (promo_rate > 0),
-    promo_type              PROMO_TYPE_ENUM NOT NULL,
-    promo_cat  	    PROMO_CAT_ENUM NOT NULL,
-    start_datetime  		timestamp,
-    end_datetime    		timestamp
-        CHECK (end_datetime > start_datetime),
-    promo_min_cost          INTEGER,
-    promo_max_discount_limit        INTEGER,
-    promo_max_num_redemption        INTEGER,
-    promo_details_text              TEXT NOT NULL,
-    PRIMARY KEY (pid),
-    FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade
-);
-
-CREATE TABLE Restaurant_Promotions(
-    pid        		INTEGER,
-    promo_rate      		INTEGER NOT NULL,
-        CHECK (promo_rate > 0),
-    promo_type              PROMO_TYPE_ENUM NOT NULL,
-    promo_cat  	    PROMO_CAT_ENUM NOT NULL,
-    start_datetime  		timestamp,
-    end_datetime    		timestamp
-        CHECK (end_datetime > start_datetime),
-    promo_min_cost                  INTEGER,
-    promo_max_discount_limit        INTEGER,
-    promo_max_num_redemption        INTEGER,
-    promo_details_text              TEXT NOT NULL,
-	rid				                INTEGER,
-	PRIMARY KEY (pid),
-	FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade,
-	FOREIGN KEY (rid) REFERENCES Restaurants (rid)
-);
-
-CREATE TABLE FDS_Promo_Applies(
-    cid         INTEGER,
-    pid    		INTEGER,
-    PRIMARY KEY (cid, pid),
-	FOREIGN KEY (cid) REFERENCES Customers (cid),
-	FOREIGN KEY (pid) REFERENCES FDS_Promotions (pid)
-);
 
 CREATE TABLE Food_Reviews(
     oid         INTEGER,
@@ -244,7 +235,7 @@ CREATE TABLE Food_Reviews(
 
 CREATE TABLE Schedules (
     sid              	INTEGER,
-	rider_id			INTEGER,
+	rider_id			INTEGER NOT NULL,
     PRIMARY KEY (sid),
 	FOREIGN KEY (rider_id) REFERENCES Riders (rider_id)
 );
@@ -595,6 +586,12 @@ BEGIN
 	if num < 10 OR num > 48 then
 		RAISE exception 'The total number of hours in each WWS must be at least 10 and at most 48.';
 	end if;
+	
+	
+	
+	
+	
+	
 	
 	FOR rec IN SELECT time_start, time_end
 			FROM Weekly_Work_Schedule
