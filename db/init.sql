@@ -7,13 +7,10 @@
 
 
 
-DROP TABLE IF EXISTS 	Accounts, Restaurants, Menus, Food, Staff, Customers, 
-						Orders, Makes, ShoppingCarts, Promotions, 
-						FDS_Promotions, Restaurant_Promotions, 
-						FDS_Promo_Applies, Delivery_Reviews, 
-						Food_Reviews, Riders, Rider_Works, 
+DROP TABLE IF EXISTS 	Accounts, Restaurants, Food, Staff, Customers,
+						Orders, ShoppingCarts, Promotions, Food_Reviews, Riders,
 						Schedules, Shifts, Monthly_Work_Schedule,
-						Weekly_Work_Schedule, Year, Month, DaysInWeek, Hour CASCADE;
+						Weekly_Work_Schedule, Year, Month, DaysInWeek, AREAS, Hour CASCADE;
 						
 DROP TYPE IF EXISTS CAT_ENUM, PROMO_CAT_ENUM, PROMO_TYPE_ENUM CASCADE;
 
@@ -131,44 +128,20 @@ CREATE TABLE Riders(
 
 CREATE TABLE Promotions(
         pid        				INTEGER,
+        promo_rate      		INTEGER NOT NULL,
+        CHECK (promo_rate > 0),
+        promo_type              PROMO_TYPE_ENUM NOT NULL,
+        promo_cat  	    PROMO_CAT_ENUM NOT NULL,
+        start_datetime  		timestamp,
+        end_datetime    		timestamp
+            CHECK (end_datetime > start_datetime),
+        promo_min_cost          INTEGER,
+        promo_max_discount_limit        INTEGER,
+        promo_max_num_redemption        INTEGER,
+        promo_details_text              TEXT NOT NULL,
+        rid				                INTEGER REFERENCES Restaurants (rid),
+
         PRIMARY KEY (pid)
-);
-
-
-CREATE TABLE FDS_Promotions(
-    pid        		INTEGER,
-    promo_rate      		INTEGER NOT NULL,
-        CHECK (promo_rate > 0),
-    promo_type              PROMO_TYPE_ENUM NOT NULL,
-    promo_cat  	    PROMO_CAT_ENUM NOT NULL,
-    start_datetime  		timestamp,
-    end_datetime    		timestamp
-        CHECK (end_datetime > start_datetime),
-    promo_min_cost          INTEGER,
-    promo_max_discount_limit        INTEGER,
-    promo_max_num_redemption        INTEGER,
-    promo_details_text              TEXT NOT NULL,
-    PRIMARY KEY (pid),
-    FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade
-);
-
-CREATE TABLE Restaurant_Promotions(
-    pid        		INTEGER,
-    promo_rate      		INTEGER NOT NULL,
-        CHECK (promo_rate > 0),
-    promo_type              PROMO_TYPE_ENUM NOT NULL,
-    promo_cat  	    PROMO_CAT_ENUM NOT NULL,
-    start_datetime  		timestamp,
-    end_datetime    		timestamp
-        CHECK (end_datetime > start_datetime),
-    promo_min_cost                  INTEGER,
-    promo_max_discount_limit        INTEGER,
-    promo_max_num_redemption        INTEGER,
-    promo_details_text              TEXT NOT NULL,
-	rid				                INTEGER,
-	PRIMARY KEY (pid),
-	FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade,
-	FOREIGN KEY (rid) REFERENCES Restaurants (rid)
 );
 
 

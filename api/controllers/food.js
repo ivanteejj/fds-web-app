@@ -35,6 +35,7 @@ const getFoodFromOneRes = (req, res, db) => {
 }
 
 const queryToGetFoodForRestaurantPage =
+    // TODO update to show sum of quantity
     "WITH perDayPurchase as (\n" +
     "\tSELECT o1.order_placed, sc1.fid, sc1.quantity\n" +
     "\tFROM Orders o1 NATURAL JOIN ShoppingCarts sc1\n" +
@@ -58,7 +59,9 @@ const getFoodForRestaurantPage = (req, res, db) => {
         })
 }
 
-
+const queryToAddFood =
+        "select *\n" +
+        "from orders"
 
 module.exports = {
     getAllFood: getAllFood,
