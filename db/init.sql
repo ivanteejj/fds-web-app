@@ -413,8 +413,8 @@ BEGIN
 	where sid = NEW.sid
 	and week = NEW.week;
 	
-	if num >= 5 then
-		RAISE exception 'MWS constraint violated.';
+	if num > 5 then
+		RAISE exception 'MWS constraint 1 violated.';
 	end if;
 	
 	--the range of date in a week wider than 5 days, false
@@ -424,7 +424,7 @@ BEGIN
 	and week = NEW.week;
 	
 	if num >= 5 then
-		RAISE exception 'MWS constraint violated.';
+		RAISE exception 'MWS constraint 2 violated.';
 	end if;
 	
 	
@@ -444,7 +444,7 @@ BEGIN
 		and week = NEW.week;
 		
 		if d2 - d1 <= 2 then
-			RAISE exception 'MWS constraint violated.';
+			RAISE exception 'MWS constraint 3 violated.';
 		end if;
 		
 		select min(sche_date) into d1
@@ -458,7 +458,7 @@ BEGIN
 		and week = NEW.week;
 		
 		if d2 - d1 > 11 then
-			RAISE exception 'MWS constraint violated.';
+			RAISE exception 'MWS constraint 4 violated.';
 		end if;
 	end if;
 	
@@ -475,7 +475,7 @@ BEGIN
 		and week = NEW.week + 1;
 		
 		if d2 -d1 <= 2 then
-			RAISE exception 'MWS constraint violated.';
+			RAISE exception 'MWS constraint 5 violated.';
 		end if;
 		
 		select min(sche_date) into d1
@@ -489,7 +489,7 @@ BEGIN
 		and week = NEW.week + 1;
 		
 		if d2 -d1 > 11 then
-			RAISE exception 'MWS constraint violated.';
+			RAISE exception 'MWS constraint 6 violated.';
 		end if;
 	end if;
 
@@ -503,7 +503,7 @@ BEGIN
 	LOOP
 		
 		IF rec.shift_id <> NEW.shift_id THEN
-			RAISE exception 'MWS constraint violated.';
+			RAISE exception 'MWS constraint 7 violated.';
 		END IF;
 	END LOOP;
 
@@ -515,7 +515,7 @@ BEGIN
 	where sid = NEW.sid;
 	
 	if num >25 then
-		RAISE exception 'MWS constraint violated.';
+		RAISE exception 'MWS constraint 8 violated.';
 	end if;
 	
 	
