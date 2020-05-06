@@ -124,7 +124,6 @@ CREATE TABLE Customers(
 CREATE TABLE Riders(
     rider_id            INTEGER,
 	rname				TEXT NOT NULL,
-    incentive           NUMERIC DEFAULT 0,
     rider_type          VARCHAR(2) NOT NULL
                         CHECK (rider_type in ('FT','PT')),
     base_salary         NUMERIC NOT NULL
@@ -152,7 +151,8 @@ CREATE TABLE Orders(
                                             CHECK (cart_fee >= 0),
     delivery_fee							numeric NOT NULL
                                             CHECK (delivery_fee >= 0),
-    discount_amount							numeric NOT NULL,
+	rider_bonus								NUMERIC DEFAULT(0),
+    discount_amount							NUMERIC NOT NULL,
     delivery_location						TEXT NOT NULL,
     delivery_location_area					TEXT NOT NULL references Areas (area),
     rider_id								INTEGER NOT NULL,
@@ -201,7 +201,7 @@ CREATE TABLE FDS_Promotions(
     promo_max_discount_limit        INTEGER,
     promo_max_num_redemption        INTEGER,
     promo_details_text              TEXT NOT NULL,
-
+    rid                             INTEGER DEFAULT NULL,
     PRIMARY KEY (pid),
     FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade
 );
@@ -245,6 +245,8 @@ CREATE TABLE Food_Reviews(
 CREATE TABLE Schedules (
     sid              	INTEGER,
 	sche_date			DATE,
+	week				INTEGER
+						CHECK (week IN (1,2,3,4)),
 	rider_id			INTEGER,
     PRIMARY KEY (sid, sche_date),
 	FOREIGN KEY (rider_id) REFERENCES Riders (rider_id)
@@ -262,6 +264,8 @@ CREATE TABLE Shifts (
 CREATE TABLE Monthly_Work_Schedule (
     sid              	INTEGER,
 	sche_date			DATE,
+	week				INTEGER
+						CHECK (week IN (1,2,3,4)),
     shift_id            INTEGER,
 	PRIMARY KEY (sid, sche_date),
 	FOREIGN KEY (sid, sche_date) REFERENCES Schedules (sid,sche_date),
@@ -271,9 +275,13 @@ CREATE TABLE Monthly_Work_Schedule (
 CREATE TABLE Weekly_Work_Schedule (
     sid              	INTEGER,
 	sche_date			DATE,
-	time_start          TIME NOT NULL,
+	time_start          TIME NOT NULL
+						CHECK (time_start >= '10:00:00'
+						AND time_start <= '22:00:00'),
     time_end            TIME NOT NULL
-						CHECK (time_end < time_start + INTERVAL '4 hours'),
+						CHECK (time_end <= time_start + INTERVAL '4 hours'
+						AND time_end >= '10:00:00'
+						AND time_end <= '22:00:00'),
 	duration			INTEGER NOT NULL,
     PRIMARY KEY (sid, sche_date),
 	FOREIGN KEY (sid, sche_date) REFERENCES Schedules (sid, sche_date)
@@ -366,4 +374,69 @@ CREATE TRIGGER first_order_discount_trigger
 	EXECUTE FUNCTION create_first_order_discount();
 
 */
+
+
+CREATE OR REPLACE FUNCTION Insert_for_next_three_week_1() RETURNS TRIGGER AS
+$$
+DECLARE
+	text VARCHAR(2);
+BEGIN
+	
+	SELECT rider_type INTO text
+	FROM Riders
+	WHERE rider_id = NEW.rider_id;
+	
+	IF text = 'FT' THEN
+	IF NEW.week = 1 THEN
+	
+		INSERT INTO Schedules
+		VALUES (NEW.sid, NEW.sche_date + INTEGER '7', 2, NEW.rider_id);
+	
+		INSERT INTO Schedules
+		VALUES (NEW.sid, NEW.sche_date + INTEGER '14', 3, NEW.rider_id);
+	
+		INSERT INTO Schedules
+		VALUES (NEW.sid, NEW.sche_date + INTEGER '21', 4, NEW.rider_id);
+		
+	END IF;
+	END IF;
+	
+	RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS schedule_trigger ON Schedules;
+CREATE TRIGGER schedule_trigger
+	AFTER INSERT ON Schedules
+	FOR EACH ROW
+	EXECUTE FUNCTION Insert_for_next_three_week_1();
+
+
+
+CREATE OR REPLACE FUNCTION Insert_for_next_three_week_2() RETURNS TRIGGER AS
+$$
+BEGIN
+	
+	IF NEW.week = 1 THEN
+	
+		INSERT INTO Monthly_Work_Schedule
+		VALUES (NEW.sid, NEW.sche_date + INTEGER '7', 2, NEW.shift_id);
+		
+		INSERT INTO Monthly_Work_Schedule
+		VALUES (NEW.sid, NEW.sche_date + INTEGER '14', 3, NEW.shift_id);
+		
+		INSERT INTO Monthly_Work_Schedule
+		VALUES (NEW.sid, NEW.sche_date + INTEGER '21', 4, NEW.shift_id);
+	
+	END IF;
+	
+	RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS monthly_work_schedule_trigger ON Monthly_Work_Schedule;
+CREATE TRIGGER monthly_work_schedule_trigger
+	AFTER INSERT ON Monthly_Work_Schedule
+	FOR EACH ROW
+	EXECUTE FUNCTION Insert_for_next_three_week_2();
 
