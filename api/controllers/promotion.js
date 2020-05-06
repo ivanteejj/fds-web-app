@@ -101,8 +101,24 @@ const getAllPromoStatisticsForFDSManagerPage = (req, res, db) => {
         })
 }
 
+const queryToAddNewPromotion =
+    "INSERT INTO Promotions (pid, promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text, rid)\n" +
+    "VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);\n"
+
+const addNewPromotion = (req, res, db) => {
+    const output = db.query(queryToAddNewPromotion, [pid, promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text, rid],
+        (error,  results) => {
+            if (error) {
+                console.log(error)
+            }
+
+            res.status(200).json(results.rows)
+        })
+}
+
 
 module.exports = {
+    addNewPromotion: addNewPromotion,
     getAllRelevantPromos: getAllRelevantPromos,
     getAllPromoStatisticsForStaffPage: getAllPromoStatisticsForStaffPage,
     getAllPromoStatisticsForFDSManagerPage: getAllPromoStatisticsForFDSManagerPage

@@ -49,6 +49,8 @@ app.get('/staff/getMostPopularByMonth/', (req, res) => orderController.getMostPo
 app.get('/staff/menu/getFoodForRestaurantPage/', (req, res) => foodController.getFoodForRestaurantPage(req, res, db))
 app.get('/staff/getPromoStats/', (req, res) => promoController.getAllPromoStatisticsForStaffPage(req, res, db))
 
+app.post('/FDSManager/addNewPromo/', (req, res) => promoController.addNewPromotion(req, res, db))
+
 
 
 
