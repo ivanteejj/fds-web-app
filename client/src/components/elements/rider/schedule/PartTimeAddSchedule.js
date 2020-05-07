@@ -46,7 +46,7 @@ export default function PartTimeAddSchedule({startDate, endDate, submitSchedule}
     const initializeNewShift = (idx) => {
         setWorkingDays(x => {
             return [...x.slice(0, idx),
-                {...x[idx], shifts: [...x[idx].shifts, {time_start: null, time_end: null, time_interval: null}]},
+                {...x[idx], shifts: [...x[idx].shifts, {time_start: null, time_end: null, duration: null}]},
                 ...x.slice(idx+1)
                 ]
         })

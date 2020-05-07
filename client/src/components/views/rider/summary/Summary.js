@@ -134,7 +134,7 @@ export default function Summary({userid}) {
                 })
                 .then(function(response) {
                     setOrders(response.data)
-                    setFilterSummary({type: "initialize", payload: response.data})
+                    setFilterSummary({type: "initialize", payload: fakeSummary.data})
 
                 })
         })()

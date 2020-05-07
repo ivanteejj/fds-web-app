@@ -8,6 +8,8 @@ import FullCalendar from "@fullcalendar/react"
 import dayGridPlugin from "@fullcalendar/daygrid"
 import timeGridPlugin from "@fullcalendar/timegrid"
 import PopupAddSchedule from "../../../elements/rider/schedule/PopupAddSchedule";
+import DateTimeUtils from "../../../commons/DateTimeUtils";
+import axios from "axios";
 
 const fakeSchedulePT = {
     // part time
@@ -66,6 +68,20 @@ function getOccupiedDates(data) {
         .map(x => moment(x, date_format).toDate());
 }
 
+function formatPT(data, sid) {
+    let a =  data.filter(x => x.shifts.length > 0);
+    let arr = a.reduce((results, item) => [...results, ...item.shifts.map(x => ({ ...item, shifts: x }))], []);
+    console.log("formatted:" + arr);
+    return arr.map(x => {
+            return {
+                "sid": sid, "sche_date": DateTimeUtils.stringtifyDate(x.date),
+                "duration": x.shifts.time_interval,
+                "time_start": DateTimeUtils.stringtifyTime(x.shifts.time_start),
+                "time_end": DateTimeUtils.stringtifyTime(x.shifts.time_end)
+            }
+        })
+}
+
 export default function Schedule({userid}) {
     const calendarComponentRef = createRef()
 
@@ -84,7 +100,7 @@ export default function Schedule({userid}) {
             let user = userid
             setSchedule(fakeSchedulePT.data);
             // retrieve rider type
-            setRiderType("part-time");
+            setRiderType("PT");
 
         })()
     }, [])
@@ -105,6 +121,34 @@ export default function Schedule({userid}) {
             *                        shifts: [{time_start: Sat May 02 2020 10:00:00 GMT+0800 (+08), time_end: Sat May 02 2020 12:00:00 GMT+0800 (+08), time_interval: 2},
             *                                {time_start: Sat May 02 2020 14:00:00 GMT+0800 (+08), time_end: Sat May 02 2020 16:00:00 GMT+0800 (+08), time_interval: 2}]]
             */
+            console.log("length of schedule " + schedule.length);
+            await axios
+                .post('/Rider/setupSchedule/', {
+                    rider_id: userid
+                })
+                .then( (resp) => {
+                    let sid = resp.data[0].sid;
+                    if (riderType === "PT") {
+                        console.log(schedule)
+                        let a = formatPT(schedule, sid)
+                        console.log(a)
+                        var data = JSON.stringify(a)
+                        console.log(data)
+                        axios
+                            .post('/Rider/addWWS/', {
+                                table: data
+                            })
+                            .then( (resp) => {
+                                console.log(resp);
+                            }, (error) => {
+                                console.log(error);
+                            });
+                    } else {
+                        //
+                    }
+                }, (error) => {
+                    console.log(error);
+                });
 
             // await two promises
             // 1. send schedule to backend, await for successful response
