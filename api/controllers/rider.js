@@ -1,7 +1,7 @@
 var express = require('express');
 
 const queryToGetAllReviewsOfOneRider =
-    "select rname as riderid, rider_rating, rider_review, order_delivered\n" +
+    "select rname as riderid, rider_rating as rating, rider_review as review, order_delivered\n" +
     "from orders JOIN Riders using (rider_id)\n" +
     "where rider_id = $1 and order_delivered IS NOT NULL;"
 
