@@ -205,9 +205,22 @@ CREATE TABLE Food_Reviews(
     oid         INTEGER,
     fid     	INTEGER,
     remark      VARCHAR(1000) NOT NULL,
+    ratings     INTEGER
+                CHECK (ratings > 0 AND ratings <= 5),
     PRIMARY KEY (oid, fid),
 	FOREIGN KEY (oid) REFERENCES Orders (oid),
 	FOREIGN KEY (fid) REFERENCES Food (fid)
+);
+
+CREATE TABLE Food_Reviews(
+    oid         INTEGER,
+    rider_id    INTEGER,
+    remark      VARCHAR(1000) NOT NULL,
+    ratings     INTEGER
+                CHECK (ratings > 0 AND ratings <= 5),
+    PRIMARY KEY (oid, rider_id),
+    FOREIGN KEY (oid) REFERENCES Orders (oid),
+    FOREIGN KEY (rider_id) REFERENCES Riders (rider_id)
 );
 
 CREATE TABLE Schedules (
