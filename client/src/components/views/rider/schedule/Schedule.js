@@ -137,6 +137,7 @@ export default function Schedule({userid}) {
             *                                {time_start: Sat May 02 2020 14:00:00 GMT+0800 (+08), time_end: Sat May 02 2020 16:00:00 GMT+0800 (+08), time_interval: 2}]]
             */
             console.log("length of schedule " + schedule.length);
+            console.log(schedule)
             await axios
                 .post('/Rider/setupSchedule/', {
                     rider_id: userid
