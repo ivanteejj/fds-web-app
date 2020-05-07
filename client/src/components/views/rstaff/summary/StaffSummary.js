@@ -185,45 +185,97 @@ export default function StaffSummary({userid, rid}) {
         })()
     }, [])
 
-    const submitAddPromo = (item) => {
+    const submitAddPromo = async (item) => {
+        let min_cost = item.promo_min_cost >= 0 ? item.promo_min_cost : null
+        let max_disc = item.promo_max_discount_limit >= 0 ? item.promo_max_discount_limit : null
+        let max_redemp = item.promo_max_num_redemption >= 0 ? item.promo_max_num_redemption : null
+
+        await axios
+            .post('/staff/addNewPromo/', {
+                promo_rate: item.promo_rate,
+                promo_type: item.promo_type,
+                promo_cat: item.promo_cat,
+                start_datetime: DateTimeUtils.stringtifyPromoDT(item.start_datetime),
+                end_datetime: DateTimeUtils.stringtifyPromoDT(item.end_datetime),
+                promo_min_cost: min_cost,
+                promo_max_discount_limit: max_disc,
+                promo_max_num_redemption: max_redemp,
+                promo_details_text: item.promo_details_text,
+                rid: rid
+            })
+            .then( (resp) => {
+                console.log(resp);
+            }, (error) => {
+                console.log(error);
+            });
+
+        await axios
+            .get('/staff/getPromoStats/', {
+                params: {
+                    rid: rid
+                }
+            })
+            .then((response) => setPromotions(response.data)
+            )
         closePopup("addPromo", false)
-        // TODO: (backend) code to add new promo
-        /* Note:
-        * item object contains:
-        * promo_details_text, promo_type, promo_cat, promo_rate, start_datetime,
-        * end_datetime, promo_max_discount_limit, promo_min_cost, promo_max_num_redemption
-        */
-
-        // TODO: (backend) once successfully, get the entire promo schema from db, update the promo at front end
-        // setPromotions(*sth sth*)
     }
 
-    const submitEditPromo = (item) => {
-        closePopup("editPromo", false)
-        // TODO: (backend) code to update promo
-        /* Note:
-        * item object contains:
-        * pid, promo_details_text, promo_type, promo_cat, promo_rate, start_datetime,
-        * end_datetime, promo_max_discount_limit, promo_min_cost, promo_max_num_redemption
-        *
-        * to access item attributes: item.pid, item.promo_rate etc..
-        */
+    const submitEditPromo = async (item) => {
+        let min_cost = item.promo_min_cost >= 0 ? item.promo_min_cost : null
+        let max_disc = item.promo_max_discount_limit >= 0 ? item.promo_max_discount_limit : null
+        let max_redemp = item.promo_max_num_redemption >= 0 ? item.promo_max_num_redemption : null
 
-        // TODO: (backend) once successful, update the promos at front end by retrieving updated promo from db
-        // setPromotions(*sth sth*)
+        await axios
+            .post('/staff/editPromo/', {
+                pid: item.pid,
+                promo_rate: item.promo_rate,
+                promo_type: item.promo_type,
+                promo_cat: item.promo_cat,
+                start_datetime: DateTimeUtils.stringtifyPromoDT(item.start_datetime),
+                end_datetime: DateTimeUtils.stringtifyPromoDT(item.end_datetime),
+                promo_min_cost: min_cost,
+                promo_max_discount_limit: max_disc,
+                promo_max_num_redemption: max_redemp,
+                promo_details_text: item.promo_details_text
+            })
+            .then( (resp) => {
+                console.log(resp);
+            }, (error) => {
+                console.log(error);
+            });
+
+        await axios
+            .get('/staff/getPromoStats/', {
+                params: {
+                    rid: rid
+                }
+            })
+            .then((response) => setPromotions(response.data)
+            )
+        closePopup("editPromo", false)
     }
 
-    const submitDeletePromo = (item) => {
-        closePopup("editPromo", false)
-        // TODO: (backend) code to update promo
-        /* Note:
-        * item object contains the promo tuple record
-        * use pid to update db
-        * to access item attributes: item.pid, item.promo_rate etc..
-        */
+    const submitDeletePromo = async (item) => {
+        await axios
+            .delete('/staff/deletePromo/', {
+                params: {
+                    pid: item.pid
+                }})
+            .then( (resp) => {
+                console.log(resp);
+            }, (error) => {
+                console.log(error);
+            });
 
-        // TODO: (backend) once successful, update the promos at front end by retrieving updated promo from db
-        // setPromotions(*sth sth*)
+        await axios
+            .get('/staff/getPromoStats/', {
+                params: {
+                    rid: rid
+                }
+            })
+            .then((response) => setPromotions(response.data)
+            )
+        closePopup("editPromo", false)
     }
 
     return (

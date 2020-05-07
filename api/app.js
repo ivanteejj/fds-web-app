@@ -50,6 +50,9 @@ app.get('/staff/getAllOrders/', (req, res) => orderController.getAllOrderDetails
 app.get('/staff/getMostPopularByMonth/', (req, res) => orderController.getMostPopularByMonth(req, res, db))
 app.get('/staff/menu/getFoodForRestaurantPage/', (req, res) => foodController.getFoodForRestaurantPage(req, res, db))
 app.get('/staff/getPromoStats/', (req, res) => promoController.getAllPromoStatisticsForStaffPage(req, res, db))
+app.post('/staff/addNewPromo/', (req, res) => promoController.addNewPromotion(req, res, db))
+app.post('/staff/editPromo/', (req, res) => promoController.editPromotion(req, res, db))
+app.delete('/staff/deletePromo/', (req, res) => promoController.deletePromotion(req, res, db))
 
 app.post('/FDSManager/addNewPromo/', (req, res) => promoController.addNewPromotion(req, res, db))
 app.post('/FDSManager/editPromo/', (req, res) => promoController.editPromotion(req, res, db))
