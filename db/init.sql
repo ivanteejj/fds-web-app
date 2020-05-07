@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 --triggers
 --1. to have a trigger such that when a new customer make the first order, the 10% discount is automatically applied
 --2. to check num of riders for any hourly interval
@@ -634,6 +635,7 @@ CREATE CONSTRAINT TRIGGER weekly_work_schedule_trigger
 	DEFERRABLE INITIALLY DEFERRED
 	FOR EACH ROW
 	EXECUTE FUNCTION check_weekly_work_schedule_constraint();
+
 
 
 

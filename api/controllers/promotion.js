@@ -59,7 +59,8 @@ const queryToGetAllPromoStatisticsForStaffPage =
     "on u1.pid = o1.pid\n" +
     "group by u1.pid, start_datetime, end_datetime\n" +
     ")\n" +
-    "select u2.pid, promo_details_text,start_datetime, end_datetime, promo_type, promo_cat, promoDuration as duration, totalCount/promoDuration as avgOrders,\n" +
+    "select u2.pid, promo_details_text,start_datetime, end_datetime, promo_type, promo_cat, promoDuration as duration, " +
+    "totalCount / (CASE WHEN promoDuration < 1 THEN 1 ELSE promoDuration END) as avgOrders,\n" +
     "promo_min_cost, promo_rate, promo_max_discount_limit, promo_max_num_redemption\n" +
     "from usePromo u2, unionPromo z1\n" +
     "where u2.pid = z1.pid"
@@ -84,7 +85,8 @@ const queryToGetAllPromoStatisticsForFDSManagerPage =
     "on u1.pid = o1.pid\n" +
     "group by u1.pid, start_datetime, end_datetime\n" +
     ")\n" +
-    "select u2.pid, promo_details_text,start_datetime, end_datetime, promo_type, promo_cat, promoDuration as duration, totalCount/promoDuration as avgOrders,\n" +
+    "select u2.pid, promo_details_text,start_datetime, end_datetime, promo_type, promo_cat, promoDuration as duration, " +
+    "totalCount / (CASE WHEN promoDuration < 1 THEN 1 ELSE promoDuration END) as avgOrders,\n" +
     "promo_min_cost, promo_rate, promo_max_discount_limit, promo_max_num_redemption\n" +
     "from usePromo u2, Promotions z1\n" +
     "where u2.pid = z1.pid\n" +
@@ -101,8 +103,75 @@ const getAllPromoStatisticsForFDSManagerPage = (req, res, db) => {
         })
 }
 
+const queryToAddNewPromotion =
+    "INSERT INTO Promotions (promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text, rid)\n" +
+    "VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);\n"
+const addNewPromotion = (req, res, db) => {
+    const promo_rate = req.body.promo_rate
+    const promo_type = req.body.promo_type
+    const promo_cat = req.body.promo_cat
+    const start_datetime = req.body.start_datetime
+    const end_datetime = req.body.end_datetime
+    const promo_min_cost = req.body.promo_min_cost
+    const promo_max_discount_limit = req.body.promo_max_discount_limit
+    const promo_max_num_redemption = req.body.promo_max_num_redemption
+    const promo_details_text = req.body.promo_details_text
+    const rid =  req.body.rid
+    const output = db.query(queryToAddNewPromotion, [promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text, rid],
+        (error,  results) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(results.rows)
+        })
+}
+
+const queryToEditPromotion =
+    "UPDATE Promotions \n" +
+    "SET promo_rate = $1, promo_type = $2, promo_cat = $3, start_datetime = $4, end_datetime = $5,\n" +
+    "promo_min_cost = $6, promo_max_discount_limit = $7, promo_max_num_redemption = $8, promo_details_text = $9\n" +
+    "WHERE\n" +
+    "\tpid = $10;"
+const editPromotion = (req, res, db) => {
+    const promo_rate = req.body.promo_rate
+    const promo_type = req.body.promo_type
+    const promo_cat = req.body.promo_cat
+    const start_datetime = req.body.start_datetime
+    const end_datetime = req.body.end_datetime
+    const promo_min_cost = req.body.promo_min_cost
+    const promo_max_discount_limit = req.body.promo_max_discount_limit
+    const promo_max_num_redemption = req.body.promo_max_num_redemption
+    const promo_details_text = req.body.promo_details_text
+    const pid =  req.body.pid
+    const output = db.query(queryToEditPromotion,
+        [promo_rate, promo_type, promo_cat, start_datetime, end_datetime, promo_min_cost, promo_max_discount_limit, promo_max_num_redemption, promo_details_text, pid],
+        (error,  results) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(results.rows)
+        })
+}
+
+const queryToDeletePromotion =
+    "delete from promotions where pid = $1;"
+const deletePromotion = (req, res, db) => {
+    const pid = req.query.pid;
+    console.log("" +pid);
+
+    const output = db.query(queryToDeletePromotion, [pid],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(result.rows);
+        })
+}
 
 module.exports = {
+    addNewPromotion: addNewPromotion,
+    editPromotion: editPromotion,
+    deletePromotion: deletePromotion,
     getAllRelevantPromos: getAllRelevantPromos,
     getAllPromoStatisticsForStaffPage: getAllPromoStatisticsForStaffPage,
     getAllPromoStatisticsForFDSManagerPage: getAllPromoStatisticsForFDSManagerPage

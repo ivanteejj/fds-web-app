@@ -60,10 +60,67 @@ const queryToGetFoodForRestaurantPage =
         })
 }
 
+const queryUpdateFood =
+    "UPDATE food \n" +
+    "SET fname = $1,\n" +
+    "\tprice = $2,\n" +
+    "\tdaily_limit = $3,\n" +
+    "\tcategory = $4\n" +
+    "WHERE\n" +
+    "\tfid = $5;"
+const updateFoodForRestaurantPage = (req, res, db) => {
+    const fid = req.body.fid;
+    console.log(fid);
+
+    const output = db.query(queryUpdateFood, [req.body.fname, req.body.price, req.body.daily_limit, req.body.category, fid],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(result.rows);
+        })
+}
+
+const queryDeleteFood =
+    "DELETE FROM food\n" +
+    "WHERE fid = $1;"
+const deleteFoodForRestaurantPage = (req, res, db) => {
+    const fid = req.query.fid;
+    console.log(fid);
+
+    const output = db.query(queryDeleteFood, [fid],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(result.rows);
+        })
+}
+
+const queryAddFood =
+    "INSERT INTO food (rid, fname, price, daily_limit, category) \n" +
+    "VALUES ($1, $2, $3, $4, $5);"
+const addFoodForRestaurantPage = (req, res, db) => {
+    let rid = req.body.rid;
+    console.log("rest_id is");
+    console.log(req.body.rid);
+    const output = db.query(queryAddFood, [rid, req.body.fname, req.body.price, req.body.daily_limit, req.body.category],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(result.rows);
+        })
+}
+
 module.exports = {
     getAllFood: getAllFood,
     getFoodFromOneRes: getFoodFromOneRes,
-    getFoodForRestaurantPage: getFoodForRestaurantPage
+    getFoodForRestaurantPage: getFoodForRestaurantPage,
+
+    addFoodForRestaurantPage : addFoodForRestaurantPage,
+    updateFoodForRestaurantPage: updateFoodForRestaurantPage,
+    deleteFoodForRestaurantPage: deleteFoodForRestaurantPage
 };
 
 
