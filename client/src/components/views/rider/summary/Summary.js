@@ -3,6 +3,7 @@ import {Divider, Dropdown, Grid} from "semantic-ui-react";
 import moment from "moment"
 import SummaryDetails from "../../../elements/rider/summary/SummaryDetails";
 import ActiveOrders from "../../../elements/rider/summary/ActiveOrders";
+import axios from "axios";
 
 const fakeSummary = {
     // TODO: For each Schedule ID, get the following:
@@ -127,11 +128,17 @@ export default function Summary({userid}) {
 
     useEffect(() => {
         (async() => {
-            // TODO: (backend) code here for first rendering of page
-            // only render incompleted orders (dt_rider_departs_rest == null)
-            let user = userid
-            setOrders(fakeOngoingOrders.data)
-            setFilterSummary({type: "initialize", payload: fakeSummary.data})
+            await axios
+                .get('/Rider/getOngoingOrders/', {
+                    params: {
+                        rider_id: userid
+                    }
+                })
+                .then(function(response) {
+                    setOrders(response.data)
+                    setFilterSummary({type: "initialize", payload: response.data})
+
+                })
         })()
     }, [])
 

@@ -4,7 +4,6 @@ import ReviewsStatistics from "../../../elements/rider/reviews/ReviewsStatistics
 import axios from "axios";
 
 const fakeReviews = {
-    //TODO: distinct (by order id) records sorted in descending order on dt_order_delivered
     data: [
         {riderid: "phukai", rating: 5, review: "Friendly rider with a big smile", dt_order_delivered: "2020-02-22 19:20:00"},
         {riderid: "phukai", rating: 4, review: "Friendly rider with a big smile", dt_order_delivered: "2020-02-22 19:20:00"},
