@@ -3,7 +3,7 @@ var express = require('express');
 const queryAddRiderReview =
     "UPDATE ORDERS\n" +
     "\tSET rider_review = $1,\n" +
-    "\t\trider_rating = $2,\n" +
+    "\t\trider_rating = $2\n" +
     "\tWHERE oid = $3;"
 const addRiderReviewByCustomerPage = (req, res, db) => {
     let oid = req.body.oid;

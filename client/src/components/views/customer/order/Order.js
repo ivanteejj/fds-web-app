@@ -138,7 +138,10 @@ export default function Order({userid}) {
             setShowReview({type: "review", payload: generateReviewSkeleton(order)})
         } else {
             setShowReview({type: "review",
-                payload: {rider: {riderid: order.rider_id, rating: order.rider_rating, review: order.rider_review}, foodrating: order.foodrating}})
+                payload: {
+                    rider: {riderid: order.riderid, rating: order.rider_rating, review: order.rider_review},
+                    foodrating: order.foodrating
+            }})
         }
 
         setShowReview({type: type, payload: boo})
@@ -148,7 +151,6 @@ export default function Order({userid}) {
         await axios
             .post('/customer/addRiderReview/', {
                 oid: reviews.oid,
-                rider_id: reviews.rider.riderid,
                 ratings: reviews.rider.rating,
                 remarks: reviews.rider.review
             })
@@ -173,16 +175,16 @@ export default function Order({userid}) {
                 });
         })
 
+        await axios
+            .get('/customer/shop/getAllOrderDetailsForOneCust/', {
+                params: {
+                    cid: userid
+                }
+            })
+            .then((response) => setOrders({type: "initialize", payload: groupOrders(response.data)})
+            )
+
         showPopup("leaveReview", false)
-
-        //FOR TESTING PURPOSE ONLY - view submitted review at bottom of the page
-        setShowReview({type: "review", payload: reviews})
-
-        // submit review to backend
-
-        // retrieve orders from backend again
-
-        // close popup
     }
 
     useEffect(() => {
@@ -263,19 +265,6 @@ export default function Order({userid}) {
 
             {showReview.viewReview && showReview.review &&
                 <PopupViewReview hidePopup={showPopup} review={showReview.review}/>
-            }
-
-            {showReview.review &&
-                <>
-                    <text>{showReview.review.oid}</text>
-                    <text>
-                        {`rider: ${showReview.review.rider.riderid} rating: ${showReview.review.rider.rating} 
-                        review: ${showReview.review.rider.review}`}
-                    </text>
-                    {showReview.review.foodrating.map(item => (
-                        <text>{`food: ${item.fname} rating: ${item.rating} review: ${item.review}`}</text>
-                    ))}
-                </>
             }
         </>
     )

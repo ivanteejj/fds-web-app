@@ -22,11 +22,14 @@ const queryToGetAllOrderDetailsForOrderPage = "WITH totalPromotions as (\n" +
     "\tSELECT oid, json_agg(json_build_object('fid', fid,'rid', rid, 'rname', rname, 'fname', sc1.fname, 'quantity', quantity ,'price', price)) as cart\n" +
     "\tFROM ((Orders JOIN ShoppingCarts sc1 using (oid)) JOIN Food f1 USING (fid)) JOIN Restaurants USING (rid)\n" +
     "\tGROUP BY oid\n" +
+    "), aggregatedFoodReviews as (\n" +
+    "\tSELECT oid, json_agg(json_build_object('fid', fid,'fname', fname, 'review', remark, 'rating', ratings)) as foodrating\n" +
+    "\tFROM Orders JOIN (Food_Reviews JOIN Food using (fid)) USING (oid)\n" +
+    "\tGROUP BY oid\n" +
     ")\n" +
     "\n" +
-    "\n" +
-    "SELECT oid, delivery_fee as deliveryfee, cart_fee as cartcost, promo_details_text, discount_amount, payment_method as paymentMode, delivery_location as deliverylocation, rider_id as riderid, order_placed as dt_order_placed, rider_depart_for_rest as dt_rider_departs, rider_arrive_rest as dt_rider_arrives_rest, rider_depart_for_delivery_location as dt_rider_departs_rest, order_delivered as dt_order_delivered , cart    \n" +
-    "FROM (Orders NATURAL JOIN aggregatedCart) LEFT JOIN totalPromotions USING (pid)\n" +
+    "SELECT oid, delivery_fee as deliveryfee, cart_fee as cartcost, promo_details_text, discount_amount, payment_method as paymentMode, delivery_location as deliverylocation, rider_id as riderid, order_placed as dt_order_placed, rider_depart_for_rest as dt_rider_departs, rider_arrive_rest as dt_rider_arrives_rest, rider_depart_for_delivery_location as dt_rider_departs_rest, order_delivered as dt_order_delivered , cart, rider_id as riderid, rider_review, rider_rating, foodrating\n" +
+    "FROM (Orders NATURAL JOIN aggregatedCart) LEFT JOIN totalPromotions USING (pid) LEFT JOIN aggregatedFoodReviews USING (oid)\n" +
     "WHERE cid = $1"
 
 
