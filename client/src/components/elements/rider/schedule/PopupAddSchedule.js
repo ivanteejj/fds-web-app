@@ -86,16 +86,18 @@ export default function PopupAddSchedule({openPopup, occupiedDates, riderType, s
 
         let skeleton = Array.apply(null, new Array(days(riderType)))
         let start_d = moment(startDate)
+        console.log(workingDays)
 
         let arr = skeleton.map((x,idx) => {
             const week = Math.floor(idx/4)
             const day = (idx % 7) + 1
             const date = start_d.add(1,'days').toDate()
-            var shift = workingDays.find(x => x === date.getDay())
-            shift = shift === undefined || shift === null ? null : shift.shift
-            return {week: week, day: day, date: date, shift: shift}
-        }).filter(x => x.shift)
+            var found = workingDays.find(x => x.day === date.getDay())
+            found = (found === undefined || found === null) ? null : found.shift_no
+            return {week: week, day: day, date: date, shift: found}
+        }).filter(x => x.shift > 0)
 
+        console.log("length" + arr.length)
         return submitSchedule(arr)
     }
 
