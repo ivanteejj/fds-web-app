@@ -37,28 +37,6 @@ export default function FdsPromotions() {
         })()
     }, [])
 
-    /*
-    (async() => {
-        const promoStats = axios
-                    .post('/FDSManager/addNewPromo/', {
-                        params: {
-                            promo_rate: item.promo_rate,
-                            promo_type: item.promo_type,
-                            promo_cat: item.promo_cat,
-                            start_datetime: item.start_datetime,
-                            end_datetime: item.end_datetime,
-                            promo_min_cost: item.promo_min_cost,
-                            promo_max_discount_limit: item.promo_max_discount_limit,
-                            promo_max_num_redemption: item.promo_max_num_redemption,
-                            promo_details_text: item.promo_details_text,
-                            rid: null
-                        }
-                    })
-                    closePopup("addPromo", false)
-
-        })
-     */
-
     const submitAddPromo = async (item) => {
         let min_cost = item.promo_min_cost >= 0 ? item.promo_min_cost : null
         let max_disc = item.promo_max_discount_limit >= 0 ? item.promo_max_discount_limit : null
