@@ -75,46 +75,6 @@ const fakeOrders = {
     ]
 }
 
-const fakeOrderCartDetails = {
-    data: [
-        {oid: 100123, fid: 100, rid: 1000, rname: "LiWoW", fname: "Regular Milk Tea", quantity: 3, price: 3.5},
-        {oid: 100123, fid: 101, rid: 1000, rname: "LiWoW", fname: "Avocado Melon Tea", quantity: 2, price: 2.9},
-        {oid: 100123, fid: 102, rid: 1000, rname: "LiWoW", fname: "Brown Sugar Fries", quantity: 3, price: 9.7},
-        {oid: 100100, fid: 100, rid: 1000, rname: "LiWoW", fname: "Regular Milk Tea", quantity: 2, price: 3.5},
-        {oid: 100100, fid: 101, rid: 1000, rname: "LiWoW", fname: "Avocado Melon Tea", quantity: 1, price: 2.9},
-        {oid: 100100, fid: 100, rid: 1000, rname: "LiWoW", fname: "Regular Milk Tea", quantity: 2, price: 3.5},
-        {oid: 100100, fid: 101, rid: 1000, rname: "LiWoW", fname: "Avocado Melon Tea", quantity: 1, price: 2.9}
-    ]
-}
-
-const fakeRiderReview = {
-    data: [
-        {oid: 100000, riderid: "phukai", rating: 5, review: "Friendly and polite"}
-    ]
-}
-
-const fakeFoodRatings = {
-    data: [
-        {oid: 100000, fid: 101, fname: "Avocado Melon Tea", rating: 5, review: "Best melon tea in singapore!"},
-        {oid: 100000, fid: 100, fname: "Regular Milk Tea", rating: 2, review: "Too bland and the pearls are hard to chew..."}
-    ]
-}
-
-// merge all tables into one nested array
-function nestArrays(order, cart, riderReview, foodRating) {
-    return order.map(x => {
-        return {...x,
-            cart: cart.filter(a => a.oid === x.oid),
-            // if no rider review, there is no food rating
-            review: riderReview.some(b => b.oid === x.oid) ?
-                {
-                    rider: riderReview.filter(c => c.oid === x.oid),
-                    foodrating: foodRating.filter(d => d.oid === x.oid)
-                } : null
-        }
-    })
-}
-
 const filterOrders = (orders, filter) => {
     switch (filter) {
         case "":

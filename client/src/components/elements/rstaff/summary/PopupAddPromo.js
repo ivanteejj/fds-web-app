@@ -25,9 +25,9 @@ export default function PopupAddPromo({closePopup, types, cats, submitAddPromo})
             then: Yup.number().required("Promo rate is required").moreThan(0).max(1, "Promo rate should not exceed 100%!"),
             otherwise: Yup.number().required("Promo rate is required").moreThan(0)}),
 
-        promo_min_cost: Yup.number().optional(),
-        promo_max_discount_limit: Yup.number().optional(),
-        promo_max_num_redemption: Yup.number().optional(),
+        promo_min_cost: Yup.number().nullable(true).optional(),
+        promo_max_discount_limit: Yup.number().nullable(true).optional(),
+        promo_max_num_redemption: Yup.number().nullable(true).optional(),
         start_datetime: Yup.date().required("Start Date is required").min(moment().toDate(), "Start date must be present time"),
         end_datetime: Yup.date().required("End date is required")
             .min(moment().toDate(), "End date must be present time")
@@ -54,11 +54,11 @@ export default function PopupAddPromo({closePopup, types, cats, submitAddPromo})
                     <Formik
                         initialValues={{
                             promo_details_text: "",
-                            promo_type: types[0], promo_cat: cats[0], promo_rate: "",
+                            promo_type: types[0], promo_cat: cats[0], promo_rate: null,
                             start_datetime: "",
                             end_datetime: "",
-                            promo_max_discount_limit: "", promo_min_cost: "",
-                            promo_max_num_redemption: ""
+                            promo_max_discount_limit: null, promo_min_cost: null,
+                            promo_max_num_redemption: null
                         }}
                         validationSchema={AddPromoSchema}
                         onSubmit={(values) => submitAddPromo(values)}

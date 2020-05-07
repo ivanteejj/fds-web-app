@@ -26,13 +26,14 @@ export default function PopupEditPromo({closePopup, item, types, cats, submitEdi
             then: Yup.number().required("Promo rate is required").moreThan(0).max(1, "Promo rate should not exceed 100%!"),
             otherwise: Yup.number().required("Promo rate is required").moreThan(0)}),
 
-        promo_min_cost: Yup.number().optional(),
-        promo_max_discount_limit: Yup.number().optional(),
-        promo_max_num_redemption: Yup.number().optional(),
+        promo_min_cost: Yup.number().nullable(true).optional(),
+        promo_max_discount_limit: Yup.number().nullable(true).optional(),
+        promo_max_num_redemption: Yup.number().nullable(true).optional(),
         start_datetime: Yup.date().required("Start Date is required"),
         end_datetime: Yup.date().required("End date is required")
                                 .min(moment().toDate(), "End date must be present time")
-                                .when("start_datetime", (start_datetime, yup) => start_datetime && yup.min(start_datetime, "End time cannot be before start time"))
+                                .when("start_datetime", (start_datetime, yup) => start_datetime &&
+                                    yup.min(moment(start_datetime).add(5,'minute').toDate(), "End time must have at least 5 minutes interval from start time"))
 
     })
 
@@ -61,8 +62,8 @@ export default function PopupEditPromo({closePopup, item, types, cats, submitEdi
                         initialValues={{
                             pid: item.pid, promo_details_text: item.promo_details_text,
                             promo_type: item.promo_type, promo_cat: item.promo_cat, promo_rate: item.promo_rate,
-                            start_datetime: moment(item.start_datetime, datetime_format).toDate(),
-                            end_datetime: moment(item.end_datetime, datetime_format).toDate(),
+                            start_datetime: moment(item.start_datetime).toDate(),
+                            end_datetime: moment(item.end_datetime).toDate(),
                             promo_max_discount_limit: item.promo_max_discount_limit, promo_min_cost: item.promo_min_cost,
                             promo_max_num_redemption: item.promo_max_num_redemption
                         }}
