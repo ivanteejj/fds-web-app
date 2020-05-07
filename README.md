@@ -52,5 +52,5 @@ sql files we have in the ./db folder
 npm start or yarn start
 ```
 
-7. FDS should now be operating. If the database is initialized correctly, you should be able to login with existing accounts or create a new account (Customer accounts only). Existing accounts all have passwords '12345'. You may try logging in using the sample accounts listed below which have data pre-loaded.
+7. FDS should now be operating. If the database is initialized correctly, you should be able to login with existing accounts or create a new account (Customer accounts only). All accounts in the existing sql files have a password of 'password'.
 
