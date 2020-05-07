@@ -158,6 +158,13 @@ BEGIN;
     INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (3, 4, '26/4/2020', 4);
 COMMIT;
 
+INSERT INTO Schedules(sid, rider_id) VALUES (4, 33);
+BEGIN;
+    INSERT INTO Weekly_Work_Schedule(sid, sche_date, time_start, time_end, duration) VALUES (4,'6/5/2020', '12:00:00','16:00:00', 4);
+    INSERT INTO Weekly_Work_Schedule(sid, sche_date, time_start, time_end, duration) VALUES (4,'7/5/2020', '12:00:00','16:00:00', 4);
+    INSERT INTO Weekly_Work_Schedule(sid, sche_date, time_start, time_end, duration) VALUES (4,'8/5/2020', '12:00:00','16:00:00', 4);
+COMMIT;
+
 
 INSERT INTO Food (fid,rid,fname,price,daily_limit,category) VALUES (101,1,'Roasted Chicken Rice',5,90,'Local');
 INSERT INTO Food (fid,rid,fname,price,daily_limit,category) VALUES (102,1,'Steamed Chicken Rice',6,85,'Local');
