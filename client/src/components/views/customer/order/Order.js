@@ -137,13 +137,42 @@ export default function Order({userid}) {
         if (type === "leaveReview") {
             setShowReview({type: "review", payload: generateReviewSkeleton(order)})
         } else {
-            setShowReview({type: "review", payload: order.review})
+            setShowReview({type: "review",
+                payload: {rider: {riderid: order.rider_id, rating: order.rider_rating, review: order.rider_review}, foodrating: order.foodrating}})
         }
 
         setShowReview({type: type, payload: boo})
     }
 
-    const submitReview = (reviews) => {
+    const submitReview = async (reviews) => {
+        await axios
+            .post('/customer/addRiderReview/', {
+                oid: reviews.oid,
+                rider_id: reviews.rider.riderid,
+                ratings: reviews.rider.rating,
+                remarks: reviews.rider.review
+            })
+            .then( (resp) => {
+                console.log(resp);
+            }, (error) => {
+                console.log(error);
+            });
+
+        reviews.foodrating.map(async item => {
+            await axios
+                .post('/customer/addFoodReview/', {
+                    oid: reviews.oid,
+                    fid: item.fid,
+                    ratings: item.rating,
+                    remarks: item.review
+                })
+                .then( (resp) => {
+                    console.log(resp);
+                }, (error) => {
+                    console.log(error);
+                });
+        })
+
         showPopup("leaveReview", false)
 
         //FOR TESTING PURPOSE ONLY - view submitted review at bottom of the page
