@@ -41,16 +41,17 @@ export default function Earnings({userid}) {
 
     useEffect(() => {
         (async() => {
-            setRider(fakeRider.data);
+            await axios.get('/Rider/getOneRiderDetail', {
+                params: {
+                    rider_id: userid
+                }
+            }).then((response) => setRider(response.data[0]))
 
             await axios.get("/Rider/getEarningsForRider/", {
                 params: {
                     rider_id: userid
                 }
             }).then((response) => groupEarnings(response.data))
-            // TODO: (backend) code here for first rendering of page
-
-            // retrieve rider information
 
         })()
     }, [])

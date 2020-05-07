@@ -54,7 +54,7 @@ const LoginForm = ({validLogin}) => {
                 // return history.push("/customer/shop")
 
                 // rider
-                validLogin(30, "rider", null);
+                validLogin(31, "rider", null);
                 return history.push("/rider/summary")
 
                 // validLogin(10, "staff", 3);

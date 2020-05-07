@@ -214,12 +214,28 @@ const getSchedule = (req, res, db) => {
         })
 }
 
+const queryToGetOneRidersDetail = "SELECT rider_type, base_salary FROM Riders WHERE rider_id = $1"
+
+const getOneRiderDetail = (req, res, db) => {
+    const rider_id = req.query.rider_id
+    const output = db.query(queryToGetOneRidersDetail, [rider_id],
+        (error,  results) => {
+            if (error) {
+                console.log(error)
+            }
+
+            res.status(200).json(results.rows)
+        })
+}
+
+
 
 module.exports = {
     getAllReviewsOfOneRider: getAllReviewsOfOneRider,
     getAllCurrentlyAvailableRider: getAllCurrentlyAvailableRider,
     getSummaryForRider: getSummaryForRider,
     getEarningsForRider: getEarningsForRider,
-    getSchedule: getSchedule
+    getSchedule: getSchedule,
+    getOneRiderDetail: getOneRiderDetail
 };
 
