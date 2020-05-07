@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react"
 import {Grid, Header, Card, Divider, Item} from "semantic-ui-react";
 import moment from "moment"
 import Utils from "../../../commons/Utils";
+import axios from "axios";
 
 const fakeEarnings = {
     // TODO: For each Schedule ID, get the following:
@@ -26,7 +27,7 @@ const fakeEarnings = {
 
 const fakeRider = {
     // NOTE: Incentives are on % basis for each completed order
-    data: {rider_type: "part-time", base_salary: 50}
+    data: {rider_type: "part-time", base_salary: 1000}
     // {rider_type: "full-time, incentive: 0.05, base_salary: "220"}
 }
 
@@ -37,16 +38,23 @@ export default function Earnings({userid}) {
     const [pastEarnings, setPastEarnings] = useState(null)
     const [rider, setRider] = useState(null)
 
+
     useEffect(() => {
         (async() => {
-            // TODO: (backend) code here for first rendering of page
-            let user = userid
-            groupEarnings(fakeEarnings.data)
-            // retrieve rider information
             setRider(fakeRider.data);
+
+            await axios.get("/Rider/getEarningsForRider/", {
+                params: {
+                    rider_id: userid
+                }
+            }).then((response) => groupEarnings(response.data))
+            // TODO: (backend) code here for first rendering of page
+
+            // retrieve rider information
 
         })()
     }, [])
+
 
     const groupEarnings = (data) => {
         var curr = [];
