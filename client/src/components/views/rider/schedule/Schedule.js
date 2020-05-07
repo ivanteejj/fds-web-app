@@ -45,9 +45,9 @@ const fakeSchedulePT = {
     ]
 }
 
-const datetime_format = "DD/MM/YYYY HH:mm";
+const datetime_format = "DD/MM/YYYY HH:mm:ss";
 const date_format = "DD/MM/YYYY";
-const time_format = "HH:mm";
+const time_format = "HH:mm:ss";
 const pretty_time_format = "ha";
 
 function transform(data) {
@@ -56,6 +56,12 @@ function transform(data) {
                         (${item.time_interval} hours)`,
                 start: moment(item.date + " " + item.time_start, datetime_format).toDate(),
                 end: moment(item.date + " " + item.time_end, datetime_format).toDate()}
+    })
+}
+
+function formatDT(data) {
+    return data.map(item => {
+        return {...item, date: DateTimeUtils.stringtifyDate(item.date)}
     })
 }
 
@@ -101,7 +107,7 @@ export default function Schedule({userid}) {
                 params: {
                     rider_id: user
                 }
-            }).then((response) => setSchedule(response.data))
+            }).then((response) => setSchedule(formatDT(response.data)))
 
             // retrieve rider type
             setRiderType("PT");
