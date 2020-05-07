@@ -15,8 +15,14 @@ export default class Utils extends Component {
         return {...state, [action.type]: action.payload}
     }
 
-    // round x to specified dp places
+    // round x to specified dp places (converts to string)
     static roundDecimalPlace = (x, dp) => {
         return Number.parseFloat(x).toFixed(dp)
+    }
+
+    // round x to specified dp places (number type)
+    static numberRoundDP = (x, dp) => {
+        var multiplier = Math.pow(10, dp || 0);
+        return Math.round(x * multiplier) / multiplier;
     }
 }

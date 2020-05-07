@@ -159,11 +159,71 @@ const getSummaryDetailsByArea = (req, res, db) => {
         })
 }
 
+const queryToGetRiderSummaryStats =
+    "with ordersgroupbyMonthYear as (\n" +
+    "select rider_id, count(*) as totalOrders, EXTRACT(MONTH from order_placed) as month, EXTRACT(YEAR from order_placed) as year\n" +
+    "from Orders\n" +
+    "group by rider_id, EXTRACT(MONTH from order_placed), EXTRACT(YEAR from order_placed)\n" +
+    "order by rider_id asc\n" +
+    "),\n" +
+    "FT_shifts as (\n" +
+    "select rider_id, count(*) as totalShifts, EXTRACT(MONTH from sche_date) as month, EXTRACT(YEAR from sche_date) as year\n" +
+    "from Riders r1 natural join Schedules s1 natural join Monthly_Work_Schedule m1 natural join Shifts f1\n" +
+    "group by rider_id, EXTRACT(MONTH from sche_date), EXTRACT(YEAR from sche_date)\n" +
+    "),\n" +
+    "FT_groups as (\n" +
+    "select rider_id, totalShifts*8 as totalHours, month, year\n" +
+    "from FT_shifts\n" +
+    "),\n" +
+    "PT_groups as (\n" +
+    "select rider_id, sum(duration) as totalHours, EXTRACT(MONTH from sche_date) as month, EXTRACT(YEAR from sche_date) as year\n" +
+    "from Riders natural join Schedules natural join Weekly_Work_Schedule\n" +
+    "group by rider_id, EXTRACT(MONTH from sche_date), EXTRACT(YEAR from sche_date)\n" +
+    "order by rider_id asc\n" +
+    "),\n" +
+    "FT_PT_groups as(\n" +
+    "select *\n" +
+    "from FT_groups \n" +
+    "union \n" +
+    "select * \n" +
+    "from PT_groups\n" +
+    "),\n" +
+    "totalSalary as (\n" +
+    "select rider_id, r1.base_salary+sum(rider_bonus) as totalSalary, EXTRACT(MONTH from o1.order_placed) as month, \n" +
+    "EXTRACT(YEAR from o1.order_placed) as year\n" +
+    "from Riders r1 natural join Orders o1\n" +
+    "where r1.rider_id = o1.rider_id\n" +
+    "group by rider_id, EXTRACT(MONTH from o1.order_placed), EXTRACT(YEAR from o1.order_placed)\n" +
+    "order by rider_id asc\n" +
+    "),\n" +
+    "deliveryTimeandRatings as (\n" +
+    "select rider_id, avg(EXTRACT(MINUTE from (order_delivered-rider_depart_for_rest))) as avgDeliveryTime, count(rider_rating) as numRating, \n" +
+    "    avg(rider_rating) as avgRating, EXTRACT(MONTH from order_placed) as month, EXTRACT(YEAR from order_placed) as year\n" +
+    "from Riders natural join Orders\n" +
+    "group by rider_id, EXTRACT(MONTH from order_placed), EXTRACT(YEAR from order_placed)\n" +
+    "order by rider_id asc\n" +
+    ")\n" +
+    "\n" +
+    "select o1.month, o1.year, r1.rname as riderid, totalOrders, totalHours, totalSalary, avgDeliveryTime, numRating, avgRating\n" +
+    "from Riders r1 natural join ordersgroupbyMonthYear o1 natural join FT_PT_groups f1 natural join totalSalary \n" +
+    "natural join deliveryTimeandRatings\n" +
+    ";"
+
+const getRiderSummaryStats  = (req, res, db) => {
+    const output = db.query(queryToGetRiderSummaryStats,
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(result.rows);
+        })
+}
 
 
 module.exports = {
     getMainSummaryData: getMainSummaryData,
     getSummaryDetailsByCustomer: getSummaryDetailsByCustomer,
+    getRiderSummaryStats: getRiderSummaryStats,
     getSummaryDetailsByArea: getSummaryDetailsByArea
 };
 
@@ -270,4 +330,54 @@ SELECT rmy1.month, rmy1.year,
 	) ELSE 0
 	END as totalcost
 FROM relevantMonthYear rmy1
+ */
+/*
+with ordersgroupbyMonthYear as (
+select rider_id, count(*) as totalOrders, EXTRACT(MONTH from order_placed) as month, EXTRACT(YEAR from order_placed) as year
+from Orders
+group by rider_id, EXTRACT(MONTH from order_placed), EXTRACT(YEAR from order_placed)
+order by rider_id asc
+),
+FT_shifts as (
+select rider_id, count(*) as totalShifts, EXTRACT(MONTH from sche_date) as month, EXTRACT(YEAR from sche_date) as year
+from Riders r1 natural join Schedules s1 natural join Monthly_Work_Schedule m1 natural join Shifts f1
+group by rider_id, EXTRACT(MONTH from sche_date), EXTRACT(YEAR from sche_date)
+),
+FT_groups as (
+select rider_id, totalShifts*8 as totalHours, month, year
+from FT_shifts
+),
+PT_groups as (
+select rider_id, sum(duration) as totalHours, EXTRACT(MONTH from sche_date) as month, EXTRACT(YEAR from sche_date) as year
+from Riders natural join Schedules natural join Weekly_Work_Schedule
+group by rider_id, EXTRACT(MONTH from sche_date), EXTRACT(YEAR from sche_date)
+order by rider_id asc
+),
+FT_PT_groups as(
+select *
+from FT_groups
+union
+select *
+from PT_groups
+),
+totalSalary as (
+select rider_id, r1.base_salary+sum(rider_bonus) as totalSalary, EXTRACT(MONTH from o1.order_placed) as month,
+EXTRACT(YEAR from o1.order_placed) as year
+from Riders r1 natural join Orders o1
+where r1.rider_id = o1.rider_id
+group by rider_id, EXTRACT(MONTH from o1.order_placed), EXTRACT(YEAR from o1.order_placed)
+order by rider_id asc
+),
+deliveryTimeandRatings as (
+select rider_id, avg(EXTRACT(MINUTE from (order_delivered-rider_depart_for_rest))) as avgDeliveryTime, count(rider_rating) as numRating,
+    avg(rider_rating) as avgRating, EXTRACT(MONTH from order_placed) as month, EXTRACT(YEAR from order_placed) as year
+from Riders natural join Orders
+group by rider_id, EXTRACT(MONTH from order_placed), EXTRACT(YEAR from order_placed)
+order by rider_id asc
+)
+
+select o1.month, o1.year, r1.rname as riderid, totalOrders, totalHours, totalSalary, avgDeliveryTime, numRating, avgRating
+from Riders r1 natural join ordersgroupbyMonthYear o1 natural join FT_PT_groups f1 natural join totalSalary
+natural join deliveryTimeandRatings
+;
  */

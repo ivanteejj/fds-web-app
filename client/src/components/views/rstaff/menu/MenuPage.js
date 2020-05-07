@@ -10,6 +10,7 @@ function MenuPage (props) {
                 <StaffHeader/>
                 <StaffMenuBar userid={props.user.userid} signout={props.handleSignOut}/>
                 <Menu userid={props.user.userid} rid={props.user.rid}/>
+                <div className="Footer"/>
             </div>
         </>
     )

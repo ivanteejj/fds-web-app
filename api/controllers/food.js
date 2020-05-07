@@ -36,15 +36,17 @@ const getFoodFromOneRes = (req, res, db) => {
 
 const queryToGetFoodForRestaurantPage =
     "WITH perDayPurchase as (\n" +
-    "\tSELECT o1.order_placed, sc1.fid, sc1.quantity\n" +
-    "\tFROM Orders o1 NATURAL JOIN ShoppingCarts sc1\n" +
+    "    SELECT sc1.fid, sum(sc1.quantity) as quantity\n" +
+    "    FROM Orders o1 NATURAL JOIN ShoppingCarts sc1\n" +
     "\tWHERE DATE(order_placed) >= CURRENT_DATE AND DATE(order_placed) < CURRENT_DATE::DATE + INTERVAL '1 DAY'\n" +
+    "\tGROUP BY fid\n" +
     ")\n" +
-    "\n" +
-    "SELECT f1.fid, f1.fname, f1.rid as rid, f1.price, f1.category, f1.daily_limit, COALESCE(quantity, 0) as daily_sold\n" +
-    "FROM Food f1 LEFT JOIN perDayPurchase USING (fid)\n" +
-    "WHERE f1.rid = $1"
-const getFoodForRestaurantPage = (req, res, db) => {
+    "\t\n" +
+    "    SELECT f1.fid, f1.fname, f1.rid as rid, f1.price, f1.category, f1.daily_limit, COALESCE(quantity, 0) as daily_sold\n" +
+    "    FROM Food f1 LEFT JOIN perDayPurchase USING (fid)\n" +
+    "    WHERE f1.rid = $1"
+
+    const getFoodForRestaurantPage = (req, res, db) => {
     const rid = req.query.rid;
     console.log("rest_id is");
     console.log(rid);
@@ -58,10 +60,81 @@ const getFoodForRestaurantPage = (req, res, db) => {
         })
 }
 
+const queryUpdateFood =
+    "UPDATE food \n" +
+    "SET fname = $1,\n" +
+    "\tprice = $2,\n" +
+    "\tdaily_limit = $3,\n" +
+    "\tcategory = $4\n" +
+    "WHERE\n" +
+    "\tfid = $5;"
+const updateFoodForRestaurantPage = (req, res, db) => {
+    const fid = req.body.fid;
+    console.log(fid);
 
+    const output = db.query(queryUpdateFood, [req.body.fname, req.body.price, req.body.daily_limit, req.body.category, fid],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(result.rows);
+        })
+}
+
+const queryDeleteFood =
+    "DELETE FROM food\n" +
+    "WHERE fid = $1;"
+const deleteFoodForRestaurantPage = (req, res, db) => {
+    const fid = req.query.fid;
+    console.log(fid);
+
+    const output = db.query(queryDeleteFood, [fid],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(result.rows);
+        })
+}
+
+const queryAddFood =
+    "INSERT INTO food (rid, fname, price, daily_limit, category) \n" +
+    "VALUES ($1, $2, $3, $4, $5);"
+const addFoodForRestaurantPage = (req, res, db) => {
+    let rid = req.body.rid;
+    console.log("rest_id is");
+    console.log(req.body.rid);
+    const output = db.query(queryAddFood, [rid, req.body.fname, req.body.price, req.body.daily_limit, req.body.category],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(result.rows);
+        })
+}
 
 module.exports = {
     getAllFood: getAllFood,
     getFoodFromOneRes: getFoodFromOneRes,
-    getFoodForRestaurantPage: getFoodForRestaurantPage
+    getFoodForRestaurantPage: getFoodForRestaurantPage,
+
+    addFoodForRestaurantPage : addFoodForRestaurantPage,
+    updateFoodForRestaurantPage: updateFoodForRestaurantPage,
+    deleteFoodForRestaurantPage: deleteFoodForRestaurantPage
 };
+
+
+
+
+/*
+WITH perDayPurchase as (
+    SELECT sc1.fid, sum(sc1.quantity) as quantity
+    FROM Orders o1 NATURAL JOIN ShoppingCarts sc1
+	WHERE DATE(order_placed) >= CURRENT_DATE AND DATE(order_placed) < CURRENT_DATE::DATE + INTERVAL '1 DAY'
+	GROUP BY fid
+)
+
+    SELECT f1.fid, f1.fname, f1.rid as rid, f1.price, f1.category, f1.daily_limit, COALESCE(quantity, 0) as daily_sold
+    FROM Food f1 LEFT JOIN perDayPurchase USING (fid)
+    WHERE f1.rid = 1
+ */

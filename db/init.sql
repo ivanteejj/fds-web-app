@@ -592,4 +592,3 @@ CREATE CONSTRAINT TRIGGER weekly_work_schedule_trigger
 	DEFERRABLE INITIALLY DEFERRED
 	FOR EACH ROW
 	EXECUTE FUNCTION check_weekly_work_schedule_constraint();
-

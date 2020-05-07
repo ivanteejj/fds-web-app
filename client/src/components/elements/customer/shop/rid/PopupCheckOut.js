@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useReducer} from "react";
 import {
     Button,
     Header,
@@ -8,32 +8,99 @@ import {
     TextArea,
     Form,
     Label,
-    Radio, Dropdown
+    Radio,
+    Dropdown,
+    Input
 } from 'semantic-ui-react'
 import "../../../../stylesheets/Popup.css"
 import Utils from "../../../../commons/Utils";
 import PromoUtils from "../../../../commons/PromoUtils";
 
 const areaOptions = [
-    {key: 1, text: "North", value: "North"},
-    {key: 2, text: "South", value: "South"},
-    {key: 3, text: "East", value: "East"},
-    {key: 4, text: "West", value: "West"},
+    {key: 1, text: "North", value: "NORTH"},
+    {key: 2, text: "South", value: "SOUTH"},
+    {key: 3, text: "East", value: "EAST"},
+    {key: 4, text: "West", value: "WEST"},
+    {key: 4, text: "West", value: "CENTRAL"},
 ]
 
-export default function Popup({remainPopup, submitOrder, promos, cart, cartCost, deliveryFee, totalCost, deliveryLoc, paymentMtds}) {
-    const [appliedPromo, setAppliedPromo] = useState()
-    const [costOffset, setCostOffset] = useState(0)
+const offsetReducer = (state, action) => {
+    switch (action.type) {
+        case "promo":
+            return {
+                offset_type: action.type,
+                obj: action.promo,
+                value: action.value,
+                error: null
+            };
+        case "rewards":
+            return {
+                offset_type: action.type,
+                obj: null,
+                value: 0,
+                error: null
+            };
+        case "update_points":
+            return {
+                ...state,
+                obj: action.points,
+                value: action.value,
+                error: action.error
+            }
+        case "reset":
+            return {
+                offset_type: null,
+                obj: null,
+                value: 0,
+                error: null
+            };
+        default:
+            return state;
+    }
+}
+
+const paymentReducer = (state, action) => {
+    switch (action.type) {
+        case "CREDITCARD":
+            return {
+                mode: action.type,
+                value: null
+            }
+        case "update_creditcard":
+            return {
+                ...state,
+                value: action.value
+            }
+        default:
+            return {
+                mode: action.type,
+                value: null
+            }
+    }
+}
+
+const rate = 10;
+export default function Popup({remainPopup, submitOrder, rewardPts, promos, cart, cartCost, deliveryFee, totalCost, deliveryLoc, paymentMtds}) {
     const [total, setTotal] = useState(totalCost)
     const [selectedLoc, setDeliveryLoc] = useState(null)
     const [deliveryAreaInput, setDeliveryAreaInput] = useState(areaOptions[0].value)
     const [deliveryLocInput, setDeliveryLocInput] = useState("")
-    const [paymentMode, setPaymentMode] = useState("")
+
+    const [offset, setOffset] = useReducer(offsetReducer, {
+        offset_type: null,
+        obj: null,
+        value: 0,
+        error: null
+    })
+    const [paymentMode, setPaymentMode] = useReducer(paymentReducer, {
+        mode: null,
+        value: null
+    })
 
     const placeOrder = () => {
         const address = selectedLoc !== "" ? selectedLoc.address : deliveryLocInput;
         const area = selectedLoc !== "" ? selectedLoc.area : deliveryAreaInput;
-        submitOrder(cart, appliedPromo, deliveryFee, total, address, area, paymentMode);
+        submitOrder(cart, offset, deliveryFee, total, address, area, paymentMode);
         remainPopup(false) // close popup
     }
 
@@ -46,28 +113,72 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
     }
 
     const applyPromo = (promo) => {
-        if (appliedPromo === promo) {
-            setAppliedPromo()
-            setCostOffset(0)
-        } else {
-            setAppliedPromo(promo)
-            setCostOffset(PromoUtils.promoOffset(promo, cartCost, deliveryFee))
+        let value = 0;
+        switch (offset.offset_type) {
+            case "promo": {
+                if (promo === offset.obj) {
+                    setOffset({type: "reset"})
+                } else {
+                    let value = PromoUtils.promoOffset(promo, cartCost, deliveryFee)
+                    setOffset({type: "promo", promo: promo, value: value })
+                }
+                break;
+            }
+            case "rewards":
+                setOffset({type: "promo", promo: promo, value: PromoUtils.promoOffset(promo, cartCost, deliveryFee)})
+                break;
+            default: {
+                let value = PromoUtils.promoOffset(promo, cartCost, deliveryFee)
+                setOffset({type: "promo", promo: promo, value: value })
+            }
+            break;
         }
+        setTotal(totalCost - value)
+    }
 
-        setTotal(totalCost - costOffset)
+    const applyRewards = () => {
+        switch (offset.offset_type) {
+            case "promo":
+                setOffset({type: "rewards"})
+                break;
+            case "rewards":
+                setOffset({type: "reset"})
+                break;
+
+            default:
+                setOffset({type: "rewards"})
+                break;
+        }
+        setTotal(totalCost)
+    }
+
+    const updateRewards = (rewards) => {
+        let value = 0
+        if (isNaN(rewards) || rewards < 0 || (rewards > 0 && rewards > maxPointsAllowed())) {
+            setOffset({type: "update_points", points: rewards, value: 0, error: "Invalid point redemption"})
+        } else if (rewards > 0 && rewards <= maxPointsAllowed()) {
+            // every 10 points is treated as $1
+            let value = rewards > 0 ? rewards / rate : 0;
+            setOffset({type: "update_points", points: rewards, value: value, error: null})
+        } else {
+            setOffset({type: "update_points", points: rewards, value: 0, error: null})
+        }
+        setTotal(totalCost - value);
+    }
+
+    const isPromoApplied = (promo) => {
+        return offset.offset_type === "promo" && offset.obj === promo;
+    }
+
+    const maxPointsAllowed = () => {
+        return rewardPts > (deliveryFee * rate) ? (deliveryFee * rate) : rewardPts
     }
 
     const disableSubmit = () => {
-        return selectedLoc === null || (deliveryLocInput === "" && selectedLoc === "") || (paymentMode === "")
+        return selectedLoc === null || (deliveryLocInput === "" && selectedLoc === "") || paymentMode.mode === null ||
+            paymentMode.mode === "" || (paymentMode.mode === "CREDITCARD" && (paymentMode.value == "" || paymentMode.value === null)) ||
+            (offset.offset_type && offset.error)
     }
-
-    useEffect(() => {
-        if (appliedPromo) {
-            setTotal(totalCost - costOffset)
-        } else {
-            setTotal(totalCost)
-        }
-    }, [appliedPromo, totalCost, costOffset])
 
     return (
         <div className="popup-box">
@@ -115,8 +226,8 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
                                                     </Grid.Column>
 
                                                     <Grid.Column>
-                                                        <Button content={appliedPromo === promo ? "Applied" : "Apply"}
-                                                                color={appliedPromo === promo ? "grey" : "teal"}
+                                                        <Button content={isPromoApplied(promo) ? "Applied" : "Apply"}
+                                                                color={isPromoApplied(promo) ? "grey" : "teal"}
                                                                 onClick={() => applyPromo(promo)}
                                                         />
                                                     </Grid.Column>
@@ -128,6 +239,33 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
+
+                    <Divider/>
+
+                    {rewardPts && rewardPts > 0 && (
+                        <>
+                            <Button content={offset.offset_type === "rewards" ? "Applied" : "Apply"}
+                                    color={offset.offset_type === "rewards" ? "grey" : "teal"}
+                                    onClick={() => applyRewards()}
+                                    floated={'right'}
+                            />
+                            <Header as={'h2'}>Redeem Reward Points</Header>
+                            {offset.offset_type && offset.offset_type === "rewards" && (
+                                <>
+                                    <Header sub>10 Point = $1</Header>
+                                    <Item.Description>{`Your points: ${rewardPts}`}</Item.Description>
+                                    <Item.Description>{`Max points available for redemption: ${maxPointsAllowed()}`}</Item.Description>
+                                        <Input label='Reward Points'
+                                               placeholder='Redeem your rewards points'
+                                               value={offset.obj}
+                                               onChange={(e, {value}) => updateRewards(value)}
+                                        />
+                                </>
+                            )}
+
+                            {offset.error && <Header size='small' color={'red'}> {offset.error} </Header>}
+                        </>
+                    )}
 
                     <Divider/>
 
@@ -152,14 +290,26 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
                             </Grid.Column>
                         </Grid.Row>
 
-                        {appliedPromo &&
+                        {offset.offset_type === "promo" && offset.obj &&
                         <Grid.Row>
                             <Grid.Column textAlign={'left'}>
-                                <h3>{`Promo applied: ${appliedPromo.details}`}</h3>
+                                <h3>{`Promo applied: ${offset.obj.details}`}</h3>
                             </Grid.Column>
 
                             <Grid.Column textAlign={'right'}>
-                                <h3>{`- $${Utils.roundDecimalPlace(costOffset, 1)}`}</h3>
+                                <h3>{`- $${Utils.roundDecimalPlace(offset.value, 1)}`}</h3>
+                            </Grid.Column>
+                        </Grid.Row>
+                        }
+
+                        {offset.offset_type === "rewards" && offset.value > 0 &&
+                        <Grid.Row>
+                            <Grid.Column textAlign={'left'}>
+                                <h3>{`${offset.obj} reward points redeemed`}</h3>
+                            </Grid.Column>
+
+                            <Grid.Column textAlign={'right'}>
+                                <h3>{`- $${Utils.roundDecimalPlace(offset.value, 1)}`}</h3>
                             </Grid.Column>
                         </Grid.Row>
                         }
@@ -246,13 +396,20 @@ export default function Popup({remainPopup, submitOrder, promos, cart, cartCost,
                                 <Form.Field>
                                 <Radio label={paymentMtd.mode}
                                        value={paymentMtd.mode}
-                                       checked={paymentMode === paymentMtd.mode}
-                                       onChange={() => setPaymentMode(paymentMtd.mode)}
+                                       checked={paymentMode.mode === paymentMtd.mode}
+                                       onChange={() => setPaymentMode({type: paymentMtd.mode})}
                                 />
                                 </Form.Field>
                             )
                         })}
                     </Form>
+
+                    {paymentMode.mode === "CREDITCARD" && (
+                        <Input label='Credit Card'
+                               value={paymentMode.value}
+                               onChange={(e, {value}) => setPaymentMode({type: "update_creditcard", value: value})}
+                        />
+                    )}
 
                     <Divider/>
 
