@@ -6,9 +6,6 @@ import DateTimeUtils from "../../../../commons/DateTimeUtils";
 import axios from "axios";
 
 const fakeRiderStats = {
-    //TODO: aggregated data
-    //      totalratings refers to total number of reviews (NOT STARS!) for the month
-    //      avgrating = total number of stars for the month / totalratings
     data: [
         {month: 3, year: 2020, riderid: "chukai", totalorders: 105, totalhours: 80, totalsalary: 1200,
             avgdeliverytime: 23, totalratings: 12, avgrating: 3.4},

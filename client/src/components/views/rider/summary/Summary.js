@@ -19,8 +19,6 @@ const fakeSummary = {
 }
 
 const fakeOngoingOrders = {
-    // TODO: generate orders with dt_order_delivered == null
-    //  NOTE additional fields: address (restaurant address), custid (customer's userid)
     // data should already be sorted in desc order by dt_order_placed
     data: [
         {oid: 100123, totalcost: 49.5, paymentmode: "Cash On Delivery", custid: "ivantee",
@@ -142,30 +140,81 @@ export default function Summary({userid}) {
         })()
     }, [])
 
-    const updateStatus = (oid, type) => {
-        //TODO: (backend) code here for updating active order status
+    const updateStatus = async (oid, type) => {
         const curr_datetime = moment().toDate();
+
         switch (type) {
             case "dt_rider_departs":
-                //update dt_rider_departs on oid with curr_datetime
+                console.log("dt_rider_departs")
+                await axios
+                    .post(
+                    '/Rider/updateRiderDepartForRest/',
+                        {
+                            oid: oid
+                    }
+                    ).then( (resp) => {
+                        console.log(resp);
+                    }, (error) => {
+                        console.log(error);
+                    });
                 break;
             case "dt_rider_arrives_rests":
-                //update dt_rider_arrives_rests on oid with curr_datetime
+                console.log("dt_rider_arrives_rests")
+                await axios
+                    .post(
+                        '/Rider/updateRiderArriveRest/', {
+                                oid: oid
+                        }
+                    ).then( (resp) => {
+                        console.log(resp);
+                    }, (error) => {
+                        console.log(error);
+                    });
                 break;
             case "dt_rider_departs_rest":
-                //update dt_rider_departs_rests on oid with curr_datetime
+                console.log("dt_rider_departs_rest")
+
+                await axios
+                    .post(
+                        '/Rider/updateRiderDepartForDeliveryLoc/', {
+                                oid: oid
+                        }
+                    ).then( (resp) => {
+                    console.log(resp);
+                    }, (error) => {
+                        console.log(error);
+                    });
                 break;
             case "dt_order_delivered":
-                //update dt_order_delivered on oid with curr_datetime
-                break;
+                console.log("dt_order_delivered")
+                await axios
+                    .post(
+                        '/Rider/updateOrderDelivered/', {
+                                oid: oid
+                        }
+                    ).then( (resp) => {
+                        console.log(resp);
+                    }, (error) => {
+                        console.log(error);
+                    });
             default:
                 break;
-        }
+        };
         //TODO: after successful update,
         // re-render incomplete orders (dt_rider_departs_rest == null)
         // re-render stats
-        //setOrders(*newly updated data*)
-        //setFilterSummary({type: "initialize", payload: *newly updated data*})
+
+        await axios
+            .get('/Rider/getOngoingOrders/', {
+                params: {
+                    rider_id: userid
+                }
+            })
+            .then(function(response) {
+                setOrders(response.data)
+                setFilterSummary({type: "initialize", payload: response.data})
+
+            })
     }
 
     return (

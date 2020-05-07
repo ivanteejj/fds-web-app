@@ -155,10 +155,73 @@ const getOngoingOrderForOneRider = (req, res, db) => {
         })
 }
 
+const queryToUpdateRiderDepartForRest =
+    "UPDATE Orders\n" +
+    "SET rider_depart_for_rest = now()::timestamp\n" +
+    "WHERE oid = $1"
 
+const updateRiderDepartForRest = (req, res, db) => {
+    const oid = req.body.oid
+    const output = db.query(queryToUpdateRiderDepartForRest, [oid],
+        (error,  results) => {
+            if (error) {
+                console.log(error)
+            }
 
+            res.status(200).json(results.rows)
+        })
+}
 
+const queryToUpdateRiderArriveRest =
+    "UPDATE Orders\n" +
+    "SET rider_arrive_rest = now()::timestamp\n" +
+    "WHERE oid = $1"
 
+const updateRiderArriveRest = (req, res, db) => {
+    const oid = req.body.oid
+    const output = db.query(queryToUpdateRiderArriveRest, [oid],
+        (error,  results) => {
+            if (error) {
+                console.log(error)
+            }
+
+            res.status(200).json(results.rows)
+        })
+}
+
+const queryToUpdateRiderDepartForDeliveryLoc =
+    "UPDATE Orders\n" +
+    "SET rider_depart_for_delivery_location = now()::timestamp\n" +
+    "WHERE oid = $1"
+
+const updateRiderDepartForDeliveryLoc = (req, res, db) => {
+    const oid = req.body.oid
+    const output = db.query(queryToUpdateRiderDepartForDeliveryLoc, [oid],
+        (error,  results) => {
+            if (error) {
+                console.log(error)
+            }
+
+            res.status(200).json(results.rows)
+        })
+}
+
+const queryToUpdateOrderDelivered =
+    "UPDATE Orders\n" +
+    "SET order_delivered = now()::timestamp\n" +
+    "WHERE oid = $1"
+
+const updateOrderDelivered = (req, res, db) => {
+    const oid = req.body.oid
+    const output = db.query(queryToUpdateOrderDelivered, [oid],
+        (error,  results) => {
+            if (error) {
+                console.log(error)
+            }
+
+            res.status(200).json(results.rows)
+        })
+}
 
 
 
@@ -167,6 +230,10 @@ module.exports = {
     getAllOrderDetailsforRestaurantStaffPage: getAllOrderDetailsforRestaurantStaffPage,
     getMostPopularByMonth: getMostPopularByMonth,
     getOngoingOrderForOneRider: getOngoingOrderForOneRider,
+    updateRiderDepartForRest: updateRiderDepartForRest,
+    updateRiderArriveRest: updateRiderArriveRest,
+    updateRiderDepartForDeliveryLoc: updateRiderDepartForDeliveryLoc,
+    updateOrderDelivered: updateOrderDelivered
 };
 
 
