@@ -89,7 +89,11 @@ export default function PopupAddSchedule({openPopup, occupiedDates, riderType, s
         console.log(workingDays)
 
         let arr = skeleton.map((x,idx) => {
-            const week = Math.floor(idx/4)
+            //console.log("x")
+            //console.log(x)
+            //console.log("idx")
+            //console.log(idx)
+            const week = Math.ceil((idx + 1)/4)
             const day = (idx % 7) + 1
             const date = start_d.add(1,'days').toDate()
             var found = workingDays.find(x => x.day === date.getDay())
