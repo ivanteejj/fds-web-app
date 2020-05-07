@@ -41,6 +41,8 @@ const LoginForm = ({validLogin}) => {
             initialValues={{ userid: '', username: '', password: '', type: type[0].value}}
             validationSchema={LoginSchema}
             onSubmit={(values) => {
+
+
                 // TODO: backend code here
                 //comment out the unused user roles
                 // validLogin (userid, user_type, rid (set as null if NA))
@@ -50,12 +52,12 @@ const LoginForm = ({validLogin}) => {
                 // return history.push("/fds/summary")
 
                 // customer
-                // validLogin(20, "customer", null);
-                // return history.push("/customer/shop")
+                validLogin(20, "customer", null);
+                return history.push("/customer/shop")
 
                 // rider
-                validLogin(33, "rider", null);
-                return history.push("/rider/summary")
+                // validLogin(33, "rider", null);
+                // return history.push("/rider/summary")
 
                 // validLogin(10, "staff", 3);
                 //return history.push("/staff/summary")

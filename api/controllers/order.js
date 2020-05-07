@@ -249,7 +249,6 @@ const addAnOrder = (req, res, db) => {
             if (error) {
                 console.log(error)
             }
-
             res.status(200).json(results.rows)
         })
 }

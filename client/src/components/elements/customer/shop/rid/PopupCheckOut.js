@@ -100,7 +100,14 @@ export default function Popup({remainPopup, submitOrder, rewardPts, promos, cart
     const placeOrder = () => {
         const address = selectedLoc !== "" ? selectedLoc.address : deliveryLocInput;
         const area = selectedLoc !== "" ? selectedLoc.area : deliveryAreaInput;
-        submitOrder(cart, offset, deliveryFee, total, address, area, paymentMode);
+
+        let pid = offset.offset_type === "promo" ? offset.obj.pid : null
+        let discount_amount = offset.value
+        let cust_points = offset.offset_type === "rewards" ? offset.obj : 0
+        let payment_mode = paymentMode.mode
+        let cc = paymentMode.value
+
+        submitOrder(cart, offset, deliveryFee, total, address, area, payment_mode, cc, cust_points, discount_amount, pid);
         remainPopup(false) // close popup
     }
 
@@ -179,6 +186,14 @@ export default function Popup({remainPopup, submitOrder, rewardPts, promos, cart
             paymentMode.mode === "" || (paymentMode.mode === "CREDITCARD" && (paymentMode.value == "" || paymentMode.value === null)) ||
             (offset.offset_type && offset.error)
     }
+
+    useEffect(() => {
+        if (offset.offset_type) {
+            setTotal(totalCost - offset.value)
+        } else {
+            setTotal(totalCost)
+        }
+    }, [offset.value])
 
     return (
         <div className="popup-box">
@@ -394,10 +409,10 @@ export default function Popup({remainPopup, submitOrder, rewardPts, promos, cart
                         {paymentMtds.map(paymentMtd => {
                             return (
                                 <Form.Field>
-                                <Radio label={paymentMtd.mode}
-                                       value={paymentMtd.mode}
-                                       checked={paymentMode.mode === paymentMtd.mode}
-                                       onChange={() => setPaymentMode({type: paymentMtd.mode})}
+                                <Radio label={paymentMtd}
+                                       value={paymentMtd}
+                                       checked={paymentMode.mode === paymentMtd}
+                                       onChange={() => setPaymentMode({type: paymentMtd})}
                                 />
                                 </Form.Field>
                             )
