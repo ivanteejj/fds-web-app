@@ -27,7 +27,7 @@ const fakeEarnings = {
 
 const fakeRider = {
     // NOTE: Incentives are on % basis for each completed order
-    data: {rider_type: "part-time", base_salary: 1000}
+    data: {rider_type: "PT", base_salary: 1000}
     // {rider_type: "full-time, incentive: 0.05, base_salary: "220"}
 }
 
@@ -112,8 +112,8 @@ export default function Earnings({userid}) {
                                 <Card fluid>
                                     <Card.Content>
                                         <h2>
-                                            {`${moment(item.start_dt, date_format).format("Do MMM YY")} 
-                                            - ${moment(item.end_dt, date_format).format("Do MMM YY")}`}
+                                            {`${moment(item.start_dt).format("Do MMM YY")} 
+                                            - ${moment(item.end_dt).format("Do MMM YY")}`}
                                         </h2>
                                         <Item>
                                             <Item.Description>{`Total Orders Delivered: ${item.total_orders_delivered}`}</Item.Description>
@@ -167,8 +167,8 @@ export default function Earnings({userid}) {
                                 <Card fluid>
                                     <Card.Content>
                                         <h2>
-                                            {`${moment(item.start_dt, date_format).format("Do MMM YY")} 
-                                            - ${moment(item.end_dt, date_format).format("Do MMM YY")}`}
+                                            {`${moment(item.start_dt).format("Do MMM YY")} 
+                                            - ${moment(item.end_dt).format("Do MMM YY")}`}
                                         </h2>
                                         <Item>
                                             <Item.Description>{`Total Orders Delivered: ${item.total_orders_delivered}`}</Item.Description>
