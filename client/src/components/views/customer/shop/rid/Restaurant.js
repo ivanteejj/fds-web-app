@@ -4,11 +4,12 @@ import {
     Header,
     Card
 } from 'semantic-ui-react'
-import {useParams} from 'react-router-dom'
+import {useParams, useHistory} from 'react-router-dom'
 import Menu from "../../../../elements/customer/shop/rid/Menu"
 import ShoppingCart from "../../../../elements/customer/shop/rid/ShoppingCart"
 import Popup from "../../../../elements/customer/shop/rid/PopupCheckOut"
 import Utils from "../../../../commons/Utils";
+import DateTimeUtils from "../../../../commons/DateTimeUtils";
 import PromoUtils from "../../../../commons/PromoUtils";
 import axios from 'axios'
 
@@ -35,8 +36,8 @@ const fakeRecentDeliverLoc = {
 
 const fakePaymentOptions = {
     data: [
-        {mode: "CASHONDELIVERY"},
-        {mode: "CREDITCARD"}
+        'CASHONDELIVERY',
+        'CREDITCARD'
     ]
 }
 
@@ -49,6 +50,7 @@ function sumCartCost(cart) {
 
 export default function Restaurant({ userid }) {
     let params = useParams()
+    let history = useHistory()
 
     const [menu, setMenu] = useState([]);
     const [rdetails, setRDetails] = useState({});
@@ -62,50 +64,65 @@ export default function Restaurant({ userid }) {
     const [paymentMtds, setPaymentMtds] = useState([]);
     const [rewardPts, setRewardPts] = useState(0);
 
-    const [test, setTest] = useState(null)
-
     // HARD CODED % DELIVERY FEE
     const delivery_base = 3
     const delivery_percent = 0.025
 
-    const promo_offset = (offset) => {
-        switch (offset.type) {
-            case "promo":
-                return {pid: offset.obj.pid, discount_amount: offset.value}
-            case "rewards": {
-                // await function here
-                return {pid: null, discount_amount: offset.value}
-            }
-            default:
-                return {pid: null, discount_amount: 0}
+    const payment_type = async (paymentMode, cc) => {
+        if (paymentMode === "CREDITCARD") {
+            await axios.post('/customer/editCreditCard/', {
+                cid: userid,
+                credit_card_number: cc
+            }).then((resp) => {
+                console.log(resp);
+            }, (error) => {
+                console.log(error);
+            });
         }
     }
 
-    const payment_mode = (paymentMode) => {
-        switch (paymentMode.mode) {
-            case "CREDITCARD":
-                // await function here
-                return {payment_method: paymentMode.mode}
-            default:
-                return {payment_method: paymentMode.mode}
-        }
-    }
+    const submitOrder = async (cart, offset, deliveryFee, totalCharge, deliveryLoc, deliveryArea,
+                               payment_mode, cc, cust_points, discount_amount, pid) => {
 
-    const submitOrder = async (cart, offset, deliveryFee, totalCharge, deliveryLoc, deliveryArea, paymentMode) => {
-
+        payment_type(payment_mode, cc);
         await axios.get('/customer/shop/getAllCurrentlyAvailableRider/')
-            .then( (resp) => {
+            .then( async (resp) => {
                 let listOfAvailableRider = resp.data
                 console.log(listOfAvailableRider)
                 const rider = listOfAvailableRider[Math.floor(Math.random() * listOfAvailableRider.length)];
                 console.log("rider selected:" + rider.rider_id)
 
+                await axios.post('/customer/shop/newOrder/', {
+                    cid: userid,
+                    payment_method: payment_mode,
+                    cart_fee: cartCost,
+                    delivery_fee: deliveryFee,
+                    discount_amount: discount_amount,
+                    delivery_location: deliveryLoc,
+                    delivery_location_area: deliveryArea,
+                    rider_id: rider.rider_id,
+                    rider_bonus: 3 + (cartCost * 0.1),
+                    pid: pid
+                }).then((resp) => {
+                    console.log(resp);
+                }, (error) => {
+                    console.log(error);
+                });
             }, (error) => {
                 console.log(error);
             });
 
-        setTest({area: deliveryArea, address: deliveryLoc})
+        let pts = Utils.numberRoundDP((rewardPts - cust_points) + (totalCharge), 0)
+        await axios.post('/customer/updatePoints/', {
+            cid: userid,
+            points: pts
+        }).then((resp) => {
+            console.log(resp);
+        }, (error) => {
+            console.log(error);
+        });
         // once order successful, direct to home page
+        history.push("/customer/order")
     }
 
     const addToCart = (fid, fname, price, qty_left) => {
@@ -162,8 +179,7 @@ export default function Restaurant({ userid }) {
         (async() => {
             //TODO: get user's reward points
             //userid
-            setRewardPts(100)
-
+            setPaymentMtds(fakePaymentOptions.data);
             const menu = await axios
                  .get('/customer/shop/getMenu', {
                      params: {
@@ -198,7 +214,20 @@ export default function Restaurant({ userid }) {
             })
             .then((response) => setPromos(response.data))
 
-            setPaymentMtds(fakePaymentOptions.data);
+            // const pts = await axios
+            //     .get('/customer/getCustPoints/', {
+            //         params: {
+            //             cid: userid
+            //         }
+            //     })
+            //     .then((response) => {
+            //         console.log(response.data)
+            //         console.log(response.data[0])
+            //         console.log(response.data[0].points)
+            //         setRewardPts(response.data[0].points)
+            //     })
+            //     .then((error) => console.log(error))
+            setRewardPts(100);
         })();
     }, []);
 
@@ -250,16 +279,6 @@ export default function Restaurant({ userid }) {
                        deliveryLoc={recentDeliveryLoc} paymentMtds={paymentMtds} submitOrder={submitOrder}
                 />
             }
-
-            {cart.map(d => {
-                return <>{`item:${d.id} quantity: ${d.quantity}`}</>;
-            })}
-
-            {test && (
-                <text>{`area: ${test.area}, address: ${test.address}`}</text>
-            )}
-
-            {userid && (<text>{userid}</text>)}
         </>
     )
 

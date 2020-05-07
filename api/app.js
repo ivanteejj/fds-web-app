@@ -47,6 +47,10 @@ app.get('/customer/shop/getAllRelevantPromosForOneCust/', (req, res) => promoCon
 app.get('/customer/shop/getAllCurrentlyAvailableRider/', (req, res) => riderController.getAllCurrentlyAvailableRider(req, res, db))
 app.post('/customer/shop/newOrder/', (req, res) => orderController.addAnOrder(req, res, db))
 
+app.post('/customer/editCreditCard/', (req, res) => customerController.updateCreditCard(req, res, db))
+app.post('/customer/updatePoints/', (req, res) => customerController.updateCustPoints(req, res, db))
+app.post('/customer/getCustPoints/', (req, res) => customerController.getCustPoints(req, res, db))
+
 app.post('/customer/addRiderReview/', (req, res) => reviewController.addRiderReviewByCustomerPage(req, res, db))
 app.post('/customer/addFoodReview/', (req, res) => reviewController.addFoodReviewByCustomerPage(req, res, db))
 
