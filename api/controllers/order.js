@@ -19,8 +19,8 @@ const queryToGetAllOrderDetailsForOrderPage = "WITH totalPromotions as (\n" +
     "\tSELECT *\n" +
     "\tFROM Promotions\n" +
     "), aggregatedCart as (\n" +
-    "\tSELECT oid, json_agg(json_build_object('fid', fid,'rid', rid, 'rname', rname, 'fname', fname, 'quantity', quantity ,'price', price)) as cart\n" +
-    "\tFROM ((Orders JOIN ShoppingCarts using (oid)) JOIN Food f1 USING (fid)) JOIN Restaurants USING (rid)\n" +
+    "\tSELECT oid, json_agg(json_build_object('fid', fid,'rid', rid, 'rname', rname, 'fname', sc1.fname, 'quantity', quantity ,'price', price)) as cart\n" +
+    "\tFROM ((Orders JOIN ShoppingCarts sc1 using (oid)) JOIN Food f1 USING (fid)) JOIN Restaurants USING (rid)\n" +
     "\tGROUP BY oid\n" +
     ")\n" +
     "\n" +
