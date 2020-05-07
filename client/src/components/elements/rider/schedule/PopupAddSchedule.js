@@ -83,25 +83,21 @@ export default function PopupAddSchedule({openPopup, occupiedDates, riderType, s
     }, [startDate, endDate, occupiedDates])
 
     function submitFTSchedule(workingDays) {
-        console.log(workingDays)
 
         let skeleton = Array.apply(null, new Array(days(riderType)))
-        console.log("Skeleton: ")
-        console.log(skeleton)
         let start_d = moment(startDate)
-        console.log("start_d: ")
-        console.log(start_d)
-
+        console.log(workingDays)
 
         let arr = skeleton.map((x,idx) => {
             const week = Math.floor(idx/4)
             const day = (idx % 7) + 1
-
             const date = start_d.add(1,'days').toDate()
-            var shift = workingDays.find(x => x === date.getDay())
-            return {week: week, day: day, date: date, shift: shift}
-        }).filter(x => x.shift)
-        console.log(arr)
+            var found = workingDays.find(x => x.day === date.getDay())
+            found = (found === undefined || found === null) ? null : found.shift_no
+            return {week: week, day: day, date: date, shift: found}
+        }).filter(x => x.shift > 0)
+
+        console.log("length" + arr.length)
         return submitSchedule(arr)
     }
 
