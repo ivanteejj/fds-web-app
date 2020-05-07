@@ -15,6 +15,7 @@ var restController = require('./controllers/restaurant');
 var orderController = require('./controllers/order');
 var promoController = require('./controllers/promotion');
 var fdsStatsController = require('./controllers/fdsstats');
+var reviewController = require('./controllers/review');
 var riderController = require('./controllers/rider');
 
 
@@ -41,6 +42,9 @@ app.get('/customer/shop/getRestaurantDetails/', (req, res) => restController.get
 app.get('/customer/shop/getRecentDeliveryAddress/', (req, res) => customerController.getRecentDeliveryAddress(req, res, db))
 app.get('/customer/shop/getAllOrderDetailsForOneCust/', (req, res) => orderController.getAllOrderDetailsForOrderPage(req, res, db))
 app.get('/customer/shop/getAllRelevantPromosForOneCust/', (req, res) => promoController.getAllRelevantPromos(req, res, db))
+
+app.post('/customer/addRiderReview/', (req, res) => reviewController.addRiderReviewByCustomerPage(req, res, db))
+app.post('/customer/addFoodReview/', (req, res) => reviewController.addFoodReviewByCustomerPage(req, res, db))
 
 app.get('/FDSManager/getMainSummaryData/', (req, res) => fdsStatsController.getMainSummaryData(req, res, db))
 app.get('/FDSManager/getSummaryDataByCustomer/', (req, res) => fdsStatsController.getSummaryDetailsByCustomer(req, res, db))

@@ -17,7 +17,9 @@ const getOneRestDetails = (req, res, db) => {
     }
 
 
-const queryForGetAllRestDataForHomePage = "SELECT r1.rname, r1.rid as rid, r1.area, r1.address, f1.fname, f1.fid, f1.price, f1.category, f1.daily_limit FROM Restaurants r1 JOIN food f1 ON r1.rid = f1.rid"
+const queryForGetAllRestDataForHomePage =
+    "SELECT r1.rname, r1.rid as rid, r1.area, r1.address, f1.fname, f1.fid, f1.price, f1.category, f1.daily_limit " +
+    "FROM Restaurants r1 JOIN food f1 ON r1.rid = f1.rid"
 const getAllRestDataForHomePage = (req, res, db) => {
     const output = db.query(queryForGetAllRestDataForHomePage,
         (error,  results) => {
