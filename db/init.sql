@@ -7,21 +7,15 @@
 
 
 
-DROP TABLE IF EXISTS 	Accounts, Restaurants, Menus, Food, Staff, Customers, 
-						Orders, Makes, ShoppingCarts, Promotions, 
-						FDS_Promotions, Restaurant_Promotions, 
-						FDS_Promo_Applies, Delivery_Reviews, 
-						Food_Reviews, Riders, Rider_Works, 
-						Schedules, Shifts, Monthly_Work_Schedule,
-						Weekly_Work_Schedule, Year, Month, DaysInWeek, Hour CASCADE;
+DROP TABLE IF EXISTS 	Accounts, Restaurants, Food, Staff, Customers,
+						Orders, ShoppingCarts, Promotions,
+						Food_Reviews, Riders, Schedules, Shifts, Monthly_Work_Schedule,
+						Weekly_Work_Schedule, Year, Month, DaysInWeek, Hour, Areas, Base_Salary CASCADE;
 						
 DROP TYPE IF EXISTS CAT_ENUM, PROMO_CAT_ENUM, PROMO_TYPE_ENUM CASCADE;
 
 
-CREATE TABLE AREAS (
-    area        text,
-    primary key (area)
-);
+
 
 CREATE TYPE CAT_ENUM AS ENUM (
     'Local',
@@ -64,6 +58,11 @@ CREATE TABLE Hour (
     primary key (hour)
 );
 
+
+CREATE TABLE AREAS (
+    area        text,
+    primary key (area)
+);
 
 CREATE TABLE Accounts (
 	username				TEXT,
@@ -122,53 +121,28 @@ CREATE TABLE Riders(
 	rname				TEXT NOT NULL,
     rider_type          VARCHAR(2) NOT NULL
                         CHECK (rider_type in ('FT','PT')),
-    base_salary         NUMERIC NOT NULL
-                        CHECK (base_salary > 0),
+    base_salary         NUMERIC NOT NULL,
 	username			TEXT NOT NULL,
     PRIMARY KEY (rider_id),
 	FOREIGN KEY (username) REFERENCES Accounts (username)
 );
 
 CREATE TABLE Promotions(
-        pid        				INTEGER,
+        pid        				        SERIAL,
+        promo_rate      		        INTEGER NOT NULL,
+        CHECK (promo_rate > 0),
+        promo_type                      PROMO_TYPE_ENUM NOT NULL,
+        promo_cat  	                    PROMO_CAT_ENUM NOT NULL,
+        start_datetime  		        timestamp,
+        end_datetime    		        timestamp
+            CHECK (end_datetime > start_datetime),
+        promo_min_cost                  INTEGER,
+        promo_max_discount_limit        INTEGER,
+        promo_max_num_redemption        INTEGER,
+        promo_details_text              TEXT NOT NULL,
+        rid				                INTEGER REFERENCES Restaurants (rid),
+
         PRIMARY KEY (pid)
-);
-
-
-CREATE TABLE FDS_Promotions(
-    pid        		INTEGER,
-    promo_rate      		INTEGER NOT NULL,
-        CHECK (promo_rate > 0),
-    promo_type              PROMO_TYPE_ENUM NOT NULL,
-    promo_cat  	    PROMO_CAT_ENUM NOT NULL,
-    start_datetime  		timestamp,
-    end_datetime    		timestamp
-        CHECK (end_datetime > start_datetime),
-    promo_min_cost          INTEGER,
-    promo_max_discount_limit        INTEGER,
-    promo_max_num_redemption        INTEGER,
-    promo_details_text              TEXT NOT NULL,
-    PRIMARY KEY (pid),
-    FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade
-);
-
-CREATE TABLE Restaurant_Promotions(
-    pid        		INTEGER,
-    promo_rate      		INTEGER NOT NULL,
-        CHECK (promo_rate > 0),
-    promo_type              PROMO_TYPE_ENUM NOT NULL,
-    promo_cat  	    PROMO_CAT_ENUM NOT NULL,
-    start_datetime  		timestamp,
-    end_datetime    		timestamp
-        CHECK (end_datetime > start_datetime),
-    promo_min_cost                  INTEGER,
-    promo_max_discount_limit        INTEGER,
-    promo_max_num_redemption        INTEGER,
-    promo_details_text              TEXT NOT NULL,
-	rid				                INTEGER,
-	PRIMARY KEY (pid),
-	FOREIGN KEY (pid) REFERENCES Promotions (pid) on delete cascade,
-	FOREIGN KEY (rid) REFERENCES Restaurants (rid)
 );
 
 
@@ -213,10 +187,13 @@ CREATE TABLE Orders(
 );
 
 CREATE TABLE ShoppingCarts(
-	oid			INTEGER,
-	fid			INTEGER,
-	quantity	INTEGER NOT NULL
-				CHECK (quantity > 0),
+	oid							INTEGER,
+	fid							INTEGER,
+	quantity					INTEGER NOT NULL
+								CHECK (quantity > 0),
+	fname 						TEXT NOT NULL,
+	food_price_purchased		NUMERIC NOT NULL
+								CHECK (food_price_purchased > 0),
 	PRIMARY KEY (oid,fid),
 	FOREIGN KEY (oid) REFERENCES Orders (oid),
 	FOREIGN KEY (fid) REFERENCES Food (fid)
@@ -280,14 +257,6 @@ CREATE TABLE Weekly_Work_Schedule (
 );
 
 
-
-
-
-
-
-
-
-
 -- Trigger function to update menu availability on every order placed
 CREATE OR REPLACE FUNCTION update_food_availability() RETURNS TRIGGER AS 
 $$
@@ -340,7 +309,6 @@ $$ LANGUAGE plpgsql;
 	
 
 /*
-
 CREATE OR REPLACE FUNCTION create_first_order_discount() RETURNS TRIGGER AS
 $$
 DECLARE
@@ -364,13 +332,11 @@ BEGIN
 	RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
-
 DROP TRIGGER IF EXISTS first_order_discount_trigger ON Customers;
 CREATE TRIGGER first_order_discount_trigger
 	AFTER INSERT ON Customers
 	FOR EACH ROW
 	EXECUTE FUNCTION create_first_order_discount();
-
 */
 
 
@@ -444,8 +410,8 @@ BEGIN
 	where sid = NEW.sid
 	and week = NEW.week;
 	
-	if num >= 5 then
-		RAISE exception 'MWS constraint violated.';
+	if num > 5 then
+		RAISE exception 'MWS constraint 1 violated.';
 	end if;
 	
 	--the range of date in a week wider than 5 days, false
@@ -455,7 +421,7 @@ BEGIN
 	and week = NEW.week;
 	
 	if num >= 5 then
-		RAISE exception 'MWS constraint violated.';
+		RAISE exception 'MWS constraint 2 violated.';
 	end if;
 	
 	
@@ -475,7 +441,7 @@ BEGIN
 		and week = NEW.week;
 		
 		if d2 - d1 <= 2 then
-			RAISE exception 'MWS constraint violated.';
+			RAISE exception 'MWS constraint 3 violated.';
 		end if;
 		
 		select min(sche_date) into d1
@@ -489,7 +455,7 @@ BEGIN
 		and week = NEW.week;
 		
 		if d2 - d1 > 11 then
-			RAISE exception 'MWS constraint violated.';
+			RAISE exception 'MWS constraint 4 violated.';
 		end if;
 	end if;
 	
@@ -506,7 +472,7 @@ BEGIN
 		and week = NEW.week + 1;
 		
 		if d2 -d1 <= 2 then
-			RAISE exception 'MWS constraint violated.';
+			RAISE exception 'MWS constraint 5 violated.';
 		end if;
 		
 		select min(sche_date) into d1
@@ -520,7 +486,7 @@ BEGIN
 		and week = NEW.week + 1;
 		
 		if d2 -d1 > 11 then
-			RAISE exception 'MWS constraint violated.';
+			RAISE exception 'MWS constraint 6 violated.';
 		end if;
 	end if;
 
@@ -534,7 +500,7 @@ BEGIN
 	LOOP
 		
 		IF rec.shift_id <> NEW.shift_id THEN
-			RAISE exception 'MWS constraint violated.';
+			RAISE exception 'MWS constraint 7 violated.';
 		END IF;
 	END LOOP;
 
@@ -546,7 +512,7 @@ BEGIN
 	where sid = NEW.sid;
 	
 	if num >25 then
-		RAISE exception 'MWS constraint violated.';
+		RAISE exception 'MWS constraint 8 violated.';
 	end if;
 	
 	
@@ -626,8 +592,4 @@ CREATE CONSTRAINT TRIGGER weekly_work_schedule_trigger
 	DEFERRABLE INITIALLY DEFERRED
 	FOR EACH ROW
 	EXECUTE FUNCTION check_weekly_work_schedule_constraint();
-
-
-
-
 
