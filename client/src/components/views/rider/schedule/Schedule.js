@@ -87,6 +87,10 @@ function formatPT(data, sid) {
         })
 }
 
+function formatFT(data, sid) {
+    console.log(data)
+}
+
 export default function Schedule({userid}) {
     const calendarComponentRef = createRef()
 
@@ -101,16 +105,17 @@ export default function Schedule({userid}) {
 
     useEffect(() => {
         (async() => {
-            // TODO: (backend) code here for first rendering of page
             let user = userid
+            await axios.get('/Rider/getOneRiderDetail/', {
+                    params: {
+                        rider_id: user
+                    }
+                }).then((response) => setRiderType(response.data[0].rider_type))
             await axios.get('/Rider/getSchedule/', {
                 params: {
                     rider_id: user
                 }
             }).then((response) => setSchedule(formatDT(response.data)))
-
-            // retrieve rider type
-            setRiderType("PT");
 
         })()
     }, [])
@@ -154,7 +159,11 @@ export default function Schedule({userid}) {
                                 console.log(error);
                             });
                     } else {
-                        //
+                        console.log("Full timer!")
+                        let sid = resp.data[0].sid;
+                        console.log(schedule)
+                        console.log(sid)
+                        let a = formatFT(schedule, sid)
                     }
                 }, (error) => {
                     console.log(error);

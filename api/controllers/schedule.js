@@ -30,7 +30,24 @@ const insertWWS = (req, res, db) => {
         })
 }
 
+const queryInsertMWS =
+    "INSERT INTO Monthly_Work_Schedule" +
+    "SELECT * from json_populate_recordset(null::Monthly_Work_Schedule, $1"
+
+const insertMWS = (req, res, db) => {
+    const output = db.query(queryInsertMWS, [req.body.table],
+        (error,  results) => {
+            if (error) {
+                console.log(error)
+            }
+
+            res.status(200).json(results.rows)
+        })
+}
+
+
 module.exports = {
     setUpSchedule: setUpSchedule,
-    insertWWS: insertWWS
+    insertWWS: insertWWS,
+    queryInsertMWS: queryInsertMWS
 };
