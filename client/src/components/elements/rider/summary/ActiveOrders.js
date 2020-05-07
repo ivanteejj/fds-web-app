@@ -1,5 +1,6 @@
 import React, {useState} from "react"
 import {Container, Card, Item, Grid, Label, Divider, Button, Segment} from "semantic-ui-react";
+import DateTimeUtils from "../../../commons/DateTimeUtils";
 
 const showLatestStatus = (o) => {
     if (o.dt_rider_departs === null) {
@@ -54,7 +55,7 @@ export default function ActiveOrders({orders, updateRiderStatus}) {
                     <Card.Content textAlign={'left'}>
                         <Item.Header>{`Order #${order.oid}`}</Item.Header>
                         <Item.Description>{``}</Item.Description>
-                        <Item.Meta>{`Order placed: ${order.dt_order_placed}`}</Item.Meta>
+                        <Item.Meta>{`Order placed: ${DateTimeUtils.stringtifyPrettyDT(order.dt_order_placed)}`}</Item.Meta>
                         <Item.Description>{`Payment: ${order.paymentmode}`}</Item.Description>
                         <Item.Description>{`Total Cost: $${order.totalcost}`}</Item.Description>
                         <Card>
