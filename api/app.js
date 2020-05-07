@@ -50,6 +50,12 @@ app.get('/FDSManager/getRiderSummaryStats/', (req, res) => fdsStatsController.ge
 
 app.get('/Rider/getAllReviewsOfOneRider/', (req, res) => riderController.getAllReviewsOfOneRider(req, res, db))
 app.get('/Rider/getOngoingOrders/', (req, res) => orderController.getOngoingOrderForOneRider(req, res, db))
+app.post('/Rider/updateRiderDepartForRest/', (req, res) => orderController.updateRiderDepartForRest(req, res, db))
+app.post('/Rider/updateRiderArriveRest/', (req, res) => orderController.updateRiderArriveRest(req, res, db))
+app.post('/Rider/updateRiderDepartForDeliveryLoc/', (req, res) => orderController.updateRiderDepartForDeliveryLoc(req, res, db))
+app.post('/Rider/updateOrderDelivered/', (req, res) => orderController.updateOrderDelivered(req, res, db))
+
+
 
 app.get('/staff/getAllOrders/', (req, res) => orderController.getAllOrderDetailsforRestaurantStaffPage(req, res, db))
 app.get('/staff/getMostPopularByMonth/', (req, res) => orderController.getMostPopularByMonth(req, res, db))
