@@ -165,6 +165,55 @@ BEGIN;
     INSERT INTO Weekly_Work_Schedule(sid, sche_date, time_start, time_end, duration) VALUES (4,'8/5/2020', '12:00:00','16:00:00', 4);
 COMMIT;
 
+INSERT INTO Schedules(sid, rider_id) VALUES (5, 30);
+BEGIN;
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 1, '3/5/2020', 1);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 1, '4/5/2020', 2);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 1, '5/5/2020', 3);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 1, '6/5/2020', 4);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 1, '7/5/2020', 4);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 2, '10/5/2020', 1);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 2, '11/5/2020', 2);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 2, '12/5/2020', 3);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 2, '13/5/2020', 4);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 2, '14/5/2020', 4);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 3, '17/5/2020', 1);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 3, '18/5/2020', 2);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 3, '19/5/2020', 3);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 3, '20/5/2020', 4);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 3, '21/5/2020', 4);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 4, '24/5/2020', 1);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 4, '25/5/2020', 2);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 4, '26/5/2020', 3);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 4, '27/5/2020', 4);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (5, 4, '28/5/2020', 4);
+COMMIT;
+
+INSERT INTO Schedules(sid, rider_id) VALUES (6, 31);
+BEGIN;
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 1, '3/5/2020', 4);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 1, '4/5/2020', 3);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 1, '5/5/2020', 2);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 1, '6/5/2020', 1);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 1, '7/5/2020', 1);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 2, '10/5/2020', 4);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 2, '11/5/2020', 3);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 2, '12/5/2020', 2);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 2, '13/5/2020', 1);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 2, '14/5/2020', 1);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 3, '17/5/2020', 4);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 3, '18/5/2020', 3);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 3, '19/5/2020', 2);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 3, '20/5/2020', 1);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 3, '21/5/2020', 1);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 4, '24/5/2020', 4);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 4, '25/5/2020', 3);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 4, '26/5/2020', 2);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 4, '27/5/2020', 1);
+INSERT INTO Monthly_Work_Schedule(sid, week, sche_date, shift_id) VALUES (6, 4, '28/5/2020', 1);
+COMMIT;
+
+
 
 INSERT INTO Food (fid,rid,fname,price,daily_limit,category) VALUES (101,1,'Roasted Chicken Rice',5,90,'Local');
 INSERT INTO Food (fid,rid,fname,price,daily_limit,category) VALUES (102,1,'Steamed Chicken Rice',6,85,'Local');

@@ -42,6 +42,7 @@ app.get('/customer/shop/getRestaurantDetails/', (req, res) => restController.get
 app.get('/customer/shop/getRecentDeliveryAddress/', (req, res) => customerController.getRecentDeliveryAddress(req, res, db))
 app.get('/customer/shop/getAllOrderDetailsForOneCust/', (req, res) => orderController.getAllOrderDetailsForOrderPage(req, res, db))
 app.get('/customer/shop/getAllRelevantPromosForOneCust/', (req, res) => promoController.getAllRelevantPromos(req, res, db))
+app.get('/customer/shop/getAllCurrentlyAvailableRider/', (req, res) => riderController.getAllCurrentlyAvailableRider(req, res, db))
 
 app.post('/customer/addRiderReview/', (req, res) => reviewController.addRiderReviewByCustomerPage(req, res, db))
 app.post('/customer/addFoodReview/', (req, res) => reviewController.addFoodReviewByCustomerPage(req, res, db))
