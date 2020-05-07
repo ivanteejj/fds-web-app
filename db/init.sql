@@ -67,12 +67,6 @@ CREATE TABLE AREAS (
     primary key (area)
 );
 
-CREATE TABLE Base_Salary (
-	base_salary		NUMERIC
-                    CHECK (base_salary > 0),
-	primary key(base_salary)
-);
-
 
 CREATE TABLE Accounts (
 	username				TEXT,
@@ -134,8 +128,7 @@ CREATE TABLE Riders(
     base_salary         NUMERIC NOT NULL,
 	username			TEXT NOT NULL,
     PRIMARY KEY (rider_id),
-	FOREIGN KEY (username) REFERENCES Accounts (username),
-	FOREIGN KEY (base_salary) REFERENCES Base_Salary(base_salary)
+	FOREIGN KEY (username) REFERENCES Accounts (username)
 );
 
 CREATE TABLE Promotions(
