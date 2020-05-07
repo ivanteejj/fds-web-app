@@ -10,7 +10,7 @@
 DROP TABLE IF EXISTS 	Accounts, Restaurants, Food, Staff, Customers,
 						Orders, ShoppingCarts, Promotions,
 						Food_Reviews, Riders, Schedules, Shifts, Monthly_Work_Schedule,
-						Weekly_Work_Schedule, Year, Month, DaysInWeek, Hour, Areas, Base_Salary CASCADE;
+						Weekly_Work_Schedule, Year, Month, DaysInWeek, Hour, Areas, Base_Salary, FDS_Manager CASCADE;
 						
 DROP TYPE IF EXISTS CAT_ENUM, PROMO_CAT_ENUM, PROMO_TYPE_ENUM CASCADE;
 
@@ -102,6 +102,11 @@ CREATE TABLE Staff (
     PRIMARY KEY (staff_id),
     FOREIGN KEY (rid) REFERENCES Restaurants (rid),
 	FOREIGN KEY (username) REFERENCES Accounts (username)
+);
+
+CREATE TABLE FDS_Manager (
+    username			TEXT NOT NULL,
+    FOREIGN KEY (username) REFERENCES Accounts (username)
 );
 
 CREATE TABLE Customers(
