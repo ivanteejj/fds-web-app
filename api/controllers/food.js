@@ -102,8 +102,6 @@ const queryAddFood =
     "VALUES ($1, $2, $3, $4, $5);"
 const addFoodForRestaurantPage = (req, res, db) => {
     let rid = req.body.rid;
-    console.log("rest_id is");
-    console.log(req.body.rid);
     const output = db.query(queryAddFood, [rid, req.body.fname, req.body.price, req.body.daily_limit, req.body.category],
         (error, result) => {
             if (error) {

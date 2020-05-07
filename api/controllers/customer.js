@@ -25,16 +25,22 @@ const getRecentDeliveryAddress = (req, res, db) => {
         })
 }
 
-const getCustomerDetails = (req, res) => {
-    const custUsername = req.params.userName
-    
-    const outputCustDetails = 
-        cust.filter((c) => c.id === parseInt(custUsername))
+const queryToGetOneCustomersDetails = "SELECT * FROM Customers WHERE cid = $1"
 
-    res.json(outputCustDetails)
+const getOneCustomersDetails = (req, res, db) => {
+    const cid = req.query.cid;
+    console.log(cid);
+
+    const output = db.query(queryToGetOneCustomersDetails, [cid],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(result.rows);
+        })
 }
 
 module.exports = {
     getRecentDeliveryAddress: getRecentDeliveryAddress,
-    getCustomerDetails: getCustomerDetails
+    getOneCustomersDetails: getOneCustomersDetails,
 };
