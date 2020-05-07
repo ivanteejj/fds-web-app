@@ -19,8 +19,6 @@ const fakeSummary = {
 }
 
 const fakeOngoingOrders = {
-    // TODO: generate orders with dt_order_delivered == null
-    //  NOTE additional fields: address (restaurant address), custid (customer's userid)
     // data should already be sorted in desc order by dt_order_placed
     data: [
         {oid: 100123, totalcost: 49.5, paymentmode: "Cash On Delivery", custid: "ivantee",
@@ -143,7 +141,6 @@ export default function Summary({userid}) {
     }, [])
 
     const updateStatus = async (oid, type) => {
-        //TODO: (backend) code here for updating active order status
         const curr_datetime = moment().toDate();
 
         switch (type) {
