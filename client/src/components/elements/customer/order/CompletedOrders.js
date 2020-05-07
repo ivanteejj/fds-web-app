@@ -16,11 +16,11 @@ export default function CompletedOrders({orders, openReview}) {
                         <Card.Content>
                             <h2>{`Order ID: #${order.oid}`}</h2>
                             <Button floated={'right'} size="small"
-                                    color={order.review === null ? 'teal' : "orange"}
-                                    content={order.review === null ? 'Leave Review' : "View Review"}
+                                    color={order.foodrating && order.foodrating.length > 0? "orange" : 'teal'}
+                                    content={order.foodrating && order.foodrating.length > 0 ? "View Review" : 'Leave Review'}
                                     onClick={()=> {
-                                        order.review === null ? openReview("leaveReview", true, order)
-                                            : openReview("viewReview", true, order)
+                                        order.foodrating && order.foodrating.length > 0 ? openReview("viewReview", true, order)
+                                            : openReview("leaveReview", true, order)
                                     }}
                             />
 

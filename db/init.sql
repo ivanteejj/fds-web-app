@@ -265,96 +265,7 @@ CREATE TABLE Weekly_Work_Schedule (
 
 
 
-
-
-
-
--- Trigger function to update menu availability on every order placed
-CREATE OR REPLACE FUNCTION update_food_availability() RETURNS TRIGGER AS 
-$$
-DECLARE
-	rec RECORD;
-	daily_sold_qty INTEGER;
-	daily_limit INTEGER;
-	exceed_limit BOOLEAN;
-BEGIN
-  
-	FOR rec IN SELECT fid, quantity
-			FROM ShoppingCarts
-			WHERE oid = NEW.oid
-	LOOP
-	SELECT daily_sold_qty INTO daily_sold_qty
-		FROM Food
-		WHERE fid = rec.fid;
-	SELECT daily_limit INTO daily_limit
-		FROM Food
-		WHERE fid = rec.fid;
-	IF rec.quantity + daily_sold_qty > daily_limit THEN
-		exceed_limit = true;
-	ELSIF rec.quantity + daily_sold_qty = daily_limit THEN
-		UPDATE Food
-		SET daily_sold_qty = daily_sold_qty + rec.quantity,
-			availability = 'NOT AVAILABLE'
-		WHERE fid = rec.fid;
-	ELSE
-		UPDATE Food
-		SET daily_sold_qty = daily_sold_qty + rec.quantity
-		WHERE fid = rec.fid;
-	END IF;
-	END LOOP;
-	
-	IF exceed_limit THEN
-		RAISE exception 'Unable to make the order';
-	ELSE
-		RETURN NEW;
-	END IF;
-	
-END;
-$$ LANGUAGE plpgsql;
-
---DROP TRIGGER IF EXISTS food_daily_limit_trigger ON Orders;
---CREATE TRIGGER food_daily_limit_trigger
---    BEFORE INSERT ON Orders
---    FOR EACH ROW
---    EXECUTE FUNCTION update_food_availability();
-
-	
-
-/*
-
-CREATE OR REPLACE FUNCTION create_first_order_discount() RETURNS TRIGGER AS
-$$
-DECLARE
-	num_rec INTEGER;
-BEGIN
-	
-	SELECT count(*) INTO num_rec
-	FROM Promotions;
-	
-	num_rec = num_rec + 1;
-	
-	INSERT INTO Promotions
-	VALUES (num_rec,10,NULL,NULL,1);
-	
-	INSERT INTO FDS_Promotions
-	VALUES (num_rec,'Order');
-	
-	INSERT INTO FDS_Promo_Applies
-	VALUES (NEW.cid,num_rec);
-	
-	RETURN NULL;
-END;
-$$ LANGUAGE plpgsql;
-
-DROP TRIGGER IF EXISTS first_order_discount_trigger ON Customers;
-CREATE TRIGGER first_order_discount_trigger
-	AFTER INSERT ON Customers
-	FOR EACH ROW
-	EXECUTE FUNCTION create_first_order_discount();
-
-*/
-
-CREATE OR REPLACE FUNCTION create_first_order_discount() RETURNS TRIGGER AS
+CREATE OR REPLACE FUNCTION update_cart_fee_in_order() RETURNS TRIGGER AS
 $$
 DECLARE
 	num INTEGER;
@@ -377,64 +288,13 @@ DROP TRIGGER IF EXISTS update_cart_fee_trigger ON ShoppingCarts;
 CREATE TRIGGER update_cart_fee_trigger
 	AFTER UPDATE OR INSERT ON ShoppingCarts
 	FOR EACH ROW
-	EXECUTE FUNCTION create_first_order_discount();
+	EXECUTE FUNCTION update_cart_fee_in_order();
 
 
 
 
---option A
---assumed if insert the MWS as a transaction, this would enforce the constraint that 4 WWS must be the same
-CREATE OR REPLACE FUNCTION check_monthly_work_schedule_constraint() RETURNS TRIGGER AS
-$$
-DECLARE
-	num INTEGER;
-BEGIN
-
-
-	select count(*) INTO num
-	from (select EXTRACT(DOW from sche_date), shift_id
-	from Monthly_Work_Schedule
-	where sid = NEW.sid
-	and week = 1
-	intersect
-	select EXTRACT(DOW from sche_date), shift_id
-	from Monthly_Work_Schedule
-	where sid = NEW.sid
-	and week = 2
-	intersect
-	select EXTRACT(DOW from sche_date), shift_id
-	from Monthly_Work_Schedule
-	where sid = NEW.sid
-	and week = 3
-	intersect
-	select EXTRACT(DOW from sche_date), shift_id
-	from Monthly_Work_Schedule
-	where sid = NEW.sid
-	and week = 4
-	) AS Foo;
-	
-	IF (num <> 5) THEN
-		RAISE exception 'MWS constraint violated.';
-	END IF;
-	
-	RETURN NULL;
-
-END;
-$$ LANGUAGE plpgsql;
-
-
-DROP TRIGGER IF EXISTS monthly_work_schedule_trigger on Monthly_Work_Schedule;
-CREATE CONSTRAINT TRIGGER weekly_work_schedule_trigger
-	AFTER UPDATE OR INSERT 
-	ON Monthly_Work_Schedule
-	deferrable initially deferred
-	FOR EACH ROW
-	EXECUTE FUNCTION check_monthly_work_schedule_constraint();
-	
-	
 	
 
---Option B
 --this would also enforce the constraint that 4 WWS must be the same
 CREATE OR REPLACE FUNCTION check_monthly_work_schedule_constraint() RETURNS TRIGGER AS
 $$
@@ -452,7 +312,7 @@ BEGIN
 	where sid = NEW.sid
 	and week = NEW.week;
 	
-	if num >= 5 then
+	if num > 5 then
 		RAISE exception 'MWS constraint violated.';
 	end if;
 	
@@ -564,10 +424,11 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-DROP TRIGGER IF EXISTS monthly_work_schedule_trigger on Monthly_Work_Schedule;
-CREATE TRIGGER weekly_work_schedule_trigger
+DROP TRIGGER IF EXISTS monthly_work_schedule_trigger on Monthly_Work_Schedule CASCADE;
+CREATE CONSTRAINT TRIGGER weekly_work_schedule_trigger
 	AFTER UPDATE OR INSERT 
 	ON Monthly_Work_Schedule
+	DEFERRABLE INITIALLY DEFERRED
 	FOR EACH ROW
 	EXECUTE FUNCTION check_monthly_work_schedule_constraint();
 	
@@ -594,11 +455,6 @@ BEGIN
 	if num < 10 OR num > 48 then
 		RAISE exception 'The total number of hours in each WWS must be at least 10 and at most 48.';
 	end if;
-	
-	
-	
-	
-	
 	
 	
 	FOR rec IN SELECT time_start, time_end
@@ -637,6 +493,84 @@ CREATE CONSTRAINT TRIGGER weekly_work_schedule_trigger
 
 
 
+CREATE OR REPLACE FUNCTION check_cart_items_from_same_rest() RETURNS TRIGGER AS
+$$
+DECLARE
+	rec RECORD;
+	restId INTEGER;
+BEGIN
+
+	select rid into restId
+	from Food natural join Restaurants
+	where fid = NEW.fid;
+
+	FOR rec in select rid
+	from ShoppingCarts natural join Food
+	where oid = NEW.oid
+	LOOP
+		
+		if rec.rid <> restId then
+			RAISE EXCEPTION 'Cart items must be from the same restaurant.';
+		end if;
+	END LOOP;
+	
+	RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+
+DROP TRIGGER IF EXISTS check_cart_items_from_same_rest_trigger on ShoppingCarts;
+CREATE TRIGGER check_cart_items_from_same_rest_trigger
+	AFTER UPDATE OR INSERT ON ShoppingCarts
+	FOR EACH ROW
+	EXECUTE FUNCTION check_cart_items_from_same_rest();
+	
+	
+CREATE OR REPLACE FUNCTION check_FT_Rider_Schedules_constraints() RETURNS TRIGGER AS
+$$
+DECLARE
+	rtype VARCHAR;
+BEGIN
+	select rider_type into rtype
+	from Schedules natural join Riders
+	where sid = NEW.sid;
+	
+	if rtype <> 'FT' then
+		RAISE EXCEPTION 'MWS can only be assigned to full time rider';
+	end if;
+	
+	RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+	
+DROP TRIGGER IF EXISTS FT_Rider_Schedules_constraints_trigger on Monthly_Work_Schedule;
+CREATE TRIGGER FT_Rider_Schedules_constraints_trigger
+	AFTER UPDATE OR INSERT ON Monthly_Work_Schedule
+	FOR EACH ROW
+	EXECUTE FUNCTION check_FT_Rider_Schedules_constraints();
 
 
 
+
+CREATE OR REPLACE FUNCTION check_PT_Rider_Schedules_constraints() RETURNS TRIGGER AS
+$$
+DECLARE
+	rtype VARCHAR;
+BEGIN
+	select rider_type into rtype
+	from Schedules natural join Riders
+	where sid = NEW.sid;
+	
+	if rtype <> 'PT' then
+		RAISE EXCEPTION 'WWS can only be assigned to part time rider';
+	end if;
+	
+	RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+	
+DROP TRIGGER IF EXISTS PT_Rider_Schedules_constraints_trigger on Weekly_Work_Schedule;
+CREATE TRIGGER PT_Rider_Schedules_constraints_trigger
+	AFTER UPDATE OR INSERT ON Weekly_Work_Schedule
+	FOR EACH ROW
+	EXECUTE FUNCTION check_PT_Rider_Schedules_constraints();

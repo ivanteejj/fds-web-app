@@ -15,6 +15,8 @@ var restController = require('./controllers/restaurant');
 var orderController = require('./controllers/order');
 var promoController = require('./controllers/promotion');
 var fdsStatsController = require('./controllers/fdsstats');
+var reviewController = require('./controllers/review');
+var riderController = require('./controllers/rider');
 
 
 // view engine setup
@@ -34,18 +36,32 @@ app.use(
 )
 
 // Routing for customers
+app.get('/customer/getOneCustomersDetails/', (req, res) => customerController.getOneCustomersDetails(req, res, db))
 app.get('/customer/shop/', (req, res) => restController.getAllRestDataForHomePage(req, res, db))
 app.get('/customer/shop/getMenu', (req, res) => foodController.getFoodFromOneRes(req, res, db))
 app.get('/customer/shop/getRestaurantDetails/', (req, res) => restController.getOneRestDetails(req, res, db))
 app.get('/customer/shop/getRecentDeliveryAddress/', (req, res) => customerController.getRecentDeliveryAddress(req, res, db))
 app.get('/customer/shop/getAllOrderDetailsForOneCust/', (req, res) => orderController.getAllOrderDetailsForOrderPage(req, res, db))
 app.get('/customer/shop/getAllRelevantPromosForOneCust/', (req, res) => promoController.getAllRelevantPromos(req, res, db))
+app.get('/customer/shop/getAllCurrentlyAvailableRider/', (req, res) => riderController.getAllCurrentlyAvailableRider(req, res, db))
+app.post('/customer/shop/newOrder/', (req, res) => orderController.addAnOrder(req, res, db))
+
+app.post('/customer/addRiderReview/', (req, res) => reviewController.addRiderReviewByCustomerPage(req, res, db))
+app.post('/customer/addFoodReview/', (req, res) => reviewController.addFoodReviewByCustomerPage(req, res, db))
 
 app.get('/FDSManager/getMainSummaryData/', (req, res) => fdsStatsController.getMainSummaryData(req, res, db))
 app.get('/FDSManager/getSummaryDataByCustomer/', (req, res) => fdsStatsController.getSummaryDetailsByCustomer(req, res, db))
 app.get('/FDSManager/getSummaryDataByArea/', (req, res) => fdsStatsController.getSummaryDetailsByArea(req, res, db))
 app.get('/FDSManager/getPromoStats/', (req, res) => promoController.getAllPromoStatisticsForFDSManagerPage(req, res, db))
 app.get('/FDSManager/getRiderSummaryStats/', (req, res) => fdsStatsController.getRiderSummaryStats(req, res, db))
+
+app.get('/Rider/getAllReviewsOfOneRider/', (req, res) => riderController.getAllReviewsOfOneRider(req, res, db))
+app.get('/Rider/getOngoingOrders/', (req, res) => orderController.getOngoingOrderForOneRider(req, res, db))
+app.post('/Rider/updateRiderDepartForRest/', (req, res) => orderController.updateRiderDepartForRest(req, res, db))
+app.post('/Rider/updateRiderArriveRest/', (req, res) => orderController.updateRiderArriveRest(req, res, db))
+app.post('/Rider/updateRiderDepartForDeliveryLoc/', (req, res) => orderController.updateRiderDepartForDeliveryLoc(req, res, db))
+app.post('/Rider/updateOrderDelivered/', (req, res) => orderController.updateOrderDelivered(req, res, db))
+
 
 
 app.get('/staff/getAllOrders/', (req, res) => orderController.getAllOrderDetailsforRestaurantStaffPage(req, res, db))

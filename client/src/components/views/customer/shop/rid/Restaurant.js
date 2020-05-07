@@ -68,9 +68,13 @@ export default function Restaurant({ userid }) {
     const delivery_base = 3
     const delivery_percent = 0.025
 
-    const submitOrder = (cart, offset, deliveryFee, totalCharge, deliveryLoc, deliveryArea, paymentMode) => {
-        // TODO: backend code for submit order
-        // generate order in backend
+    const submitOrder = async (cart, offset, deliveryFee, totalCharge, deliveryLoc, deliveryArea, paymentMode) => {
+        let listOfAvailableRider;
+
+        axios.get('/customer/shop/getAllCurrentlyAvailableRider/')
+            .then((response) => listOfAvailableRider = response.data)
+
+        console.log(listOfAvailableRider)
         setTest({area: deliveryArea, address: deliveryLoc})
         // once order successful, direct to home page
     }
