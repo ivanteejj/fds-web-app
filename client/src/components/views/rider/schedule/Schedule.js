@@ -97,7 +97,12 @@ export default function Schedule({userid}) {
         (async() => {
             // TODO: (backend) code here for first rendering of page
             let user = userid
-            setSchedule(fakeSchedulePT.data);
+            await axios.get('/Rider/getSchedule/', {
+                params: {
+                    rider_id: user
+                }
+            }).then((response) => setSchedule(response.data))
+
             // retrieve rider type
             setRiderType("PT");
 

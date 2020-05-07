@@ -224,6 +224,35 @@ const updateOrderDelivered = (req, res, db) => {
         })
 }
 
+const queryToAddAnOrder =
+    "INSERT INTO Orders (order_placed, payment_method, cart_fee, delivery_fee, rider_bonus, discount_amount, delivery_location, delivery_location_area, rider_id, cid, pid)\n" +
+    "VALUES (now()::timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)"
+
+const addAnOrder = (req, res, db) => {
+    const payment_method = req.body.payment_method
+    console.log("Payment method is")
+    console.log(payment_method)
+    const cart_fee = req.body.cart_fee
+    console.log("Cart fee is")
+    console.log(cart_fee)
+    const delivery_fee = req.body.delivery_fee
+    const rider_bonus = req.body.rider_bonus
+    const discount_amount = req.body.discount_amount
+    const delivery_location = req.body.delivery_location
+    const delivery_location_area = req.body.delivery_location_area
+    const rider_id = req.body.rider_id
+    const cid = req.body.cid
+    const pid = req.body.pid
+
+    const output = db.query(queryToAddAnOrder, [payment_method, cart_fee, delivery_fee, rider_bonus, discount_amount, delivery_location, delivery_location_area, rider_id, cid, pid],
+        (error,  results) => {
+            if (error) {
+                console.log(error)
+            }
+
+            res.status(200).json(results.rows)
+        })
+}
 
 
 module.exports = {
@@ -234,7 +263,8 @@ module.exports = {
     updateRiderDepartForRest: updateRiderDepartForRest,
     updateRiderArriveRest: updateRiderArriveRest,
     updateRiderDepartForDeliveryLoc: updateRiderDepartForDeliveryLoc,
-    updateOrderDelivered: updateOrderDelivered
+    updateOrderDelivered: updateOrderDelivered,
+    addAnOrder: addAnOrder
 };
 
 

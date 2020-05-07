@@ -37,6 +37,7 @@ app.use(
 )
 
 // Routing for customers
+app.get('/customer/getOneCustomersDetails/', (req, res) => customerController.getOneCustomersDetails(req, res, db))
 app.get('/customer/shop/', (req, res) => restController.getAllRestDataForHomePage(req, res, db))
 app.get('/customer/shop/getMenu', (req, res) => foodController.getFoodFromOneRes(req, res, db))
 app.get('/customer/shop/getRestaurantDetails/', (req, res) => restController.getOneRestDetails(req, res, db))
@@ -44,6 +45,7 @@ app.get('/customer/shop/getRecentDeliveryAddress/', (req, res) => customerContro
 app.get('/customer/shop/getAllOrderDetailsForOneCust/', (req, res) => orderController.getAllOrderDetailsForOrderPage(req, res, db))
 app.get('/customer/shop/getAllRelevantPromosForOneCust/', (req, res) => promoController.getAllRelevantPromos(req, res, db))
 app.get('/customer/shop/getAllCurrentlyAvailableRider/', (req, res) => riderController.getAllCurrentlyAvailableRider(req, res, db))
+app.post('/customer/shop/newOrder/', (req, res) => orderController.addAnOrder(req, res, db))
 
 app.post('/customer/addRiderReview/', (req, res) => reviewController.addRiderReviewByCustomerPage(req, res, db))
 app.post('/customer/addFoodReview/', (req, res) => reviewController.addFoodReviewByCustomerPage(req, res, db))
@@ -54,6 +56,9 @@ app.get('/FDSManager/getSummaryDataByArea/', (req, res) => fdsStatsController.ge
 app.get('/FDSManager/getPromoStats/', (req, res) => promoController.getAllPromoStatisticsForFDSManagerPage(req, res, db))
 app.get('/FDSManager/getRiderSummaryStats/', (req, res) => fdsStatsController.getRiderSummaryStats(req, res, db))
 
+app.get('/Rider/getSchedule/', (req, res) => riderController.getSchedule(req, res, db))
+app.get('/Rider/getEarningsForRider/', (req, res) => riderController.getEarningsForRider(req, res, db))
+app.get('/Rider/getSummaryForRider/', (req, res) => riderController.getSummaryForRider(req, res, db))
 app.get('/Rider/getAllReviewsOfOneRider/', (req, res) => riderController.getAllReviewsOfOneRider(req, res, db))
 app.get('/Rider/getOngoingOrders/', (req, res) => orderController.getOngoingOrderForOneRider(req, res, db))
 app.post('/Rider/updateRiderDepartForRest/', (req, res) => orderController.updateRiderDepartForRest(req, res, db))

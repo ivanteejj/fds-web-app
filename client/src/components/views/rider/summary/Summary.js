@@ -6,11 +6,6 @@ import ActiveOrders from "../../../elements/rider/summary/ActiveOrders";
 import axios from "axios";
 
 const fakeSummary = {
-    // TODO: For each Schedule ID, get the following:
-    //  1) Min Date as start_dt, Max Date as end_dt
-    //  2) Total Orders delivered
-    //  3) Sum(time_interval) as total_hours
-    //  4) Base salary + (total_orders_delivered * rider's incentive) as total_salary
     // data should already be sorted in desc order by data
     data: [
         {sch_id: 1221, start_dt: "25/04/2020", end_dt: "02/05/2020", total_hours: 30, total_orders_delivered: 100, total_salary: 103},
@@ -126,6 +121,14 @@ export default function Summary({userid}) {
 
     useEffect(() => {
         (async() => {
+            await axios.get('/Rider/getSummaryForRider/', {
+                params: {
+                    rider_id: userid
+                }
+            })
+                .then((response) => setFilterSummary({type: "initialize", payload: response.data})
+                )
+
             await axios
                 .get('/Rider/getOngoingOrders/', {
                     params: {
@@ -134,9 +137,8 @@ export default function Summary({userid}) {
                 })
                 .then(function(response) {
                     setOrders(response.data)
-                    setFilterSummary({type: "initialize", payload: fakeSummary.data})
-
                 })
+
         })()
     }, [])
 
