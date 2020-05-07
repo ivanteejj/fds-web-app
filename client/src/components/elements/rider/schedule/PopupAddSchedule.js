@@ -16,9 +16,9 @@ const error_range_msg = "Range Specified contains clashing schedule!"
 
 const days = (riderType) => {
     switch (riderType) {
-        case "part-time":
+        case "PT":
             return 7;
-        case "full-time":
+        case "FT":
             return 28;
         default:
             return 0;
@@ -146,13 +146,13 @@ export default function PopupAddSchedule({openPopup, occupiedDates, riderType, s
                         </Card.Content>
                     </Card>
 
-                    {errors.range && riderType === "full-time" && (
+                    {errors.range && riderType === "FT" && (
                         <FullTimeAddSchedule startDate={startDate} endDate={endDate}
                                              submitSchedule={submitFTSchedule}
                         />
                     )}
 
-                    {errors.range && riderType === "part-time" && (
+                    {errors.range && riderType === "PT" && (
                         <PartTimeAddSchedule startDate={startDate} endDate={endDate}
                                              submitSchedule={submitSchedule}
                         />

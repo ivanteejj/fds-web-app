@@ -17,6 +17,7 @@ var promoController = require('./controllers/promotion');
 var fdsStatsController = require('./controllers/fdsstats');
 var reviewController = require('./controllers/review');
 var riderController = require('./controllers/rider');
+var scheduleController = require('./controllers/schedule');
 
 
 // view engine setup
@@ -64,6 +65,10 @@ app.post('/Rider/updateRiderDepartForRest/', (req, res) => orderController.updat
 app.post('/Rider/updateRiderArriveRest/', (req, res) => orderController.updateRiderArriveRest(req, res, db))
 app.post('/Rider/updateRiderDepartForDeliveryLoc/', (req, res) => orderController.updateRiderDepartForDeliveryLoc(req, res, db))
 app.post('/Rider/updateOrderDelivered/', (req, res) => orderController.updateOrderDelivered(req, res, db))
+app.post('/Rider/updateRiderDepartForDeliveryLoc/', (req, res) => orderController.updateRiderDepartForDeliveryLoc(req, res, db))
+app.post('/Rider/updateOrderDelivered/', (req, res) => orderController.updateOrderDelivered(req, res, db))
+app.post('/Rider/setupSchedule/', (req, res) => scheduleController.setUpSchedule(req, res, db))
+app.post('/Rider/addWWS/', (req, res) => scheduleController.insertWWS(req, res, db))
 
 
 

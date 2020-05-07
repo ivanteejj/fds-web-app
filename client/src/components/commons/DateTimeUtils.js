@@ -34,6 +34,14 @@ export default class DateTimeUtils extends Component {
         return months[month - 1] + " "  + year
     }
 
+    static stringtifyTime(datetime) {
+        return moment(datetime).format("HH:mm:ss").toString()
+    }
+
+    static stringtifyDate(datetime) {
+        return moment(datetime).format("DD/MM/YYYY").toString()
+    }
+
     // expects month and year variables name to be standardized as follows
     // returns an array with additional period field
     static formatDataPeriod = (data) => {
