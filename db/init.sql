@@ -1,10 +1,3 @@
---triggers
---1. to have a trigger such that when a new customer make the first order, the 10% discount is automatically applied
---2. to check num of riders for any hourly interval
---3. to check the total cost of order is above min_amt of a restaurant after update on order_status from incomplete to placed
---4. to check whether food_items which belongs to the same order come from the same restaurant(front end)
---5. might need to refresh the sold_qty of Food
-
 
 
 DROP TABLE IF EXISTS 	Accounts, Restaurants, Menus, Food, Staff, Customers, 
