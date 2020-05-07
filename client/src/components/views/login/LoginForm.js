@@ -54,11 +54,11 @@ const LoginForm = ({validLogin}) => {
                 // return history.push("/customer/shop")
 
                 // rider
-                // validLogin(30, "rider", null);
-                // return history.push("/rider/summary")
+                validLogin(30, "rider", null);
+                return history.push("/rider/summary")
 
-                validLogin(10, "staff", 3);
-                return history.push("/staff/summary")
+                // validLogin(10, "staff", 3);
+                //return history.push("/staff/summary")
             }}
         > 
 

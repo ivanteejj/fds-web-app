@@ -55,6 +55,9 @@ app.get('/FDSManager/getSummaryDataByArea/', (req, res) => fdsStatsController.ge
 app.get('/FDSManager/getPromoStats/', (req, res) => promoController.getAllPromoStatisticsForFDSManagerPage(req, res, db))
 app.get('/FDSManager/getRiderSummaryStats/', (req, res) => fdsStatsController.getRiderSummaryStats(req, res, db))
 
+app.get('/Rider/getSchedule/', (req, res) => riderController.getSchedule(req, res, db))
+app.get('/Rider/getEarningsForRider/', (req, res) => riderController.getEarningsForRider(req, res, db))
+app.get('/Rider/getSummaryForRider/', (req, res) => riderController.getSummaryForRider(req, res, db))
 app.get('/Rider/getAllReviewsOfOneRider/', (req, res) => riderController.getAllReviewsOfOneRider(req, res, db))
 app.get('/Rider/getOngoingOrders/', (req, res) => orderController.getOngoingOrderForOneRider(req, res, db))
 app.post('/Rider/updateRiderDepartForRest/', (req, res) => orderController.updateRiderDepartForRest(req, res, db))

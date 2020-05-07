@@ -8,6 +8,7 @@ import FullCalendar from "@fullcalendar/react"
 import dayGridPlugin from "@fullcalendar/daygrid"
 import timeGridPlugin from "@fullcalendar/timegrid"
 import PopupAddSchedule from "../../../elements/rider/schedule/PopupAddSchedule";
+import axios from "axios";
 
 const fakeSchedulePT = {
     // part time
@@ -82,7 +83,12 @@ export default function Schedule({userid}) {
         (async() => {
             // TODO: (backend) code here for first rendering of page
             let user = userid
-            setSchedule(fakeSchedulePT.data);
+            await axios.get('/Rider/getSchedule/', {
+                params: {
+                    rider_id: user
+                }
+            }).then((response) => setSchedule(response.data))
+
             // retrieve rider type
             setRiderType("part-time");
 
