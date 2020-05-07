@@ -68,13 +68,42 @@ export default function Restaurant({ userid }) {
     const delivery_base = 3
     const delivery_percent = 0.025
 
+    const promo_offset = (offset) => {
+        switch (offset.type) {
+            case "promo":
+                return {pid: offset.obj.pid, discount_amount: offset.value}
+            case "rewards": {
+                // await function here
+                return {pid: null, discount_amount: offset.value}
+            }
+            default:
+                return {pid: null, discount_amount: 0}
+        }
+    }
+
+    const payment_mode = (paymentMode) => {
+        switch (paymentMode.mode) {
+            case "CREDITCARD":
+                // await function here
+                return {payment_method: paymentMode.mode}
+            default:
+                return {payment_method: paymentMode.mode}
+        }
+    }
+
     const submitOrder = async (cart, offset, deliveryFee, totalCharge, deliveryLoc, deliveryArea, paymentMode) => {
-        let listOfAvailableRider;
 
-        axios.get('/customer/shop/getAllCurrentlyAvailableRider/')
-            .then((response) => listOfAvailableRider = response.data)
+        await axios.get('/customer/shop/getAllCurrentlyAvailableRider/')
+            .then( (resp) => {
+                let listOfAvailableRider = resp.data
+                console.log(listOfAvailableRider)
+                const rider = listOfAvailableRider[Math.floor(Math.random() * listOfAvailableRider.length)];
+                console.log("rider selected:" + rider.rider_id)
 
-        console.log(listOfAvailableRider)
+            }, (error) => {
+                console.log(error);
+            });
+
         setTest({area: deliveryArea, address: deliveryLoc})
         // once order successful, direct to home page
     }

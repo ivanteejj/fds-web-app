@@ -64,11 +64,11 @@ export default function PopupAddSchedule({openPopup, occupiedDates, riderType, s
         switch (type) {
             case "start":
                 setStartDate(date)
-                setEndDate(new Date(new Date().setDate(date.getDate() + days(riderType) - 1)))
+                setEndDate(moment(date).add(days(riderType) - 1, 'day').toDate())
                 return
             case "end":
                 setEndDate(date)
-                setStartDate(new Date(new Date().setDate(date.getDate() - days(riderType) + 1)))
+                setStartDate(moment(date).add(-days(riderType) + 1, 'day').toDate())
                 return
             default:
                 return;

@@ -110,7 +110,7 @@ export default function Schedule({userid}) {
             }).then((response) => setSchedule(formatDT(response.data)))
 
             // retrieve rider type
-            setRiderType("PT");
+            setRiderType("FT");
 
         })()
     }, [])

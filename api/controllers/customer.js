@@ -40,7 +40,26 @@ const getOneCustomersDetails = (req, res, db) => {
         })
 }
 
+const queryUpdateCC =
+    "UPDATE customers \n" +
+    "set credit_card_number = 101\n" +
+    "WHERE cid = $1;"
+
+const updateCreditCard = (req, res, db) => {
+    const cid = req.body.cid;
+    console.log(cid);
+
+    const output = db.query(queryUpdateCC, [cid],
+        (error, result) => {
+            if (error) {
+                console.log(error)
+            }
+            res.status(200).json(result.rows);
+        })
+}
+
 module.exports = {
     getRecentDeliveryAddress: getRecentDeliveryAddress,
     getOneCustomersDetails: getOneCustomersDetails,
+    updateCreditCard: updateCreditCard
 };
