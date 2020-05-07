@@ -9,7 +9,7 @@
 
 DROP TABLE IF EXISTS 	Accounts, Restaurants, Food, Staff, Customers,
 						Orders, ShoppingCarts, Promotions,
-						Food_Reviews, Riders, Schedules, Shifts, Monthly_Work_Schedule,
+						Food_Reviews, Rider_Reviews, Riders, Schedules, Shifts, Monthly_Work_Schedule,
 						Weekly_Work_Schedule, Year, Month, DaysInWeek, Hour, Areas, Base_Salary CASCADE;
 						
 DROP TYPE IF EXISTS CAT_ENUM, PROMO_CAT_ENUM, PROMO_TYPE_ENUM CASCADE;
