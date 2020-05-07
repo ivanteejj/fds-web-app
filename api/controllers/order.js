@@ -85,12 +85,12 @@ const queryToGetMostPopularByMonth =
     "\t-- can be adjusted to show more months\n" +
     "\tLIMIT 12\n" +
     "), totalOrdersWithFood as (\n" +
-    "\tSELECT EXTRACT(MONTH FROM order_delivered) as month, EXTRACT(YEAR FROM order_delivered) as year, fid, fname, sum(quantity) as qty_sold\n" +
-    "\tFROM Orders NATURAL JOIN (ShoppingCarts NATURAL JOIN (Food NATURAL JOIN Restaurants))\n" +
+    "\tSELECT EXTRACT(MONTH FROM order_delivered) as month, EXTRACT(YEAR FROM order_delivered) as year, fid, sc1.fname, sum(quantity) as qty_sold\n" +
+    "\tFROM Orders NATURAL JOIN (ShoppingCarts sc1 NATURAL JOIN (Food NATURAL JOIN Restaurants))\n" +
     "\tWHERE EXTRACT(MONTH FROM order_delivered) IS NOT NULL\n" +
     "\tAND EXTRACT(YEAR FROM order_delivered) IS NOT NULL\n" +
     "\tAND rid = $1\n" +
-    "\tGROUP BY month, year, fid, fname\n" +
+    "\tGROUP BY month, year, fid, sc1.fname\n" +
     "\tORDER BY qty_sold desc\n" +
     "), totalOrdersPerMonthYear as (\n" +
     "\tselect EXTRACT(MONTH FROM order_placed) as month, EXTRACT(YEAR FROM order_placed) as year, count(*) as totalorders, sum(cart_fee) as totalProfit\n" +
