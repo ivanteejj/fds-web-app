@@ -1,10 +1,15 @@
 var express = require('express');
 
 const getAllRecentDeliveryLocForOnePerson =
-    "select delivery_location as address\n" +
-    "from Orders join Customers using(cid)\n" +
-    "where cid = $1\n" +
-    "order by order_placed DESC\n" +
+"WITH recentDuplicatedDeliveryAddresses as (\n" +
+    "\tselect delivery_location as address, delivery_location_area as area\n" +
+    "    from Orders join Customers using(cid)\n" +
+    "    where cid = $1\n" +
+    "    order by order_placed DESC\n" +
+    ")\n" +
+    "\n" +
+    "SELECT DISTINCT address, area\n" +
+    "FROM recentDuplicatedDeliveryAddresses\n" +
     "limit 5;"
 
 const getRecentDeliveryAddress = (req, res, db) => {
@@ -16,7 +21,6 @@ const getRecentDeliveryAddress = (req, res, db) => {
             if (error) {
                 console.log(error)
             }
-            console.log(result.rows)
             res.status(200).json(result.rows);
         })
 }
