@@ -212,7 +212,7 @@ CREATE TABLE Food_Reviews(
 	FOREIGN KEY (fid) REFERENCES Food (fid)
 );
 
-CREATE TABLE Food_Reviews(
+CREATE TABLE Rider_Reviews(
     oid         INTEGER,
     rider_id    INTEGER,
     remark      VARCHAR(1000) NOT NULL,
