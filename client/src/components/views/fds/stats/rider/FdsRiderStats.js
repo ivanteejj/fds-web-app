@@ -3,6 +3,7 @@ import ReactTableFilters from "../../../../commons/ReactTableFilters";
 import {Grid, Header} from "semantic-ui-react";
 import FdsStatsTable from "../../../../elements/fds/stats/FdsStatsTable";
 import DateTimeUtils from "../../../../commons/DateTimeUtils";
+import axios from "axios";
 
 const fakeRiderStats = {
     //TODO: aggregated data
@@ -102,11 +103,11 @@ export default function FdsRiderStats() {
             }
         ], []
     )
-
     useEffect(() => {
         (async() => {
-            // TODO: (backend) code here for first rendering of page
-            setData(DateTimeUtils.formatDataPeriod(fakeRiderStats.data))
+            const allRelevantOrders = await axios
+                .get('/FDSManager/getRiderSummaryStats/', )
+                .then((response) => setData((DateTimeUtils.formatDataPeriod(response.data))))
         })()
     }, [])
 
