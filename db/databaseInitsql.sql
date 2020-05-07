@@ -273,6 +273,7 @@ SELECT pg_catalog.setval(pg_get_serial_sequence('Orders', 'oid'), MAX(oid)) FROM
 SELECT pg_catalog.setval(pg_get_serial_sequence('Food', 'fid'), MAX(fid)) FROM Food;
 SELECT pg_catalog.setval(pg_get_serial_sequence('Restaurants', 'rid'), MAX(rid)) FROM Restaurants;
 SELECT pg_catalog.setval(pg_get_serial_sequence('Customers', 'cid'), MAX(cid)) FROM Customers;
+SELECT pg_catalog.setval(pg_get_serial_sequence('FDS_Manager', 'manager_id'), MAX(manager_id)) FROM FDS_Manager;
 SELECT pg_catalog.setval(pg_get_serial_sequence('Staff', 'staff_id'), MAX(staff_id)) FROM Staff;
 SELECT pg_catalog.setval(pg_get_serial_sequence('Riders', 'rider_id'), MAX(rider_id)) FROM Riders;
 SELECT pg_catalog.setval(pg_get_serial_sequence('Schedules', 'sid'), MAX(sid)) FROM Schedules;
