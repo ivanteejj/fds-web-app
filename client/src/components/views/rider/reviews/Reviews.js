@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from "react"
 import {Card, Divider, Grid, Header, Rating, Label, Item} from "semantic-ui-react";
 import ReviewsStatistics from "../../../elements/rider/reviews/ReviewsStatistics";
+import axios from "axios";
 
 const fakeReviews = {
-    //TODO: distinct (by order id) records sorted in descending order on dt_order_delivered
     data: [
         {riderid: "phukai", rating: 5, review: "Friendly rider with a big smile", dt_order_delivered: "2020-02-22 19:20:00"},
         {riderid: "phukai", rating: 4, review: "Friendly rider with a big smile", dt_order_delivered: "2020-02-22 19:20:00"},
@@ -22,9 +22,13 @@ export default function Reviews({userid}) {
 
     useEffect(() => {
         (async() => {
-            // TODO: (backend) code here for first rendering of page
-            let user = userid
-            setReviews(fakeReviews.data)
+            await axios
+                .get('/Rider/getAllReviewsOfOneRider/', {
+                    params: {
+                        rider_id: userid
+                    }
+                })
+                .then((response) => setReviews(response.data))
         })()
     }, [])
 

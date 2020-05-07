@@ -9,7 +9,7 @@
 
 DROP TABLE IF EXISTS 	Accounts, Restaurants, Food, Staff, Customers,
 						Orders, ShoppingCarts, Promotions,
-						Food_Reviews, Rider_Reviews, Riders, Schedules, Shifts, Monthly_Work_Schedule,
+						Food_Reviews, Riders, Schedules, Shifts, Monthly_Work_Schedule,
 						Weekly_Work_Schedule, Year, Month, DaysInWeek, Hour, Areas, Base_Salary CASCADE;
 						
 DROP TYPE IF EXISTS CAT_ENUM, PROMO_CAT_ENUM, PROMO_TYPE_ENUM CASCADE;
@@ -205,22 +205,9 @@ CREATE TABLE Food_Reviews(
     oid         INTEGER,
     fid     	INTEGER,
     remark      VARCHAR(1000) NOT NULL,
-    ratings     INTEGER
-                CHECK (ratings > 0 AND ratings <= 5),
     PRIMARY KEY (oid, fid),
 	FOREIGN KEY (oid) REFERENCES Orders (oid),
 	FOREIGN KEY (fid) REFERENCES Food (fid)
-);
-
-CREATE TABLE Rider_Reviews(
-    oid         INTEGER,
-    rider_id    INTEGER,
-    remark      VARCHAR(1000) NOT NULL,
-    ratings     INTEGER
-                CHECK (ratings > 0 AND ratings <= 5),
-    PRIMARY KEY (oid, rider_id),
-    FOREIGN KEY (oid) REFERENCES Orders (oid),
-    FOREIGN KEY (rider_id) REFERENCES Riders (rider_id)
 );
 
 CREATE TABLE Schedules (
@@ -322,7 +309,6 @@ $$ LANGUAGE plpgsql;
 	
 
 /*
-
 CREATE OR REPLACE FUNCTION create_first_order_discount() RETURNS TRIGGER AS
 $$
 DECLARE
@@ -346,13 +332,11 @@ BEGIN
 	RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
-
 DROP TRIGGER IF EXISTS first_order_discount_trigger ON Customers;
 CREATE TRIGGER first_order_discount_trigger
 	AFTER INSERT ON Customers
 	FOR EACH ROW
 	EXECUTE FUNCTION create_first_order_discount();
-
 */
 
 
@@ -608,8 +592,3 @@ CREATE CONSTRAINT TRIGGER weekly_work_schedule_trigger
 	DEFERRABLE INITIALLY DEFERRED
 	FOR EACH ROW
 	EXECUTE FUNCTION check_weekly_work_schedule_constraint();
-
-
-
-
-

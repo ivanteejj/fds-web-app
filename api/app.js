@@ -16,6 +16,8 @@ var orderController = require('./controllers/order');
 var promoController = require('./controllers/promotion');
 var fdsStatsController = require('./controllers/fdsstats');
 var reviewController = require('./controllers/review');
+var riderController = require('./controllers/rider');
+
 
 // view engine setup
 app.use(logger('dev'));
@@ -48,6 +50,10 @@ app.get('/FDSManager/getMainSummaryData/', (req, res) => fdsStatsController.getM
 app.get('/FDSManager/getSummaryDataByCustomer/', (req, res) => fdsStatsController.getSummaryDetailsByCustomer(req, res, db))
 app.get('/FDSManager/getSummaryDataByArea/', (req, res) => fdsStatsController.getSummaryDetailsByArea(req, res, db))
 app.get('/FDSManager/getPromoStats/', (req, res) => promoController.getAllPromoStatisticsForFDSManagerPage(req, res, db))
+app.get('/FDSManager/getRiderSummaryStats/', (req, res) => fdsStatsController.getRiderSummaryStats(req, res, db))
+
+app.get('/Rider/getAllReviewsOfOneRider/', (req, res) => riderController.getAllReviewsOfOneRider(req, res, db))
+app.get('/Rider/getOngoingOrders/', (req, res) => orderController.getOngoingOrderForOneRider(req, res, db))
 
 app.get('/staff/getAllOrders/', (req, res) => orderController.getAllOrderDetailsforRestaurantStaffPage(req, res, db))
 app.get('/staff/getMostPopularByMonth/', (req, res) => orderController.getMostPopularByMonth(req, res, db))

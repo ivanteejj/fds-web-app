@@ -124,6 +124,34 @@ const getMostPopularByMonth = (req, res, db) => {
         })
 }
 
+const queryToGetOngoingOrdersForOneRider =
+    "with aggregatedCart as (\n" +
+    "SELECT oid, json_agg(json_build_object('fid', fid,'rid', rid, 'rname', rname, 'address', address, 'fname', fname, 'quantity', quantity ,'price', price)) as cart\n" +
+    "FROM Orders natural join ShoppingCarts natural join Food natural join Restaurants\n" +
+    "group by oid\n" +
+    ")\n" +
+    "\n" +
+    "select o1.oid, o1.cart_fee as totalcost, payment_method as paymentmode, c1.cname as custid, delivery_location as deliverylocation, \n" +
+    "rname as rider_id, order_placed as dt_order_placed, rider_depart_for_rest as dt_rider_departs, \n" +
+    "rider_arrive_rest as dt_rider_arrives_rest, rider_depart_for_delivery_location as dt_rider_departs_rest, \n" +
+    "order_delivered as dt_order_delivered, cart\n" +
+    "from orders o1 natural join aggregatedCart natural join riders, Customers c1\n" +
+    "where o1.cid = c1.cid and order_delivered IS NULL\n" +
+    "and rider_id = $1\n" +
+    ";"
+
+const getOngoingOrderForOneRider = (req, res, db) => {
+    const rider_id = req.query.rider_id
+    const output = db.query(queryToGetOngoingOrdersForOneRider, [rider_id],
+        (error,  results) => {
+            if (error) {
+                console.log(error)
+            }
+
+            res.status(200).json(results.rows)
+        })
+}
+
 
 
 
@@ -135,6 +163,7 @@ module.exports = {
     getAllOrderDetailsForOrderPage: getAllOrderDetailsForOrderPage,
     getAllOrderDetailsforRestaurantStaffPage: getAllOrderDetailsforRestaurantStaffPage,
     getMostPopularByMonth: getMostPopularByMonth,
+    getOngoingOrderForOneRider: getOngoingOrderForOneRider,
 };
 
 
