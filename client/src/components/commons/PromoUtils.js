@@ -1,7 +1,6 @@
 import React, {Component} from "react"
 
 export default class PromoUtils extends Component {
-
     // calculate promo offset
     static promoOffset = (promo, cartCost, deliveryFee) => {
         switch(promo.disc_type) {
@@ -34,5 +33,10 @@ export default class PromoUtils extends Component {
                 <h4>{`${promo.disc}`}</h4>
             )
         }
+    }
+
+    // filter promos to only those within min_cost requirements
+    static filterValidPromos = (promos, cartCost) => {
+        return promos.filter( x => x.promo_min_cost <= cartCost )
     }
 }

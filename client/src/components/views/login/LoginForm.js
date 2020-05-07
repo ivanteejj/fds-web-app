@@ -45,21 +45,20 @@ const LoginForm = ({validLogin}) => {
                 //comment out the unused user roles
                 // validLogin (userid, user_type, rid (set as null if NA))
 
-                // fds
-                // validLogin(20, "fds", null);
-                // return history.push("/fds/summary")
+                //fds
+                validLogin(20, "fds", null);
+                return history.push("/fds/summary")
 
                 // customer
                 // validLogin(20, "customer", null);
                 // return history.push("/customer/shop")
 
                 // rider
-                // validLogin(20, "rider", null);
+                // validLogin(30, "rider", null);
                 // return history.push("/rider/summary")
 
-                // staff
-                validLogin(10, "staff", 1);
-                return history.push("/staff/summary")
+                //validLogin(10, "staff", 3);
+                //return history.push("/staff/summary")
             }}
         > 
 

@@ -17,13 +17,10 @@ const getOneRestDetails = (req, res, db) => {
 
 const queryToGetAllOrderDetailsForOrderPage = "WITH totalPromotions as (\n" +
     "\tSELECT *\n" +
-    "\tFROM Restaurant_Promotions\n" +
-    "\tUNION\n" +
-    "\tSELECT *, null as rest_id\n" +
-    "\tFROM FDS_Promotions\n" +
+    "\tFROM Promotions\n" +
     "), aggregatedCart as (\n" +
-    "\tSELECT oid, json_agg(json_build_object('fid', fid,'rid', rid, 'rname', rname, 'fname', fname, 'quantity', quantity ,'price', price)) as cart\n" +
-    "\tFROM ((Orders JOIN ShoppingCarts using (oid)) JOIN Food f1 USING (fid)) JOIN Restaurants USING (rid)\n" +
+    "\tSELECT oid, json_agg(json_build_object('fid', fid,'rid', rid, 'rname', rname, 'fname', sc1.fname, 'quantity', quantity ,'price', price)) as cart\n" +
+    "\tFROM ((Orders JOIN ShoppingCarts sc1 using (oid)) JOIN Food f1 USING (fid)) JOIN Restaurants USING (rid)\n" +
     "\tGROUP BY oid\n" +
     ")\n" +
     "\n" +
@@ -89,12 +86,12 @@ const queryToGetMostPopularByMonth =
     "\t-- can be adjusted to show more months\n" +
     "\tLIMIT 12\n" +
     "), totalOrdersWithFood as (\n" +
-    "\tSELECT EXTRACT(MONTH FROM order_delivered) as month, EXTRACT(YEAR FROM order_delivered) as year, fid, fname, sum(quantity) as qty_sold\n" +
-    "\tFROM Orders NATURAL JOIN (ShoppingCarts NATURAL JOIN (Food NATURAL JOIN Restaurants))\n" +
+    "\tSELECT EXTRACT(MONTH FROM order_delivered) as month, EXTRACT(YEAR FROM order_delivered) as year, fid, sc1.fname, sum(quantity) as qty_sold\n" +
+    "\tFROM Orders NATURAL JOIN (ShoppingCarts sc1 NATURAL JOIN (Food NATURAL JOIN Restaurants))\n" +
     "\tWHERE EXTRACT(MONTH FROM order_delivered) IS NOT NULL\n" +
     "\tAND EXTRACT(YEAR FROM order_delivered) IS NOT NULL\n" +
     "\tAND rid = $1\n" +
-    "\tGROUP BY month, year, fid, fname\n" +
+    "\tGROUP BY month, year, fid, sc1.fname\n" +
     "\tORDER BY qty_sold desc\n" +
     "), totalOrdersPerMonthYear as (\n" +
     "\tselect EXTRACT(MONTH FROM order_placed) as month, EXTRACT(YEAR FROM order_placed) as year, count(*) as totalorders, sum(cart_fee) as totalProfit\n" +

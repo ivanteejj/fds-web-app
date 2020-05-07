@@ -25,6 +25,10 @@ export default class DateTimeUtils extends Component {
         return moment(datetime).format("Do MMMM YYYY h:mm:ssa").toString()
     }
 
+    static stringtifyPromoDT(datetime) {
+        return moment(datetime).format("DD/MM/YYYY HH:mm:ss").toString()
+    }
+
     // stringtify month and year
     static stringtifyPeriod(month, year) {
         return months[month - 1] + " "  + year

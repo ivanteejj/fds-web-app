@@ -20,7 +20,17 @@ const fakeMenu = {
 
 const fakeCategories = {
     data: [
-        "Beverages", "Fast Food", "Dessert", "Western", "Japanese", "Chinese", "Mexican", "Korean", "Local Cuisine"
+        'Local',
+        'Asian',
+        'Chinese',
+        'Japanese',
+        'Western',
+        'Italian',
+        'Vegetarian',
+        'Fast Food',
+        'Breakfast',
+        'Desserts',
+        'Beverage'
     ]
 }
 
@@ -40,6 +50,8 @@ export default function Menu({userid, rid}) {
         item: null
     })
 
+    const [test, setTest] = useState(null)
+
     const openPopup = (type, boo, item) => {
         setShowPopup({type: "item", payload: item})
         setShowPopup({type: type, payload: boo})
@@ -50,43 +62,86 @@ export default function Menu({userid, rid}) {
         setShowPopup({type: type, payload: boo})
     }
 
-    const submitEditFood = (item) => {
-        closePopup("editFood", false)
-        // TODO: (backend) code to update food
-        /* Note:
-        * item object contains the following: fname, fid, price, category, daily_limit
-        * use fid to update db
-        * to access item attributes: item.fname, item.fid etc..
-        */
+    const submitEditFood = async (item) => {
+        console.log("fid:" +  item.fid)
 
-        // TODO: (backend) once successfully, update the menu at front end by retrieving updated menu from db
-        // setMenu(Utils.groupBy("sth sth", "category"))
+        await axios
+            .post('/staff/updateFood/', {
+                    fid: item.fid,
+                    fname: item.fname,
+                    price: item.price,
+                    category: item.category,
+                    daily_limit: item.daily_limit
+                })
+            .then( (resp) => {
+                console.log(resp);
+            }, (error) => {
+                console.log(error);
+            });
+
+        await axios
+            .get('/staff/menu/getFoodForRestaurantPage/', {
+                params: {
+                    rid: rid
+                }})
+            .then( function(response) {
+                setTopItems(top5Items(response.data.slice()))
+                setMenu(Utils.groupBy(response.data, "category"))
+            })
+        closePopup("editFood", false)
 
     }
 
-    const submitAddFood = (item) => {
+    const submitAddFood = async (item) => {
+        await axios
+            .post('/staff/addFood/', {
+                    rid: rid,
+                    fname: item.fname,
+                    price: item.price,
+                    category: item.category,
+                    daily_limit : item.daily_limit
+
+                })
+            .then( (resp) => {
+                console.log(resp);
+            }, (error) => {
+                console.log(error);
+            });
+
+        await axios
+            .get('/staff/menu/getFoodForRestaurantPage/', {
+                params: {
+                    rid: rid
+                }})
+            .then( function(response) {
+                setTopItems(top5Items(response.data.slice()))
+                setMenu(Utils.groupBy(response.data, "category"))
+            })
         closePopup("addFood", false)
-        // TODO: (backend) code to add new food
-        /* Note:
-        * item param DOES NOT include rid
-        * item object contains: fname, price, category, daily_limit
-        */
-
-        // TODO: (backend) once successfully, get the entire updated menu schema from db, update the menu at front end
-        // setMenu(Utils.groupBy("sth sth", "category"))
     }
 
-    const submitDeleteFood = (item) => {
-        closePopup("editFood", false)
-        // TODO: (backend) code to delete food
-        /* Note:
-        * item object contains the following: fname, fid, price, category, daily_limit
-        * use fid to update db
-        * to access item attributes: item.fname, item.fid etc..
-        */
+    const submitDeleteFood = async (item) => {
+        await axios
+            .delete('/staff/deleteFood/', {
+                params: {
+                    fid: item.fid
+                }})
+            .then( (resp) => {
+                console.log(resp);
+            }, (error) => {
+                console.log(error);
+            });
 
-        // TODO: (backend) once successfully, get the entire updated menu schema from db, update the menu at front end
-        // setMenu(Utils.groupBy("sth sth", "category"))
+        await axios
+            .get('/staff/menu/getFoodForRestaurantPage/', {
+                params: {
+                    rid: rid
+                }})
+            .then( function(response) {
+                setTopItems(top5Items(response.data.slice()))
+                setMenu(Utils.groupBy(response.data, "category"))
+            })
+        closePopup("editFood", false)
     }
 
     useEffect(() => {
@@ -182,8 +237,11 @@ export default function Menu({userid, rid}) {
                 <PopupAddFood closePopup={closePopup}
                               categories={categories}
                               submitAddFood={submitAddFood}
+                              rid={rid}
                 />
             }
+
+            {rid && <text>{rid}</text>}
         </>
     )
 }
