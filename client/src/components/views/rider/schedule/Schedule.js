@@ -71,7 +71,6 @@ function getOccupiedDates(data) {
 function formatPT(data, sid) {
     let a =  data.filter(x => x.shifts.length > 0);
     let arr = a.reduce((results, item) => [...results, ...item.shifts.map(x => ({ ...item, shifts: x }))], []);
-    console.log("formatted:" + arr);
     return arr.map(x => {
             return {
                 "sid": sid, "sche_date": DateTimeUtils.stringtifyDate(x.date),
