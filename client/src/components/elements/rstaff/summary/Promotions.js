@@ -36,7 +36,7 @@ export default function Promotions({promotions, openPromo}) {
                             <Table.Cell>{promo.duration}</Table.Cell>
                             <Table.Cell>{Utils.roundDecimalPlace(promo.avgorders, 2)}</Table.Cell>
                             <Table.Cell>{promo.promo_max_num_redemption ? promo.promo_max_num_redemption : "NA"}</Table.Cell>
-                            {moment().isBefore(promo.end_datetime) ? (
+                            {moment().isBefore(promo.start_datetime)? (
                                 <Table.Cell>
                                     <Button content={'Edit'}
                                             onClick={() => openPromo("editPromo", true, promo)}

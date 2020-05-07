@@ -52,6 +52,8 @@ app.get('/staff/menu/getFoodForRestaurantPage/', (req, res) => foodController.ge
 app.get('/staff/getPromoStats/', (req, res) => promoController.getAllPromoStatisticsForStaffPage(req, res, db))
 
 app.post('/FDSManager/addNewPromo/', (req, res) => promoController.addNewPromotion(req, res, db))
+app.post('/FDSManager/editPromo/', (req, res) => promoController.editPromotion(req, res, db))
+app.delete('/FDSManager/deletePromo/', (req, res) => promoController.deletePromotion(req, res, db))
 
 app.post('/staff/addFood/', (req, res) => foodController.addFoodForRestaurantPage(req, res, db))
 app.post('/staff/updateFood/', (req, res) => foodController.updateFoodForRestaurantPage(req, res, db))
